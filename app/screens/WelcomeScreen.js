@@ -86,3 +86,4 @@ export default WelcomeScreen;
 
 // 70%:
 // 105 por 117
+//
