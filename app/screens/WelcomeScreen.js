@@ -24,12 +24,12 @@ function WelcomeScreen(props) {
         <View style={styles.buttonsContainer}>
           <AppButton
             title="Login"
-            onPress={() => console.log("PRESSIONADO")}
+            onPress={() => console.log("PRESSIONADO LOGIN")}
             color="media2"
           />
           <AppButton
             title="Registrar-se"
-            onPress={() => console.log("PRESSIONADO")}
+            onPress={() => console.log("PRESSIONADO CADASTRO")}
             color="escura1"
           />
         </View>
