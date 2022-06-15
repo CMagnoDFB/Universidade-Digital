@@ -1,42 +1,9 @@
 import React from "react";
+import { render } from "react-dom";
 import { ImageBackground, StyleSheet, View, Text, Image } from "react-native";
 
 import AppButton from "../components/AppButton";
 import colors from "../config/colors";
-
-function WelcomeScreen(props) {
-  return (
-    <>
-      <ImageBackground
-        opacity={0.6}
-        source={require("../assets/background.jpg")}
-        style={styles.background}
-        blurRadius={3}
-      >
-        <View style={styles.logoContainer}>
-          <Image style={styles.u} source={require("../assets/U.png")} />
-          <View style={styles.textContainer}>
-            <Text style={styles.uni}>UNIVERSIDADE</Text>
-            <Text style={styles.digi}>DIGITAL</Text>
-            <Text style={styles.moto}>AMBIENTE ACADÊMICO CONECTADO</Text>
-          </View>
-        </View>
-        <View style={styles.buttonsContainer}>
-          <AppButton
-            title="Login"
-            onPress={() => console.log("PRESSIONADO")}
-            color="media2"
-          />
-          <AppButton
-            title="Registrar-se"
-            onPress={() => console.log("PRESSIONADO")}
-            color="escura1"
-          />
-        </View>
-      </ImageBackground>
-    </>
-  );
-}
 
 const styles = StyleSheet.create({
   background: {
@@ -78,8 +45,39 @@ const styles = StyleSheet.create({
     fontFamily: "Mulish_700Bold",
   },
 });
-
-export default WelcomeScreen;
+export default function WelcomeScreen({ navigation }) {
+  return (
+    <>
+      <ImageBackground
+        opacity={0.6}
+        source={require("../assets/background.jpg")}
+        style={styles.background}
+        blurRadius={3}
+      >
+        <View style={styles.logoContainer}>
+          <Image style={styles.u} source={require("../assets/U.png")} />
+          <View style={styles.textContainer}>
+            <Text style={styles.uni}>UNIVERSIDADE</Text>
+            <Text style={styles.digi}>DIGITAL</Text>
+            <Text style={styles.moto}>AMBIENTE ACADÊMICO CONECTADO</Text>
+          </View>
+        </View>
+        <View style={styles.buttonsContainer}>
+          <AppButton
+            title="Login"
+            onPress={() => navigation.navigate('Login')}
+            color="media2"
+          />
+          <AppButton
+            title="Registrar-se"
+            onPress={() => console.log("PRESSIONADO CADASTRO")}
+            color="escura1"
+          />
+        </View>
+      </ImageBackground>
+    </>
+  );
+}
 
 // original:
 // 150 por 168
