@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import WelcomeScreen from "./app/screens/WelcomeScreen";
-
+import PostsScreen from "./app/screens/PostsScreen";
 import React, { useState, useEffect } from "react";
 
 import { Text, View, StyleSheet } from "react-native";
