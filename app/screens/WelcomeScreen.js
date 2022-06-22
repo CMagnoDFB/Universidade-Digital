@@ -30,19 +30,16 @@ const styles = StyleSheet.create({
   },
   uni: {
     fontSize: 28,
-    color: colors.cinzaEscuro,
-    fontFamily: "Mulish_400Regular",
+    color: colors.cinzaEscuro
   },
   digi: {
     fontSize: 55,
     lineHeight: 55,
-    color: colors.cinzaEscuro,
-    fontFamily: "Mulish_400Regular",
+    color: colors.cinzaEscuro
   },
   moto: {
     fontSize: 11.6,
-    color: colors.cinzaEscuro,
-    fontFamily: "Mulish_700Bold",
+    color: colors.cinzaEscuro
   },
 });
 export default function WelcomeScreen({ navigation }) {

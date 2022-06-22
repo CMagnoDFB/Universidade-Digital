@@ -2,6 +2,7 @@ import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import WelcomeScreen from "./app/screens/WelcomeScreen";
 import LoginScreen from "./app/screens/LoginScreen";
+import PostsScreen from "./app/screens/PostsScreen";
 
 import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
@@ -13,10 +14,8 @@ import {
   useFonts,
   Mulish_200ExtraLight,
   Mulish_300Light,
-  Mulish_400Regular,
   Mulish_500Medium,
   Mulish_600SemiBold,
-  Mulish_700Bold,
   Mulish_800ExtraBold,
   Mulish_900Black,
   Mulish_200ExtraLight_Italic,
@@ -33,10 +32,8 @@ export default function App() {
   let fontsLoaded = useFonts({
     Mulish_200ExtraLight,
     Mulish_300Light,
-    Mulish_400Regular,
     Mulish_500Medium,
     Mulish_600SemiBold,
-    Mulish_700Bold,
     Mulish_800ExtraBold,
     Mulish_900Black,
     Mulish_200ExtraLight_Italic,
@@ -51,11 +48,13 @@ export default function App() {
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
+    
     return (
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Posts" component={PostsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );

@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ImageBackground, StyleSheet, View, Text, Image, TextInput } from "react-native";
 
 import AppButton from "../components/AppButton";
 import colors from "../config/colors";
+
+import api from "./../../connectAPI"
+import { saveLoginState, removeLoginState, checkLoginState } from "./../../loginState"
 
 const styles = StyleSheet.create({
   background: {
@@ -18,8 +21,7 @@ const styles = StyleSheet.create({
   usuarioSenha: {
     color: colors.branco,
     height: 40,
-    fontSize: 18,
-    fontFamily: "Mulish_700Bold"
+    fontSize: 18
   },
   input: {
     height: 40,
@@ -27,7 +29,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.branco,
     fontSize: 14,
     bottom: "5%",
-    fontFamily: "Mulish_700Bold",
     borderRadius: 10
   },
   buttonsContainer: {
@@ -51,22 +52,58 @@ const styles = StyleSheet.create({
   },
   uni: {
     fontSize: 28,
-    color: colors.branco,
-    fontFamily: "Mulish_400Regular",
+    color: colors.branco
   },
   digi: {
     fontSize: 55,
     lineHeight: 55,
-    color: colors.branco,
-    fontFamily: "Mulish_400Regular",
+    color: colors.branco
   },
   moto: {
     fontSize: 11.6,
-    color: colors.branco,
-    fontFamily: "Mulish_700Bold",
+    color: colors.branco
   }
 });
 export default function LoginScreen({ navigation }) {
+
+  const checkIfLogged = async () => {
+    //await removeLoginState();
+    if (await checkLoginState() != false) {
+      console.log("Usuario já estava logado");
+      navigation.navigate('Posts');
+    }
+  };
+  
+  useEffect(() => {
+    checkIfLogged();
+  }, []);
+
+  const [usuarioInput, setUsuarioInput] = useState("Fernando111");
+  const [senhaInput, setSenhaInput] = useState("12345678");
+
+  const usuarioChangeHandler = (i) => {
+    setUsuarioInput(i.nativeEvent.text);
+  };
+
+  const senhaChangeHandler = (i) => {
+    setSenhaInput(i.nativeEvent.text);
+  };
+
+  const efetuarLogin = async () => {
+
+    api.post("login", {
+      usuario: usuarioInput,
+	    senha: senhaInput
+    } ).then(({data}) => {
+      saveLoginState(data.token).then(() => {
+        //console.log("retorno: ", data.token)
+        navigation.navigate('Posts');
+      }); 
+    }).catch(err => {
+      console.log('error', err.response);
+    });
+  };
+
   return (
     <>
       <ImageBackground
@@ -86,23 +123,25 @@ export default function LoginScreen({ navigation }) {
           <Text style={styles.usuarioSenha}>Usuário</Text>
           <TextInput
             style={styles.input}
-            value={2}
+            defaultValue={"Fernando111"}
             placeholder=""
             keyboardType="ascii-capable"
+            onChange={usuarioChangeHandler}
           />
           <Text style={styles.usuarioSenha}>Senha</Text>
           <TextInput
             style={styles.input}
-            value={2}
+            defaultValue={"12345678"}
             placeholder=""
             secureTextEntry={true}
             keyboardType="ascii-capable"
+            onChange={senhaChangeHandler}
           />
         </View>
         <View style={styles.buttonsContainer}>
           <AppButton
             title="Login"
-            onPress={() => console.log("USUÁRIO LOGADO!")}
+            onPress={() => efetuarLogin()}
             color="media2"
           />
         </View>
