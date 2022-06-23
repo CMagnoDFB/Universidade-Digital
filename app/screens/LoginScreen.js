@@ -5,7 +5,7 @@ import AppButton from "../components/AppButton";
 import colors from "../config/colors";
 
 import api from "./../../connectAPI"
-import { saveLoginState, removeLoginState, checkLoginState } from "./../../loginState"
+import { saveLoginState, checkLoginState } from "./../../loginState"
 
 const styles = StyleSheet.create({
   background: {
