@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: "3%",
     backgroundColor: colors.branco,
     fontSize: 14,
-    bottom: "5%",
+    bottom: "4%",
     fontFamily: "Mulish_500Medium",
     borderRadius: 10
   },
