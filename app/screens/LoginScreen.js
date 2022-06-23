@@ -15,11 +15,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: "30%",
   },
-  usuarioSenha: {
+  usuarioInput: {
     color: colors.branco,
     height: 40,
     fontSize: 18,
-    fontFamily: "Mulish_700Bold"
+    fontFamily: "Mulish_500Medium"
   },
   input: {
     height: 40,
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.branco,
     fontSize: 14,
     bottom: "5%",
-    fontFamily: "Mulish_700Bold",
+    fontFamily: "Mulish_500Medium",
     borderRadius: 10
   },
   buttonsContainer: {
@@ -83,17 +83,15 @@ export default function LoginScreen({ navigation }) {
               <Text style={styles.moto}>AMBIENTE ACADÊMICO CONECTADO</Text>
             </View>
           </View>
-          <Text style={styles.usuarioSenha}>Usuário</Text>
+          <Text style={styles.usuarioInput}>Usuário</Text>
           <TextInput
             style={styles.input}
-            value={2}
             placeholder=""
             keyboardType="ascii-capable"
           />
-          <Text style={styles.usuarioSenha}>Senha</Text>
+          <Text style={styles.usuarioInput}>Senha</Text>
           <TextInput
             style={styles.input}
-            value={2}
             placeholder=""
             secureTextEntry={true}
             keyboardType="ascii-capable"
@@ -102,7 +100,7 @@ export default function LoginScreen({ navigation }) {
         <View style={styles.buttonsContainer}>
           <AppButton
             title="Login"
-            onPress={() => console.log("USUÁRIO LOGADO!")}
+            onPress={() => navigation.navigate("Posts")}
             color="media2"
           />
         </View>

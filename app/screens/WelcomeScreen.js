@@ -65,12 +65,12 @@ export default function WelcomeScreen({ navigation }) {
         <View style={styles.buttonsContainer}>
           <AppButton
             title="Login"
-            onPress={() => navigation.navigate('Login')}
+            onPress={() => navigation.navigate("Login")}
             color="media2"
           />
           <AppButton
             title="Registrar-se"
-            onPress={() => console.log("PRESSIONADO CADASTRO")}
+            onPress={() => navigation.navigate("Register")}
             color="escura1"
           />
         </View>

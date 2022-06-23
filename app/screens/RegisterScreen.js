@@ -1,13 +1,14 @@
 import React from "react";
-import { ImageBackground, StyleSheet, View, Text, Image, TextInput } from "react-native";
-
+import { StatusBar } from "expo-status-bar";
+import { ImageBackground, StyleSheet, View, Text, Image, TextInput, SafeAreaView, ScrollView } from "react-native";
+import CheckBox from "expo-checkbox";
 import AppButton from "../components/AppButton";
 import colors from "../config/colors";
 
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: colors.escura2
+    backgroundColor: colors.escura2,
   },
   inputContainer: {
     width: "100%",
@@ -15,31 +16,37 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: "30%",
   },
-  usuarioSenha: {
+  usuarioInput: {
     color: colors.branco,
     height: 40,
     fontSize: 18,
-    fontFamily: "Mulish_700Bold"
+    fontFamily: "Mulish_500Medium"
   },
   input: {
     height: 40,
     paddingHorizontal: "3%",
     backgroundColor: colors.branco,
     fontSize: 14,
-    bottom: "5%",
-    fontFamily: "Mulish_700Bold",
+    bottom: "3%",
+    fontFamily: "Mulish_500Medium",
     borderRadius: 10
   },
-  buttonsContainer: {
+  checkboxContainer: {
     width: "100%",
     padding: 20,
-    position: "absolute",
-    bottom: 20,
+    top: "68%"
+  },
+  checkbox: {
+    backgroundColor: colors.branco
+  }, 
+  buttonsContainer: {
+    width: "100%",
+    top: "70%",
   },
   logoContainer: {
     justifyContent: "center",
     flexDirection: "row",
-    bottom: "5%"
+    bottom: "10%"
   },
   u: {
     width: 105,
@@ -66,7 +73,7 @@ const styles = StyleSheet.create({
     fontFamily: "Mulish_700Bold",
   }
 });
-export default function LoginScreen({ navigation }) {
+export default function RegisterScreen({ navigation }) {
   return (
     <>
       <ImageBackground
@@ -83,26 +90,45 @@ export default function LoginScreen({ navigation }) {
               <Text style={styles.moto}>AMBIENTE ACADÊMICO CONECTADO</Text>
             </View>
           </View>
-          <Text style={styles.usuarioSenha}>Usuário</Text>
+          <Text style={styles.usuarioInput}>Usuário</Text>
           <TextInput
             style={styles.input}
-            value={2}
             placeholder=""
             keyboardType="ascii-capable"
           />
-          <Text style={styles.usuarioSenha}>Senha</Text>
+          <Text style={styles.usuarioInput}>Email</Text>
           <TextInput
             style={styles.input}
-            value={2}
+            placeholder="usuario@email.com"
+            keyboardType="email-address"
+          />
+          <Text style={styles.usuarioInput}>Senha</Text>
+          <TextInput
+            style={styles.input}
+            placeholder=""
+            secureTextEntry={true}
+            keyboardType="ascii-capable"
+          />
+          <Text style={styles.usuarioInput}>Confirmar senha</Text>
+          <TextInput
+            style={styles.input}
             placeholder=""
             secureTextEntry={true}
             keyboardType="ascii-capable"
           />
         </View>
+        <View style={styles.checkboxContainer}>
+          <CheckBox
+            disabled={false}
+            value={true}
+            title="Concordo com os Termos de Uso"
+            style={styles.checkbox}
+          ></CheckBox>
+        </View>
         <View style={styles.buttonsContainer}>
           <AppButton
-            title="Login"
-            onPress={() => console.log("USUÁRIO LOGADO!")}
+            title="Posts"
+            onPress={() => navigation.navigate("Posts")}
             color="media2"
           />
         </View>

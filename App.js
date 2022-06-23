@@ -2,6 +2,8 @@ import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import WelcomeScreen from "./app/screens/WelcomeScreen";
 import LoginScreen from "./app/screens/LoginScreen";
+import RegisterScreen from "./app/screens/RegisterScreen";
+import PostsScreen from "./app/screens/PostsScreen";
 
 import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
@@ -30,7 +32,7 @@ import {
 } from "@expo-google-fonts/mulish";
 
 export default function App() {
-  let fontsLoaded = useFonts({
+  let [fontsLoaded] = useFonts({
     Mulish_200ExtraLight,
     Mulish_300Light,
     Mulish_400Regular,
@@ -56,6 +58,8 @@ export default function App() {
         <Stack.Navigator>
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen name="Posts" component={PostsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );
