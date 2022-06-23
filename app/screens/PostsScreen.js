@@ -62,6 +62,7 @@ export default function PostsScreen({ navigation }) {
       console.log(usuNome + " está logado");
       setUsuario(usuNome);
     }else {
+      navigation.pop();
       navigation.navigate('Login');
     }
   };
@@ -73,6 +74,7 @@ export default function PostsScreen({ navigation }) {
   const efetuarLogout = async () => {
     await removeLoginState();
     console.log("Usuário deslogado");
+    navigation.pop();
     navigation.navigate('Login');
   };
 
