@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { ImageBackground, StyleSheet, View, Text, Image, TextInput, SafeAreaView, ScrollView } from "react-native";
+import { ImageBackground, StyleSheet, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator, SafeAreaView, ScrollView } from "react-native";
 import CheckBox from "expo-checkbox";
-import AppButton from "../components/AppButton";
+
+import FlashMessage, { showMessage } from "react-native-flash-message";
 import colors from "../config/colors";
 
 import api from "./../../connectAPI"
@@ -45,6 +46,25 @@ const styles = StyleSheet.create({
   }, 
   buttonsContainer: {
     width: "100%",
+    padding: 20,
+    bottom: 20,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  buttonLogin: {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    width: 280,
+    height: 70,
+    borderRadius: 20
+  },
+  buttonText: {
+    padding:15,
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 28
   },
   logoContainer: {
     justifyContent: "center",
@@ -92,6 +112,8 @@ export default function RegisterScreen({ navigation }) {
     checkIfLogged();
   }, []);
 
+  const [loading, setLoading] = useState(false);
+
   const [usuarioInput, setUsuarioInput] = useState("");
   const [nomeInput, setNomeInput] = useState("Placeholder Ferreira dos Santos");
   const [emailInput, setEmailInput] = useState("");
@@ -125,36 +147,55 @@ export default function RegisterScreen({ navigation }) {
 
   const efetuarCadastro = async () => {
 
-    if ((senhaInput !== confsenhaInput) || !termosInput) {
-      console.log("Senhas não batem ou termo nao foi aceito");
-      return;
+    if (!loading) {
+      setLoading(true);
+      if ((senhaInput !== confsenhaInput) || !termosInput) {
+        console.log("Senhas não batem ou termo nao foi aceito");
+        return;
+      }
+  
+      api.post("signup", {
+        usuario: usuarioInput,
+        senha: senhaInput,
+        nome: nomeInput,
+        email: emailInput,
+        cargo: cargoInput,
+        curso: cursoInput,
+        campus: campusInput
+      } ).then(({r}) => {
+        console.log("Usuário criado");
+        api.post("login", {
+          usuario: usuarioInput,
+          senha: senhaInput
+        } ).then(({data}) => {
+          saveLoginState(data.token).then(() => {
+            setLoading(false);
+            navigation.navigate('Posts');
+          }); 
+        }).catch(err => {
+          setLoading(false);
+          console.log('error', err.response);
+          showMessage({
+            message: "Erro",
+            description: "Ocorreu um erro ao realizar login",
+            type: "danger",
+          });
+        });
+        
+      }).catch(err => {
+        setLoading(false);
+        console.log('error', err.response);
+        showMessage({
+          message: "Erro",
+          description: "Ocorreu um erro ao realizar o cadastro",
+          type: "danger",
+        });
+      });
+    }else {
+      console.log("Já está carregando");
     }
 
-    api.post("signup", {
-      usuario: usuarioInput,
-	    senha: senhaInput,
-	    nome: nomeInput,
-	    email: emailInput,
-	    cargo: cargoInput,
-	    curso: cursoInput,
-	    campus: campusInput
-    } ).then(({r}) => {
-      console.log("Usuário criado");
-      api.post("login", {
-        usuario: usuarioInput,
-        senha: senhaInput
-      } ).then(({data}) => {
-        saveLoginState(data.token).then(() => {
-          console.log("retorno: ", data.token)
-          navigation.navigate('Posts');
-        }); 
-      }).catch(err => {
-        console.log('error', err.response);
-      });
-      
-    }).catch(err => {
-      console.log('error', err.response);
-    });
+    
   };
 
 
@@ -216,14 +257,23 @@ export default function RegisterScreen({ navigation }) {
             <Text style={styles.termos}>Aceito os Termos de Uso</Text>
           </View>
           <View style={styles.buttonsContainer}>
-          <AppButton
-            title="Cadastrar"
-            onPress={() => efetuarCadastro()}
-            color="media2"
-          />
-        </View>
+            <TouchableOpacity onPress={() => efetuarCadastro()} disabled={loading}>
+              <View
+                style={{
+                  ...styles.buttonLogin,
+                  backgroundColor: loading ? "#3A8F95" : colors.media2 ,
+                }}
+              >
+                {loading && <ActivityIndicator size="large" color="white" />}
+                <Text style={{...styles.buttonText, display: loading ? 'none' : 'flex' }}>
+                  Cadastrar
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
       </ImageBackground>
+      <FlashMessage position="bottom" />
     </>
   );
 }
