@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { ImageBackground, StyleSheet, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
 
-import AppButton from "../components/AppButton";
 import colors from "../config/colors";
+import FlashMessage, { showMessage } from "react-native-flash-message";
 
 import api from "./../../connectAPI"
 import { saveLoginState, checkLoginState } from "./../../loginState"
+
+
 
 const styles = StyleSheet.create({
   background: {
@@ -123,6 +125,11 @@ export default function LoginScreen({ navigation }) {
       }).catch(err => {
         setLoading(false);
         console.log('error', err.response);
+        showMessage({
+          message: "Erro",
+          description: "Usuário ou senha incorretos",
+          type: "danger",
+        });
       });
     }else {
       console.log("Já está carregando");
@@ -182,6 +189,7 @@ export default function LoginScreen({ navigation }) {
 
         </View>
       </ImageBackground>
+      <FlashMessage position="bottom" />
     </>
   );
 }
