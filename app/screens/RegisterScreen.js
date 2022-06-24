@@ -119,8 +119,8 @@ export default function RegisterScreen({ navigation }) {
   };
 
   const termosChangeHandler = (i) => {
-    console.log("checkbox: ", i.target.checked);
-    setTermosInput(i.target.checked);
+    console.log("checkbox: ", i);
+    setTermosInput(i);
   };
 
   const efetuarCadastro = async () => {
@@ -210,8 +210,8 @@ export default function RegisterScreen({ navigation }) {
             <CheckBox
               title="Concordo com os Termos de Uso"
               style={styles.checkbox}
-              value={true}
-              onValueChange={termosInput}
+              value={termosInput}
+              onValueChange={termosChangeHandler}
             ></CheckBox>
             <Text style={styles.termos}>Aceito os Termos de Uso</Text>
           </View>
