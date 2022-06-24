@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ImageBackground, StyleSheet, View, Text, Image, TextInput } from "react-native";
+import { ImageBackground, StyleSheet, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
 
 import AppButton from "../components/AppButton";
 import colors from "../config/colors";
@@ -36,6 +36,23 @@ const styles = StyleSheet.create({
     padding: 20,
     position: "absolute",
     bottom: 20,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  buttonLogin: {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    width: 280,
+    height: 70,
+    borderRadius: 20
+  },
+  buttonText: {
+    padding:15,
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 28
   },
   logoContainer: {
     justifyContent: "center",
@@ -78,6 +95,8 @@ export default function LoginScreen({ navigation }) {
     checkIfLogged();
   }, []);
 
+  const [loading, setLoading] = useState(false);
+
   const [usuarioInput, setUsuarioInput] = useState("Fernando111");
   const [senhaInput, setSenhaInput] = useState("12345678");
 
@@ -91,17 +110,24 @@ export default function LoginScreen({ navigation }) {
 
   const efetuarLogin = async () => {
 
-    api.post("login", {
-      usuario: usuarioInput,
-	    senha: senhaInput
-    } ).then(({data}) => {
-      saveLoginState(data.token).then(() => {
-        //console.log("retorno: ", data.token)
-        navigation.navigate('Posts');
-      }); 
-    }).catch(err => {
-      console.log('error', err.response);
-    });
+    if (!loading) {
+      setLoading(true);
+      api.post("login", {
+        usuario: usuarioInput,
+        senha: senhaInput
+      } ).then(({data}) => {
+        saveLoginState(data.token).then(() => {
+          setLoading(false);
+          navigation.navigate('Posts');
+        }); 
+      }).catch(err => {
+        setLoading(false);
+        console.log('error', err.response);
+      });
+    }else {
+      console.log("Já está carregando");
+    }
+    
   };
 
   return (
@@ -139,11 +165,21 @@ export default function LoginScreen({ navigation }) {
           />
         </View>
         <View style={styles.buttonsContainer}>
-          <AppButton
-            title="Login"
-            onPress={() => efetuarLogin()}
-            color="media2"
-          />
+          <TouchableOpacity onPress={() => efetuarLogin()} disabled={loading}>
+            <View
+              style={{
+                ...styles.buttonLogin,
+                backgroundColor: loading ? "#3A8F95" : colors.media2 ,
+              }}
+            >
+              {loading && <ActivityIndicator size="large" color="white" />}
+              <Text style={{...styles.buttonText, display: loading ? 'none' : 'flex' }}>
+                Entrar
+              </Text>
+            </View>
+          </TouchableOpacity>
+          
+
         </View>
       </ImageBackground>
     </>
