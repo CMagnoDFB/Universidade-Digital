@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { ImageBackground, StyleSheet, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator, SafeAreaView, ScrollView } from "react-native";
+import { ImageBackground, StyleSheet, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator, SafeAreaView, ScrollView, KeyboardAvoidingView } from "react-native";
 import CheckBox from "expo-checkbox";
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
 
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import colors from "../config/colors";
@@ -16,10 +18,10 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: "100%",
-    paddingVertical: 10,
+    paddingVertical: 20,
     paddingHorizontal: 20,
-    position: "absolute",
-    bottom: "5%"
+    backgroundColor: colors.escura2,
+    bottom: "0%"
   },
   usuarioInput: {
     color: colors.branco,
@@ -148,12 +150,22 @@ export default function RegisterScreen({ navigation }) {
   const efetuarCadastro = async () => {
 
     if (!loading) {
-      setLoading(true);
-      if ((senhaInput !== confsenhaInput) || !termosInput) {
-        console.log("Senhas não batem ou termo nao foi aceito");
-        return;
+      if (senhaInput !== confsenhaInput) {
+        return showMessage({
+          message: "Erro",
+          description: "Senhas não coincidem.",
+          type: "danger",
+        });
       }
-  
+      if (!termosInput) {
+        return showMessage({
+          message: "Erro",
+          description: "Você não aceitou os Termos de Uso.",
+          type: "danger",
+        });
+      }
+      setLoading(true);
+      
       api.post("signup", {
         usuario: usuarioInput,
         senha: senhaInput,
@@ -203,77 +215,75 @@ export default function RegisterScreen({ navigation }) {
 
   return (
     <>
-      <ImageBackground
-        opacity={0.6}
-        style={styles.background}
-        blurRadius={3}
-      >
-        <View style={styles.inputContainer}>
-          <View style={styles.logoContainer}>
-            <Image style={styles.u} source={require("../assets/U.png")} />
-            <View style={styles.textContainer}>
-              <Text style={styles.uni}>UNIVERSIDADE</Text>
-              <Text style={styles.digi}>DIGITAL</Text>
-              <Text style={styles.moto}>AMBIENTE ACADÊMICO CONECTADO</Text>
-            </View>
-          </View>
-          <Text style={styles.usuarioInput}>Usuário</Text>
-          <TextInput
-            style={styles.input}
-            placeholder=""
-            keyboardType="ascii-capable"
-            onChange={usuarioChangeHandler}
-          />
-          <Text style={styles.usuarioInput}>Email</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="usuario@email.com"
-            keyboardType="email-address"
-            onChange={emailChangeHandler}
-          />
-          <Text style={styles.usuarioInput}>Senha</Text>
-          <TextInput
-            style={styles.input}
-            placeholder=""
-            secureTextEntry={true}
-            keyboardType="ascii-capable"
-            onChange={senhaChangeHandler}
-          />
-          <Text style={styles.usuarioInput}>Confirmar senha</Text>
-          <TextInput
-            style={styles.input}
-            placeholder=""
-            secureTextEntry={true}
-            keyboardType="ascii-capable"
-            onChange={confsenhaChangeHandler}
-          />
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              title="Concordo com os Termos de Uso"
-              style={styles.checkbox}
-              value={termosInput}
-              onValueChange={termosChangeHandler}
-            ></CheckBox>
-            <Text style={styles.termos}>Aceito os Termos de Uso</Text>
-          </View>
-          <View style={styles.buttonsContainer}>
-            <TouchableOpacity onPress={() => efetuarCadastro()} disabled={loading}>
-              <View
-                style={{
-                  ...styles.buttonLogin,
-                  backgroundColor: loading ? "#3A8F95" : colors.media2 ,
-                }}
-              >
-                {loading && <ActivityIndicator size="large" color="white" />}
-                <Text style={{...styles.buttonText, display: loading ? 'none' : 'flex' }}>
-                  Cadastrar
-                </Text>
+        <KeyboardAwareScrollView
+          contentContainerStyle={{flexShrink: 1, flexDirection:'column-reverse', justifyContent: 'center'}}
+          >
+            <View style={styles.inputContainer}>
+              <View style={styles.logoContainer}>
+                <Image style={styles.u} source={require("../assets/U.png")} />
+                <View style={styles.textContainer}>
+                  <Text style={styles.uni}>UNIVERSIDADE</Text>
+                  <Text style={styles.digi}>DIGITAL</Text>
+                  <Text style={styles.moto}>AMBIENTE ACADÊMICO CONECTADO</Text>
+                </View>
               </View>
-            </TouchableOpacity>
+              <Text style={styles.usuarioInput}>Usuário</Text>
+              <TextInput
+                style={styles.input}
+                placeholder=""
+                keyboardType="ascii-capable"
+                onChange={usuarioChangeHandler}
+              />
+              <Text style={styles.usuarioInput}>Email</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="usuario@email.com"
+                keyboardType="email-address"
+                onChange={emailChangeHandler}
+              />
+              <Text style={styles.usuarioInput}>Senha</Text>
+              <TextInput
+                style={styles.input}
+                placeholder=""
+                secureTextEntry={true}
+                keyboardType="ascii-capable"
+                onChange={senhaChangeHandler}
+              />
+              <Text style={styles.usuarioInput}>Confirmar senha</Text>
+              <TextInput
+                style={styles.input}
+                placeholder=""
+                secureTextEntry={true}
+                keyboardType="ascii-capable"
+                onChange={confsenhaChangeHandler}
+              />
+              <View style={styles.checkboxContainer}>
+                <CheckBox
+                  title="Concordo com os Termos de Uso"
+                  style={styles.checkbox}
+                  value={termosInput}
+                  onValueChange={termosChangeHandler}
+                ></CheckBox>
+                <Text style={styles.termos}>Aceito os Termos de Uso</Text>
+              </View>
+              <View style={styles.buttonsContainer}>
+                <TouchableOpacity onPress={() => efetuarCadastro()} disabled={loading}>
+                  <View
+                    style={{
+                      ...styles.buttonLogin,
+                      backgroundColor: loading ? "#3A8F95" : colors.media2 ,
+                    }}
+                  >
+                    {loading && <ActivityIndicator size="large" color="white" />}
+                    <Text style={{...styles.buttonText, display: loading ? 'none' : 'flex' }}>
+                      Cadastrar
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            <FlashMessage position="bottom" />
           </View>
-        </View>
-      </ImageBackground>
-      <FlashMessage position="bottom" />
+      </KeyboardAwareScrollView>
     </>
   );
 }
