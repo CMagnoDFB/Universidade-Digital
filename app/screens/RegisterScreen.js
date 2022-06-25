@@ -216,7 +216,7 @@ export default function RegisterScreen({ navigation }) {
   return (
     <>
         <KeyboardAwareScrollView
-          contentContainerStyle={{flexShrink: 1, flexDirection:'column-reverse', justifyContent: 'center'}}
+          contentContainerStyle={{flexDirection:'column', justifyContent: 'center'}}
           >
             <View style={styles.inputContainer}>
               <View style={styles.logoContainer}>
