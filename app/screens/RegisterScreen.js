@@ -215,9 +215,7 @@ export default function RegisterScreen({ navigation }) {
 
   return (
     <>
-        <KeyboardAwareScrollView
-          contentContainerStyle={{flexDirection:'column', justifyContent: 'center'}}
-          >
+        <KeyboardAwareScrollView contentContainerStyle={{flexDirection:'column', justifyContent: 'center'}}>
             <View style={styles.inputContainer}>
               <View style={styles.logoContainer}>
                 <Image style={styles.u} source={require("../assets/U.png")} />

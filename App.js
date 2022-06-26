@@ -51,12 +51,12 @@ export default function App() {
   } else {
     
     return (
-      <NavigationContainer>
+      <NavigationContainer >
         <Stack.Navigator>
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
-          <Stack.Screen name="Posts" component={PostsScreen} options={{headerLeft: null}} />
+          <Stack.Screen name="Posts" component={PostsScreen} options={{headerShown: false}} />
         </Stack.Navigator>
       </NavigationContainer>
     );
