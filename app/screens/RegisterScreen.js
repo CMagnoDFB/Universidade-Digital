@@ -11,8 +11,8 @@ import colors from "../config/colors";
 import api from "./../../connectAPI"
 import { saveLoginState, checkLoginState } from "./../../loginState"
 
-const USER_MAX_LEN = 3,
-  USER_MIN_LEN = 30,
+const USER_MAX_LEN = 30,
+  USER_MIN_LEN = 3,
   PASS_MAX_LEN = 30,
   PASS_MIN_LEN = 8,
   PASS_LABELS = ["Muito curta", "Fraca", "Normal", "Forte", "Muito Forte"];
