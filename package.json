@@ -40,5 +40,6 @@
   "devDependencies": {
     "@babel/core": "^7.12.9"
   },
+  "postinstall": "npx patch-package",
   "private": true
 }

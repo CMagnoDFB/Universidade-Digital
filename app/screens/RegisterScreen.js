@@ -11,7 +11,9 @@ import colors from "../config/colors";
 import api from "./../../connectAPI"
 import { saveLoginState, checkLoginState } from "./../../loginState"
 
-const PASS_MAX_LEN = 30,
+const USER_MAX_LEN = 3,
+  USER_MIN_LEN = 30,
+  PASS_MAX_LEN = 30,
   PASS_MIN_LEN = 8,
   PASS_LABELS = ["Muito curta", "Fraca", "Normal", "Forte", "Muito Forte"];
 
@@ -29,7 +31,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.escura2,
     bottom: "0%"
   },
-  usuarioInput: {
+  textInput: {
     color: colors.branco,
     height: 40,
     fontSize: 18,
@@ -137,7 +139,7 @@ export default function RegisterScreen({ navigation }) {
   };
 
   const emailChangeHandler = (i) => {
-    setEmailInput(i.nativeEvent.text);
+    setEmailInput(i.nativeEvent.text.toLowerCase());
   };
 
   const senhaChangeHandler = (i) => {
@@ -163,7 +165,7 @@ export default function RegisterScreen({ navigation }) {
           type: "danger",
         }); 
       }
-      if (usuarioInput.length < 3) {
+      if (usuarioInput.length < USER_MIN_LEN) {
         return showMessage({
           message: "Erro",
           description: "Usuário deve ter pelo menos 3 caracteres.",
@@ -171,14 +173,14 @@ export default function RegisterScreen({ navigation }) {
           position: "top"
         });
       }
-      if (usuarioInput.length > 30) {
+      if (usuarioInput.length > USER_MAX_LEN) {
         return showMessage({
           message: "Erro",
           description: "Usuário pode ter no máximo 30 caracteres.",
           type: "danger",
         });
       }
-      setEmailInput(emailInput.toLowerCase())
+
       if (!( emailInput.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/))) {
         return showMessage({
           message: "Erro",
@@ -234,6 +236,7 @@ export default function RegisterScreen({ navigation }) {
         } ).then(({data}) => {
           saveLoginState(data.token).then(() => {
             setLoading(false);
+            navigation.pop();
             navigation.navigate('Posts');
           }); 
         }).catch(err => {
@@ -267,84 +270,85 @@ export default function RegisterScreen({ navigation }) {
 
   return (
     <>
-    
-            <FlashMessage styles={{top:0}}/>
-        <KeyboardAvoidingView>
-          <ScrollView>
-            <View style={styles.inputContainer}>
-              <View style={styles.logoContainer}>
-                <Image style={styles.u} source={require("../assets/U.png")} />
-                <View style={styles.textContainer}>
-                  <Text style={styles.uni}>UNIVERSIDADE</Text>
-                  <Text style={styles.digi}>DIGITAL</Text>
-                  <Text style={styles.moto}>AMBIENTE ACADÊMICO CONECTADO</Text>
+      <KeyboardAvoidingView>
+        <ScrollView>
+          <View style={styles.inputContainer}>
+            <View style={styles.logoContainer}>
+              <Image style={styles.u} source={require("../assets/U.png")} />
+              <View style={styles.textContainer}>
+                <Text style={styles.uni}>UNIVERSIDADE</Text>
+                <Text style={styles.digi}>DIGITAL</Text>
+                <Text style={styles.moto}>AMBIENTE ACADÊMICO CONECTADO</Text>
+              </View>
+            </View>
+            <Text style={styles.textInput}>Usuário</Text>
+            <TextInput
+              style={styles.input}
+              placeholder=""
+              keyboardType="ascii-capable"
+              onChange={usuarioChangeHandler}
+            />
+            <Text style={styles.textInput}>Email</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="usuario@email.com"
+              keyboardType="email-address"
+              caretHidden = {false}
+              autoCapitalize='none'
+              onChange={emailChangeHandler}
+            />
+            <Text style={styles.textInput}>Senha</Text>
+            <TextInput
+              style={styles.input}
+              placeholder=""
+              secureTextEntry={true}
+              keyboardType="ascii-capable"
+              onChange={senhaChangeHandler}
+            />
+            <Text style={styles.textInput}>Confirmar senha</Text>
+            <TextInput
+              style={styles.input}
+              placeholder=""
+              secureTextEntry={true}
+              keyboardType="ascii-capable"
+              onChange={confsenhaChangeHandler}
+            />
+            <PassMeter
+              showLabels
+              password={senhaInput}
+              maxLength={PASS_MAX_LEN}
+              minLength={PASS_MIN_LEN}
+              labels={PASS_LABELS}
+            />
+            <View style={styles.checkboxContainer}>
+              <CheckBox
+                title="Concordo com os Termos de Uso"
+                style={styles.checkbox}
+                value={termosInput}
+                onValueChange={termosChangeHandler}
+                for
+              ></CheckBox>
+              <Text style={styles.termos} onPress={() => setTermosInput(!termosInput)}>Aceito os Termos de Uso</Text>
+            </View>
+            <View style={styles.buttonsContainer}>
+              <TouchableOpacity onPress={() => efetuarCadastro()} disabled={loading}>
+                <View
+                  style={{
+                    ...styles.buttonLogin,
+                    backgroundColor: loading ? "#3A8F95" : colors.media2 ,
+                  }}
+                >
+                  {loading && <ActivityIndicator size="large" color="white" />}
+                  <Text style={{...styles.buttonText, display: loading ? 'none' : 'flex' }}>
+                    Cadastrar
+                  </Text>
                 </View>
-              </View>
-              <Text style={styles.usuarioInput}>Usuário</Text>
-              <TextInput
-                style={styles.input}
-                placeholder=""
-                keyboardType="ascii-capable"
-                onChange={usuarioChangeHandler}
-              />
-              <Text style={styles.usuarioInput}>Email</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="usuario@email.com"
-                keyboardType="email-address"
-                caretHidden = {false}
-                onChange={emailChangeHandler}
-              />
-              <Text style={styles.usuarioInput}>Senha</Text>
-              <TextInput
-                style={styles.input}
-                placeholder=""
-                secureTextEntry={true}
-                keyboardType="ascii-capable"
-                onChange={senhaChangeHandler}
-              />
-              <Text style={styles.usuarioInput}>Confirmar senha</Text>
-              <TextInput
-                style={styles.input}
-                placeholder=""
-                secureTextEntry={true}
-                keyboardType="ascii-capable"
-                onChange={confsenhaChangeHandler}
-              />
-              <PassMeter
-                showLabels
-                password={senhaInput}
-                maxLength={PASS_MAX_LEN}
-                minLength={PASS_MIN_LEN}
-                labels={PASS_LABELS}
-              />
-              <View style={styles.checkboxContainer}>
-                <CheckBox
-                  title="Concordo com os Termos de Uso"
-                  style={styles.checkbox}
-                  value={termosInput}
-                  onValueChange={termosChangeHandler}
-                ></CheckBox>
-                <Text style={styles.termos}>Aceito os Termos de Uso</Text>
-              </View>
-              <View style={styles.buttonsContainer}>
-                <TouchableOpacity onPress={() => efetuarCadastro()} disabled={loading}>
-                  <View
-                    style={{
-                      ...styles.buttonLogin,
-                      backgroundColor: loading ? "#3A8F95" : colors.media2 ,
-                    }}
-                  >
-                    {loading && <ActivityIndicator size="large" color="white" />}
-                    <Text style={{...styles.buttonText, display: loading ? 'none' : 'flex' }}>
-                      Cadastrar
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>          
+              </TouchableOpacity>
+            </View>
+          </View>          
         </ScrollView>
       </KeyboardAvoidingView>
+      <FlashMessage position="bottom" />
     </>
   );
 }
