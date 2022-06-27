@@ -53,10 +53,10 @@ export default function App() {
     return (
       <NavigationContainer >
         <Stack.Navigator>
-          <Stack.Screen name="Welcome" component={WelcomeScreen} />
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Register" component={RegisterScreen} />
-          <Stack.Screen name="Posts" component={PostsScreen} options={{headerShown: false}} />
+        <Stack.Screen name="Welcome" component={WelcomeScreen} options={{headerShown: false}} />
+          <Stack.Screen name="Login" component={LoginScreen} options={{headerTitle: 'Entrar', headerTransparent: true, headerTintColor: '#fff', headerTitleStyle: {color: '#fff', fontSize: 25}}} />
+          <Stack.Screen name="Register" component={RegisterScreen} options={{headerTitle: 'Cadastrar', headerTransparent: true, headerTintColor: '#fff', headerTitleStyle: {color: '#fff', fontSize: 25}}} />
+          <Stack.Screen name="Posts" component={PostsScreen} options={{headerTitle: 'Página inicial', headerLeft: null,  headerTitleStyle: {color: '#000', fontSize: 25}}} />
         </Stack.Navigator>
       </NavigationContainer>
     );

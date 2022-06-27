@@ -18,11 +18,13 @@ const PASS_MAX_LEN = 30,
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: colors.escura2
+    backgroundColor: colors.escura2,
+    heigth: "100%"
   },
   inputContainer: {
     width: "100%",
-    paddingVertical: 20,
+    paddingTop: 110,
+    paddingVertical: 60,
     paddingHorizontal: 20,
     backgroundColor: colors.escura2,
     bottom: "0%"
@@ -44,7 +46,7 @@ const styles = StyleSheet.create({
   },
   checkboxContainer: {
     width: "100%",
-    paddingVertical: "2%",
+    paddingVertical: "14%",
     flexDirection: "row"
   },
   checkbox: {
@@ -53,7 +55,7 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     width: "100%",
     padding: 20,
-    bottom: 20,
+    paddingTop: 0,
     alignItems: "center",
     justifyContent: "center"
   },
@@ -128,7 +130,7 @@ export default function RegisterScreen({ navigation }) {
   const [cargoInput, setCargoInput] = useState("Estudante");
   const [cursoInput, setCursoInput] = useState("Ciência da Computação");
   const [campusInput, setCampusInput] = useState("Pici");
-  const [termosInput, setTermosInput] = useState(true);
+  const [termosInput, setTermosInput] = useState(false);
 
   const usuarioChangeHandler = (i) => {
     setUsuarioInput(i.nativeEvent.text);
@@ -290,6 +292,7 @@ export default function RegisterScreen({ navigation }) {
                 style={styles.input}
                 placeholder="usuario@email.com"
                 keyboardType="email-address"
+                caretHidden = {false}
                 onChange={emailChangeHandler}
               />
               <Text style={styles.usuarioInput}>Senha</Text>
