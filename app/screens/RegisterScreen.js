@@ -3,13 +3,17 @@ import { StatusBar } from "expo-status-bar";
 import { ImageBackground, StyleSheet, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator, SafeAreaView, ScrollView, KeyboardAvoidingView } from "react-native";
 import CheckBox from "expo-checkbox";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-
+import PassMeter from "react-native-passmeter";
 
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import colors from "../config/colors";
 
 import api from "./../../connectAPI"
 import { saveLoginState, checkLoginState } from "./../../loginState"
+
+const PASS_MAX_LEN = 30,
+  PASS_MIN_LEN = 8,
+  PASS_LABELS = ["Muito curta", "Fraca", "Normal", "Forte", "Muito Forte"];
 
 const styles = StyleSheet.create({
   background: {
@@ -157,6 +161,21 @@ export default function RegisterScreen({ navigation }) {
           type: "danger",
         }); 
       }
+      if (usuarioInput.length < 3) {
+        return showMessage({
+          message: "Erro",
+          description: "Usuário deve ter pelo menos 3 caracteres.",
+          type: "danger",
+          position: "top"
+        });
+      }
+      if (usuarioInput.length > 30) {
+        return showMessage({
+          message: "Erro",
+          description: "Usuário pode ter no máximo 30 caracteres.",
+          type: "danger",
+        });
+      }
       setEmailInput(emailInput.toLowerCase())
       if (!( emailInput.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/))) {
         return showMessage({
@@ -165,10 +184,17 @@ export default function RegisterScreen({ navigation }) {
           type: "danger",
         });
       }
-      if (senhaInput.length < 8) {
+      if (senhaInput.length < PASS_MIN_LEN) {
         return showMessage({
           message: "Erro",
-          description: "Senha precisa ter ao menos 8 caracteres.",
+          description: `Senha precisa ter no mínimo ${PASS_MIN_LEN} caracteres.`,
+          type: "danger",
+        });
+      }
+      if (senhaInput.length > PASS_MAX_LEN) {
+        return showMessage({
+          message: "Erro",
+          description: `Senha pode ter no máximo ${PASS_MAX_LEN} caracteres.`,
           type: "danger",
         });
       }
@@ -239,6 +265,8 @@ export default function RegisterScreen({ navigation }) {
 
   return (
     <>
+    
+            <FlashMessage styles={{top:0}}/>
         <KeyboardAvoidingView>
           <ScrollView>
             <View style={styles.inputContainer}>
@@ -280,6 +308,13 @@ export default function RegisterScreen({ navigation }) {
                 keyboardType="ascii-capable"
                 onChange={confsenhaChangeHandler}
               />
+              <PassMeter
+                showLabels
+                password={senhaInput}
+                maxLength={PASS_MAX_LEN}
+                minLength={PASS_MIN_LEN}
+                labels={PASS_LABELS}
+              />
               <View style={styles.checkboxContainer}>
                 <CheckBox
                   title="Concordo com os Termos de Uso"
@@ -304,8 +339,7 @@ export default function RegisterScreen({ navigation }) {
                   </View>
                 </TouchableOpacity>
               </View>
-            <FlashMessage position="bottom" />
-          </View>
+            </View>          
         </ScrollView>
       </KeyboardAvoidingView>
     </>
