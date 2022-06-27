@@ -150,6 +150,28 @@ export default function RegisterScreen({ navigation }) {
   const efetuarCadastro = async () => {
 
     if (!loading) {
+      if (usuarioInput.indexOf(' ') >= 0) {
+        return showMessage({
+          message: "Erro",
+          description: "Usuário não pode ter espaço.",
+          type: "danger",
+        }); 
+      }
+      setEmailInput(emailInput.toLowerCase())
+      if (!( emailInput.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/))) {
+        return showMessage({
+          message: "Erro",
+          description: "Email inválido.",
+          type: "danger",
+        });
+      }
+      if (senhaInput.length < 8) {
+        return showMessage({
+          message: "Erro",
+          description: "Senha precisa ter ao menos 8 caracteres.",
+          type: "danger",
+        });
+      }
       if (senhaInput !== confsenhaInput) {
         return showMessage({
           message: "Erro",
@@ -166,6 +188,8 @@ export default function RegisterScreen({ navigation }) {
       }
       setLoading(true);
       
+      
+
       api.post("signup", {
         usuario: usuarioInput,
         senha: senhaInput,
