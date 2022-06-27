@@ -215,7 +215,8 @@ export default function RegisterScreen({ navigation }) {
 
   return (
     <>
-        <KeyboardAwareScrollView contentContainerStyle={{flexDirection:'column', justifyContent: 'center'}}>
+        <KeyboardAvoidingView>
+          <ScrollView>
             <View style={styles.inputContainer}>
               <View style={styles.logoContainer}>
                 <Image style={styles.u} source={require("../assets/U.png")} />
@@ -281,7 +282,8 @@ export default function RegisterScreen({ navigation }) {
               </View>
             <FlashMessage position="bottom" />
           </View>
-      </KeyboardAwareScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 }
