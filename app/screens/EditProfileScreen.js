@@ -6,7 +6,7 @@ import FlashMessage, { showMessage } from "react-native-flash-message";
 import DropDownPicker from "react-native-dropdown-picker";
 
 import api from "./../../connectAPI"
-import {CARGO_VALUES, CURSO_VALUES, CAMPUS_VALUES } from "./../config/consts"
+import {CARGO_VALUES, CURSO_VALUES, CAMPUS_VALUES, BADGE_COLORS, parseTags } from "./../config/consts"
 import { saveLoginState, checkLoginState, saveUserObject, getUserObject } from "./../../loginState"
 
 const styles = StyleSheet.create({
@@ -73,7 +73,7 @@ export default function LoginScreen({ navigation }) {
 
   const [usuario, setUsuario] = useState(null);
   const [token, setToken] = useState(null);
-  const [usuarioObj, setUsuarioObj] = useState(null);
+  const [id_usuario, setIdUsuario] = useState(null);
 
   const [nomeInput, setNomeInput] = useState("");
 
@@ -91,10 +91,8 @@ export default function LoginScreen({ navigation }) {
 
   const [openTags, setOpenTags] = useState(false);
   const [valueTags, setValueTags] = useState([]);
-  const [itemsTags, setItemsTags] = useState([
-    {label: 'Disciplina 1', value: 2},
-    {label: 'Disciplina 2', value: 3}
-  ]);
+  const [valueInitialTags, setValueInitialTags] = useState([]);
+  const [itemsTags, setItemsTags] = useState(parseTags());
 
   const checkIfLogged = async () => {
     var data = await checkLoginState();
@@ -103,11 +101,51 @@ export default function LoginScreen({ navigation }) {
       console.log(data.usuario + " está logado");
       setUsuario(data.usuario);
       setToken(data.token);
-      setUsuarioObj(uObj);
       setNomeInput(uObj.nome);
       setValueCargo(uObj.cargo);
       setValueCurso(uObj.curso);
       setValueCampus(uObj.campus);
+      setIdUsuario(uObj.id);
+      
+      api.get("fetchTags", {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${data.token}`,
+          'Content-Type': 'application/json'
+        }
+      }).then((dbTags) => {
+        if(dbTags) {
+          setItemsTags(parseTags(dbTags.data.tags));  
+        }
+        
+      }).catch(err => {
+        console.log('error', err.response);
+      });
+
+      api.get("fetchUserTags", {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${data.token}`,
+          'Content-Type': 'application/json'
+        },
+        params: {
+          id_usuario: uObj.id
+        }
+      }).then((dbTags) => {
+        var tagIds = [];
+        if(dbTags) {
+          var tags = dbTags.data.tags;
+          tags.forEach((tag, i) => {
+            tagIds.push(tag.id);
+          });
+          
+          setValueInitialTags(tagIds);  
+          setValueTags(tagIds);  
+        }
+        
+      }).catch(err => {
+        console.log('error', err.response);
+      });
     }else {
       navigation.pop();
       navigation.navigate('Login');
@@ -126,7 +164,6 @@ export default function LoginScreen({ navigation }) {
 
   const efetuarEdicao = async () => {
 
-    console.log("token: ", token);
     if (!loading) {
       setLoading(true);
       api.post("updateUser", {
@@ -141,10 +178,25 @@ export default function LoginScreen({ navigation }) {
         curso: valueCurso,
         campus: valueCampus
       } ).then((dbUsuario) => {
-        setLoading(false);
+
         saveUserObject(dbUsuario.data.usuario).then(() => {
-          navigation.pop();
-          navigation.navigate('Posts');
+          api.post("addUserTags", {
+            headers: {
+              'Accept': 'application/json',
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            id_usuario: id_usuario,
+            tags: valueTags,
+            initial_tags: valueInitialTags
+          }).then(() => {
+            setLoading(false);
+            navigation.pop();
+            navigation.navigate('Posts');
+          }).catch(err => {
+            setLoading(false);
+            console.log('error', err.response);
+          });
         });
         
       }).catch(err => {
@@ -163,10 +215,8 @@ export default function LoginScreen({ navigation }) {
   };
 
   const ignorarEdicao = async () => {
-    saveUserObject(usuarioObj).then(() => {
-      navigation.pop();
-      navigation.navigate('Posts');
-    });
+    navigation.pop();
+    navigation.navigate('Posts');
   };
 
   return (
@@ -237,8 +287,9 @@ export default function LoginScreen({ navigation }) {
             setItems={setItemsTags}
             multiple={true}
             min={0}
-            max={5}
             listMode="SCROLLVIEW"
+            mode="BADGE"
+            badgeDotColors={BADGE_COLORS}
             scrollViewProps={{nestedScrollEnabled: true,}}
           />
 
