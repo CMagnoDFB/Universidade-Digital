@@ -9,7 +9,7 @@ import FlashMessage, { showMessage } from "react-native-flash-message";
 import colors from "../config/colors";
 
 import api from "./../../connectAPI"
-import { saveLoginState, checkLoginState } from "./../../loginState"
+import { saveLoginState, checkLoginState, saveUserObject } from "./../../loginState"
 
 const USER_MAX_LEN = 30,
   USER_MIN_LEN = 3,
@@ -111,10 +111,33 @@ const styles = StyleSheet.create({
 export default function RegisterScreen({ navigation }) {
 
   const checkIfLogged = async () => {
-    //await removeLoginState();
-    if (await checkLoginState() != false) {
-      console.log("Usuario já estava logado");
-      navigation.navigate('Posts');
+    var data = await checkLoginState();
+    if (data) {
+      console.log(data.usuario);
+      api.get("fetchUser", {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${data.token}`,
+          'Content-Type': 'application/json'
+        },
+        params: {
+          usuario: data.usuario
+        }
+      }).then((dbUsuario) => {
+
+        saveUserObject(dbUsuario.data.usuario).then(() => {
+          navigation.pop();
+          if (dbUsuario.data.usuario.nome && dbUsuario.data.usuario.cargo && dbUsuario.data.usuario.curso && dbUsuario.data.usuario.campus) {
+            navigation.navigate('Posts');
+          }else {
+            navigation.navigate('EditProfile');
+          }
+        });
+
+      }).catch(err => {
+        console.log('error', err.response);
+      });
+
     }
   };
 
@@ -125,13 +148,9 @@ export default function RegisterScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
 
   const [usuarioInput, setUsuarioInput] = useState("");
-  const [nomeInput, setNomeInput] = useState("Placeholder Ferreira dos Santos");
   const [emailInput, setEmailInput] = useState("");
   const [senhaInput, setSenhaInput] = useState("");
   const [confsenhaInput, setConfsenhaInput] = useState("");
-  const [cargoInput, setCargoInput] = useState("Estudante");
-  const [cursoInput, setCursoInput] = useState("Ciência da Computação");
-  const [campusInput, setCampusInput] = useState("Pici");
   const [termosInput, setTermosInput] = useState(false);
 
   const usuarioChangeHandler = (i) => {
@@ -223,11 +242,11 @@ export default function RegisterScreen({ navigation }) {
       api.post("signup", {
         usuario: usuarioInput,
         senha: senhaInput,
-        nome: nomeInput,
+        nome: "",
         email: emailInput,
-        cargo: cargoInput,
-        curso: cursoInput,
-        campus: campusInput
+        cargo: "",
+        curso: "",
+        campus: ""
       } ).then(({r}) => {
         console.log("Usuário criado");
         api.post("login", {
@@ -236,8 +255,11 @@ export default function RegisterScreen({ navigation }) {
         } ).then(({data}) => {
           saveLoginState(data.token).then(() => {
             setLoading(false);
-            navigation.pop();
-            navigation.navigate('Posts');
+            saveUserObject(data.usuario).then(() => {
+              navigation.pop();
+              navigation.navigate('EditProfile');
+            });
+            
           }); 
         }).catch(err => {
           setLoading(false);

@@ -5,7 +5,7 @@ import colors from "../config/colors";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 
 import api from "./../../connectAPI"
-import { saveLoginState, checkLoginState } from "./../../loginState"
+import { saveLoginState, checkLoginState, saveUserObject } from "./../../loginState"
 
 
 
@@ -86,10 +86,35 @@ const styles = StyleSheet.create({
 export default function LoginScreen({ navigation }) {
 
   const checkIfLogged = async () => {
-    //await removeLoginState();
-    if (await checkLoginState() != false) {
-      console.log("Usuario já estava logado");
-      navigation.navigate('Posts');
+    var data = await checkLoginState();
+    if (data) {
+      console.log("dudu");
+      console.log(data.usuario);
+      api.get("fetchUser", {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${data.token}`,
+          'Content-Type': 'application/json'
+        },
+        params: {
+          usuario: data.usuario
+        }
+      }).then((dbUsuario) => {
+        
+        saveUserObject(dbUsuario.data.usuario).then(() => {
+          navigation.pop();
+          if (dbUsuario.data.usuario.nome && dbUsuario.data.usuario.cargo && dbUsuario.data.usuario.curso && dbUsuario.data.usuario.campus) {
+            navigation.navigate('Posts');
+          }else {
+            navigation.navigate('EditProfile');
+          }
+        });
+        
+
+      }).catch(err => {
+        console.log('error', err.response);
+      });
+
     }
   };
   
@@ -120,7 +145,15 @@ export default function LoginScreen({ navigation }) {
       } ).then(({data}) => {
         saveLoginState(data.token).then(() => {
           setLoading(false);
-          navigation.navigate('Posts');
+          const dbUsuario = data.usuario;
+          saveUserObject(dbUsuario).then(() => {
+            if (dbUsuario.nome && dbUsuario.cargo && dbUsuario.curso && dbUsuario.campus) {
+              navigation.navigate('Posts');
+            }else {
+              navigation.navigate('EditProfile');
+            }
+          });
+          
         }); 
       }).catch(err => {
         setLoading(false);

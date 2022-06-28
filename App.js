@@ -3,6 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import WelcomeScreen from "./app/screens/WelcomeScreen";
 import LoginScreen from "./app/screens/LoginScreen";
 import PostsScreen from "./app/screens/PostsScreen";
+import EditProfileScreen from "./app/screens/EditProfileScreen";
 import RegisterScreen from "./app/screens/RegisterScreen";
 
 import React from "react";
@@ -57,6 +58,7 @@ export default function App() {
           <Stack.Screen name="Login" component={LoginScreen} options={{headerTitle: 'Entrar', headerTransparent: true, headerTintColor: '#fff', headerTitleStyle: {color: '#fff', fontSize: 25}}} />
           <Stack.Screen name="Register" component={RegisterScreen} options={{headerTitle: 'Cadastrar', headerTransparent: true, headerTintColor: '#fff', headerTitleStyle: {color: '#fff', fontSize: 25}}} />
           <Stack.Screen name="Posts" component={PostsScreen} options={{headerTitle: 'Página inicial', headerLeft: null,  headerTitleStyle: {color: '#000', fontSize: 25}}} />
+          <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{headerTitle: 'Editar perfil', headerLeft: null,  headerTitleStyle: {color: '#000', fontSize: 25}}} />
         </Stack.Navigator>
       </NavigationContainer>
     );

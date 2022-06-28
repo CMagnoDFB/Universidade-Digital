@@ -5,7 +5,7 @@ import PostSeparator from "../components/PostSeparator";
 import Post from "../components/Post";
 import Constants from "expo-constants";
 
-import { checkLoginState, removeLoginState } from "./../../loginState"
+import { checkLoginState, removeLoginState, saveUserObject, getUserObject } from "./../../loginState"
 
 const posts = [
   {
@@ -55,12 +55,17 @@ const posts = [
 export default function PostsScreen({ navigation }) {
 
   const [usuario, setUsuario] = useState(null);
+  const [token, setToken] = useState(null);
+  const [usuarioObj, setUsuarioObj] = useState(null);
 
   const checkIfLogged = async () => {
-    var usuNome = await checkLoginState();
-    if (usuNome != false) {
-      console.log(usuNome + " está logado");
-      setUsuario(usuNome);
+    var data = await checkLoginState();
+    var uObj = await getUserObject();
+    if (data) {
+      console.log(data.usuario + " está logado");
+      setUsuario(data);
+      setToken(data.token);
+      setUsuarioObj(uObj);
     }else {
       navigation.pop();
       navigation.navigate('Login');
@@ -71,11 +76,18 @@ export default function PostsScreen({ navigation }) {
     checkIfLogged();
   }, []);
 
+  
   const efetuarLogout = async () => {
     await removeLoginState();
     console.log("Usuário deslogado");
     navigation.pop();
     navigation.navigate('Login');
+  };
+
+  const irEdicaoPerfil = async () => {
+    await saveUserObject(usuarioObj);
+    navigation.pop();
+    navigation.navigate('EditProfile');
   };
 
   return (
@@ -84,6 +96,13 @@ export default function PostsScreen({ navigation }) {
       <AppButton
         title="Sair"
         onPress={() => efetuarLogout()}
+        color="media2"
+      />
+    </View>
+    <View style={styles.buttonsContainer}>
+      <AppButton
+        title="Editar perfil"
+        onPress={() => irEdicaoPerfil()}
         color="media2"
       />
     </View>
@@ -112,7 +131,7 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     width: "100%",
-    padding: 20,
+    paddingHorizontal: "20%",
   }
 });
 
