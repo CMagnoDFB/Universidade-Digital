@@ -30,19 +30,16 @@ const styles = StyleSheet.create({
   },
   uni: {
     fontSize: 28,
-    color: colors.cinzaEscuro,
-    fontFamily: "Mulish_400Regular",
+    color: colors.cinzaEscuro
   },
   digi: {
     fontSize: 55,
     lineHeight: 55,
-    color: colors.cinzaEscuro,
-    fontFamily: "Mulish_400Regular",
+    color: colors.cinzaEscuro
   },
   moto: {
     fontSize: 11.6,
-    color: colors.cinzaEscuro,
-    fontFamily: "Mulish_700Bold",
+    color: colors.cinzaEscuro
   },
 });
 export default function WelcomeScreen({ navigation }) {
@@ -64,13 +61,13 @@ export default function WelcomeScreen({ navigation }) {
         </View>
         <View style={styles.buttonsContainer}>
           <AppButton
-            title="Login"
+            title="Entrar"
             onPress={() => navigation.navigate('Login')}
             color="media2"
           />
           <AppButton
             title="Registrar-se"
-            onPress={() => console.log("PRESSIONADO CADASTRO")}
+            onPress={() => navigation.navigate('Register')}
             color="escura1"
           />
         </View>

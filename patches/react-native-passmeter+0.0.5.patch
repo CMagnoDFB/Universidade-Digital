@@ -1,0 +1,22 @@
+diff --git a/node_modules/react-native-passmeter/index.js b/node_modules/react-native-passmeter/index.js
+index 0d07a6a..594d99f 100644
+--- a/node_modules/react-native-passmeter/index.js
++++ b/node_modules/react-native-passmeter/index.js
+@@ -14,7 +14,7 @@ const PassMeter = props => {
+         [animateColor, setAnimateColor] = useState(new Animated.Value(0))
+ 
+     useEffect(() => {
+-        Animated.spring(animateVal, { bounciness: 15, toValue: barLength * (props.password.length / props.maxLength) }).start()
++        Animated.spring(animateVal, { useNativeDriver: false, bounciness: 15, toValue: barLength * (props.password.length / props.maxLength) }).start()
+         let passPoint = 0
+ 
+         if (props.password.length > 0 && props.password.length < props.minLength)
+@@ -23,7 +23,7 @@ const PassMeter = props => {
+             regexArr.forEach(rgx => rgx.test(props.password) ? passPoint += 1 : null)
+             setPassStat(props.labels[passPoint])
+         }
+-        Animated.timing(animateColor, { toValue: passPoint, duration: 300 }).start()
++        Animated.timing(animateColor, { useNativeDriver: false, toValue: passPoint, duration: 300 }).start()
+ 
+     }, [props.password])
+ 

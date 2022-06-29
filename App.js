@@ -2,8 +2,11 @@ import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import WelcomeScreen from "./app/screens/WelcomeScreen";
 import LoginScreen from "./app/screens/LoginScreen";
+import PostsScreen from "./app/screens/PostsScreen";
+import EditProfileScreen from "./app/screens/EditProfileScreen";
+import RegisterScreen from "./app/screens/RegisterScreen";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 const Stack = createStackNavigator();
@@ -13,10 +16,8 @@ import {
   useFonts,
   Mulish_200ExtraLight,
   Mulish_300Light,
-  Mulish_400Regular,
   Mulish_500Medium,
   Mulish_600SemiBold,
-  Mulish_700Bold,
   Mulish_800ExtraBold,
   Mulish_900Black,
   Mulish_200ExtraLight_Italic,
@@ -33,10 +34,8 @@ export default function App() {
   let fontsLoaded = useFonts({
     Mulish_200ExtraLight,
     Mulish_300Light,
-    Mulish_400Regular,
     Mulish_500Medium,
     Mulish_600SemiBold,
-    Mulish_700Bold,
     Mulish_800ExtraBold,
     Mulish_900Black,
     Mulish_200ExtraLight_Italic,
@@ -51,11 +50,15 @@ export default function App() {
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
+    
     return (
-      <NavigationContainer>
+      <NavigationContainer >
         <Stack.Navigator>
-          <Stack.Screen name="Welcome" component={WelcomeScreen} />
-          <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Welcome" component={WelcomeScreen} options={{headerShown: false}} />
+          <Stack.Screen name="Login" component={LoginScreen} options={{headerTitle: 'Entrar', headerTransparent: true, headerTintColor: '#fff', headerTitleStyle: {color: '#fff', fontSize: 25}}} />
+          <Stack.Screen name="Register" component={RegisterScreen} options={{headerTitle: 'Cadastrar', headerTransparent: true, headerTintColor: '#fff', headerTitleStyle: {color: '#fff', fontSize: 25}}} />
+          <Stack.Screen name="Posts" component={PostsScreen} options={{headerTitle: 'Página inicial', headerLeft: null,  headerTitleStyle: {color: '#000', fontSize: 25}}} />
+          <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{headerTitle: 'Editar perfil', headerLeft: null,  headerTitleStyle: {color: '#000', fontSize: 25}}} />
         </Stack.Navigator>
       </NavigationContainer>
     );
