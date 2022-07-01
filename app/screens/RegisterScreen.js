@@ -110,6 +110,14 @@ const styles = StyleSheet.create({
 });
 export default function RegisterScreen({ navigation }) {
 
+  const showConnectionError = (i) => {
+    showMessage({
+      message: "Erro",
+      description: "Erro de conexão.. Tente novamente",
+      type: "danger",
+    });
+  };
+
   const checkIfLogged = async () => {
     var data = await checkLoginState();
     if (data) {
@@ -135,6 +143,7 @@ export default function RegisterScreen({ navigation }) {
         });
 
       }).catch(err => {
+        showConnectionError();
         console.log('error', err.response);
       });
 
