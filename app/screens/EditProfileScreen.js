@@ -7,7 +7,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 
 import api from "./../../connectAPI"
 import {CARGO_VALUES, CURSO_VALUES, CAMPUS_VALUES, BADGE_COLORS, parseTags } from "./../config/consts"
-import { saveLoginState, checkLoginState, saveUserObject, getUserObject } from "./../../loginState"
+import { checkLoginState, saveUserObject, getUserObject } from "./../../loginState"
 
 const styles = StyleSheet.create({
   background: {
@@ -68,8 +68,21 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 28
   },
+  loadingScreen: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: "#fff"
+  },
+
 });
 export default function LoginScreen({ navigation }) {
+
+  const [loadingPage, setLoadingPage] = useState(true);
 
   const [usuario, setUsuario] = useState(null);
   const [token, setToken] = useState(null);
@@ -93,6 +106,14 @@ export default function LoginScreen({ navigation }) {
   const [valueTags, setValueTags] = useState([]);
   const [valueInitialTags, setValueInitialTags] = useState([]);
   const [itemsTags, setItemsTags] = useState(parseTags());
+
+  const showConnectionError = (i) => {
+    showMessage({
+      message: "Erro",
+      description: "Erro de conexão.. Tente novamente",
+      type: "danger",
+    });
+  };
 
   const checkIfLogged = async () => {
     var data = await checkLoginState();
@@ -119,6 +140,7 @@ export default function LoginScreen({ navigation }) {
         }
         
       }).catch(err => {
+        showConnectionError();
         console.log('error', err.response);
       });
 
@@ -140,10 +162,12 @@ export default function LoginScreen({ navigation }) {
           });
           
           setValueInitialTags(tagIds);  
-          setValueTags(tagIds);  
+          setValueTags(tagIds); 
+          setLoadingPage(false); 
         }
         
       }).catch(err => {
+        showConnectionError();
         console.log('error', err.response);
       });
     }else {
@@ -195,6 +219,7 @@ export default function LoginScreen({ navigation }) {
             navigation.navigate('Posts');
           }).catch(err => {
             setLoading(false);
+            showConnectionError();
             console.log('error', err.response);
           });
         });
@@ -320,6 +345,11 @@ export default function LoginScreen({ navigation }) {
         </ScrollView>
         
       </ImageBackground>
+      {loadingPage && 
+        <View style={styles.loadingScreen}>
+          <ActivityIndicator size={70} color={colors.media2} />
+        </View>
+      }
       <FlashMessage position="bottom" />
     </>
   );

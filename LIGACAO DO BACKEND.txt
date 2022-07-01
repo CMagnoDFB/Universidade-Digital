@@ -1,2 +1,0 @@
-abrir pasta com terminal e:
-node api.js
