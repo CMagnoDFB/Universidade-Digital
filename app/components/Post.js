@@ -3,21 +3,14 @@ import { Text, StyleSheet, View } from "react-native";
 import { Icon } from 'react-native-elements';
 import colors from "../config/colors";
 
-function Post({ role, tags, body, user, date }) {
+function Post({ id, role, tags, body, user, date, upvotes }) {
 
   const [upvoted, setUpvoted] = useState(false);
 
-  var min = 1;
-  var max = 10;
-  var randInt = Math.floor(Math.random() * (max - min + 1)) + min;
-
-  var d = new Date(Date.now());
-  d.setHours(d.getHours() - randInt); // UTC -3:00
-
-  var now = new Date(Date.now());
-  var diffMs = Math.abs(now - d);
-  var diffHours = Math.ceil(diffMs / (1000 * 60 * 60))
-  var hours = diffHours.toString() + "h";
+  const date1 = new Date(Date.now());
+  const date2 = new Date(date);
+  const diffTime = Math.abs(date2 - date1);
+  const hours = Math.ceil(diffTime / (1000 * 60 * 60)).toString() + "h"; 
 
   return (
     <View style={styles.card}>
@@ -30,7 +23,7 @@ function Post({ role, tags, body, user, date }) {
               reverse={upvoted}
               name='arrow-up'
               type='font-awesome'
-              color='#000'
+              color={colors.escura2}
               size={15}
               style={styles.upvoteIcon}
             />
@@ -85,7 +78,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     paddingHorizontal: 15
   },
-  postHeaderText: { flexDirection: "column", paddingLeft: 10, width: "100%" },
+  postHeaderText: { flexDirection: "column", paddingLeft: 10, width: "80%" },
   userText: {
     textTransform: "capitalize",
     fontSize: 20
@@ -95,7 +88,7 @@ const styles = StyleSheet.create({
   },
   tags: { flexDirection: "row" },
   tag: { 
-    backgroundColor: "lightblue", 
+    backgroundColor: colors.media1, 
     paddingHorizontal: 8,
     paddingVertical: 4,
     marginTop: 2,

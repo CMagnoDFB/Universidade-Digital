@@ -127,6 +127,16 @@ export default function LoginScreen({ navigation }) {
       setValueCurso(uObj.curso);
       setValueCampus(uObj.campus);
       setIdUsuario(uObj.id);
+      var tagIds = [];
+      if(uObj.tags) {
+        uObj.tags.forEach((tag, i) => {
+          tagIds.push(tag.id);
+        });
+        console.log(uObj.tags);
+        setValueInitialTags(tagIds);  
+        setValueTags(tagIds); 
+        
+      }
       
       api.get("fetchTags", {
         headers: {
@@ -136,40 +146,16 @@ export default function LoginScreen({ navigation }) {
         }
       }).then((dbTags) => {
         if(dbTags) {
-          setItemsTags(parseTags(dbTags.data.tags));  
-        }
-        
-      }).catch(err => {
-        showConnectionError();
-        console.log('error', err.response);
-      });
-
-      api.get("fetchUserTags", {
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${data.token}`,
-          'Content-Type': 'application/json'
-        },
-        params: {
-          id_usuario: uObj.id
-        }
-      }).then((dbTags) => {
-        var tagIds = [];
-        if(dbTags) {
-          var tags = dbTags.data.tags;
-          tags.forEach((tag, i) => {
-            tagIds.push(tag.id);
-          });
-          
-          setValueInitialTags(tagIds);  
-          setValueTags(tagIds); 
+          setItemsTags(parseTags(dbTags.data.tags));
           setLoadingPage(false); 
         }
         
       }).catch(err => {
         showConnectionError();
+        setLoadingPage(false); 
         console.log('error', err.response);
       });
+
     }else {
       navigation.pop();
       navigation.navigate('Login');
