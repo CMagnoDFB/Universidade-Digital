@@ -96,7 +96,6 @@ export default function LoginScreen({ navigation }) {
   const checkIfLogged = async () => {
     var data = await checkLoginState();
     if (data) {
-      console.log("dudu");
       console.log(data.usuario);
       api.get("fetchUser", {
         headers: {
@@ -108,7 +107,6 @@ export default function LoginScreen({ navigation }) {
           usuario: data.usuario
         }
       }).then((dbUsuario) => {
-        
         saveUserObject(dbUsuario.data.usuario).then(() => {
           navigation.pop();
           if (dbUsuario.data.usuario.nome && dbUsuario.data.usuario.cargo && dbUsuario.data.usuario.curso && dbUsuario.data.usuario.campus) {

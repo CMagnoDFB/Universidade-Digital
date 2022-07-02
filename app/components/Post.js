@@ -1,16 +1,65 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, StyleSheet, View } from "react-native";
 import { Icon } from 'react-native-elements';
 import colors from "../config/colors";
+import api from "./../../connectAPI"
 
-function Post({ id, role, tags, body, user, date, upvotes }) {
+function Post({ id, role, tags, body, user, date, upvotes, userUpvoted, id_usuario, token }) {
 
-  const [upvoted, setUpvoted] = useState(false);
+  const [upvoted, setUpvoted] = useState(userUpvoted);
+  const [upvoteLoading, setUpvoteLoading] = useState(false);
+
+  useEffect(() => {
+    setUpvoted(userUpvoted);
+  }, [userUpvoted]);
 
   const date1 = new Date(Date.now());
   const date2 = new Date(date);
   const diffTime = Math.abs(date2 - date1);
-  const hours = Math.ceil(diffTime / (1000 * 60 * 60)).toString() + "h"; 
+  const hours = Math.ceil(diffTime / (1000 * 60 * 60)).toString() + "h";
+
+  const upvotePost = async () => {
+    
+    if (!upvoteLoading) {
+      setUpvoteLoading(true);
+      setUpvoted(!upvoted);
+
+      if (!upvoted) {
+        api.post("upvotePost", {
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          id_usuario: id_usuario,
+          id_publicacao: id
+        } ).then(() => {
+          setUpvoteLoading(false);
+          
+        }).catch(err => {
+          setUpvoteLoading(false);
+          console.log('error', err.response);
+        });
+      } else {
+        api.post("removeUpvotePost", {
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          id_usuario: id_usuario,
+          id_publicacao: id
+        } ).then(() => {
+          setUpvoteLoading(false);
+          
+        }).catch(err => {
+          setUpvoteLoading(false);
+          console.log('error', err.response);
+        });
+      }
+    }
+    
+  }
 
   return (
     <View style={styles.card}>
@@ -18,7 +67,7 @@ function Post({ id, role, tags, body, user, date, upvotes }) {
         <View style={styles.postHeader}>
           <View style={styles.upvote}>
             <Icon
-              onPress={() => setUpvoted(!upvoted)}
+              onPress={() => upvotePost()}
               raised={!upvoted}
               reverse={upvoted}
               name='arrow-up'
@@ -52,7 +101,7 @@ function Post({ id, role, tags, body, user, date, upvotes }) {
           </View>
         </View>
         <View style={styles.cardBody}>
-          <Text style={styles.textBody} numberOfLines={6}>{body} </Text>
+          <Text style={styles.textBody} numberOfLines={6}>{id}{body} </Text>
         </View>
       </View>
     </View>

@@ -32,7 +32,7 @@ export default function PostsScreen({ navigation }) {
     });
   };
 
-  const fetchPosts = (codToken=null, more=false) => {
+  const fetchPosts = (codToken=null, more=false, id_usuario) => {
 
     const tk = token ? token : codToken;
     const nPg = more ? numPagina+1 : 1
@@ -48,7 +48,8 @@ export default function PostsScreen({ navigation }) {
         },
         params: {
           pageNumber: nPg,
-          limit: 10
+          limit: 10,
+          id_usuario: usuarioObj.id
         }
       }).then((result) => {
   
@@ -79,10 +80,10 @@ export default function PostsScreen({ navigation }) {
     if (data) {
       console.log(data.usuario + " está logado");
       setUsuario(data);
-      setToken(data.token);
+      setToken(data.token,false,);
       setUsuarioObj(uObj);
 
-      fetchPosts(data.token);
+      
 
     }else {
       navigation.pop();
@@ -93,6 +94,12 @@ export default function PostsScreen({ navigation }) {
   useEffect(() => {
     checkIfLogged();
   }, []);
+
+  useEffect(() => {
+    if (usuarioObj) {
+      fetchPosts(token, false, usuarioObj.id);
+    }
+  }, [usuarioObj]);
 
   useEffect(() => {
     fetchPosts();
@@ -196,7 +203,7 @@ export default function PostsScreen({ navigation }) {
                 tagNames.push(tag.nome);
               });
             }
-            
+
             return (
               <Post
                 key={postKey}
@@ -207,6 +214,9 @@ export default function PostsScreen({ navigation }) {
                 user={post.usuario.nome}
                 date={post.data_pub}
                 upvotes={post.upvotes}
+                userUpvoted={post.upvote_publicacaos.length > 0}
+                id_usuario={usuarioObj.id}
+                token={token}
               />
             );
           })
