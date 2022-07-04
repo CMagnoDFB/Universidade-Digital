@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { Icon } from 'react-native-elements';
 import colors from "../config/colors";
-import api from "./../../connectAPI"
+import api from "./../../connectAPI";
+import { ScrollView } from "react-native-gesture-handler";
 
-function Post({ id, role, tags, body, user, date, upvotes, userUpvoted, id_usuario, token }) {
+function Post({ navigation, id, role, tags, body, user, date, upvotes, userUpvoted, id_usuario, token }) {
 
   const [upvoted, setUpvoted] = useState(userUpvoted);
   const [upvoteLoading, setUpvoteLoading] = useState(false);
@@ -13,10 +14,14 @@ function Post({ id, role, tags, body, user, date, upvotes, userUpvoted, id_usuar
     setUpvoted(userUpvoted);
   }, [userUpvoted]);
 
-  const date1 = new Date(Date.now());
-  const date2 = new Date(date);
-  const diffTime = Math.abs(date2 - date1);
-  const hours = Math.ceil(diffTime / (1000 * 60 * 60)).toString() + "h";
+  const diffTime = Math.abs(new Date(date) - new Date(Date.now()));
+  var timeAgo = Math.ceil(diffTime / (1000 * 60 * 60));
+  if (timeAgo >= 24) {
+    timeAgo = Math.floor(diffTime / (1000 * 60 * 60 * 24)).toString() + "d";
+  }else {
+    timeAgo = timeAgo.toString() + "h";
+  }
+
 
   const upvotePost = async () => {
     
@@ -61,33 +66,42 @@ function Post({ id, role, tags, body, user, date, upvotes, userUpvoted, id_usuar
     
   }
 
+  const goToPost = async () => {
+
+    navigation.pop();
+    navigation.navigate('ViewPost', {
+      id_publicacao: id
+    });
+  
+  }
+
   return (
-    <View style={styles.card}>
-      <View >
-        <View style={styles.postHeader}>
-          <View style={styles.upvote}>
-            <Icon
-              onPress={() => upvotePost()}
-              raised={!upvoted}
-              reverse={upvoted}
-              name='arrow-up'
-              type='font-awesome'
-              color={colors.escura2}
-              size={15}
-              style={styles.upvoteIcon}
-            />
-            <View>
-              <Text style={styles.dateText} numberOfLines={1}>{hours}</Text>
-            </View>
+    <TouchableOpacity style={styles.card} delayPressIn={150} onPress={() => goToPost()}>
+      <View style={styles.postHeader}>
+        <View style={styles.upvote}>
+          <Icon
+            onPress={() => upvotePost()}
+            raised={!upvoted}
+            reverse={upvoted}
+            name='arrow-up'
+            type='font-awesome'
+            color={colors.escura2}
+            size={15}
+            style={styles.upvoteIcon}
+          />
+          <View style={styles.dateContainer}>
+            <Text style={styles.dateText} numberOfLines={1}>{timeAgo}</Text>
           </View>
-          <View style={styles.postHeaderText}>
-            <View>
-              <Text style={styles.userText} numberOfLines={1}>{user}</Text>
-            </View>
-            <View >
-              <Text style={styles.roleText} numberOfLines={1}>{role}</Text>
-            </View>
-            <View style={styles.tags}>
+        </View>
+        <View style={styles.postHeaderText}>
+          <View>
+            <Text style={styles.userText} numberOfLines={1}>{user}</Text>
+          </View>
+          <View >
+            <Text style={styles.roleText} numberOfLines={1}>{role}</Text>
+          </View>
+          <View style={styles.tags}>
+            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
               { 
                 tags.map((tag, tagKey) => {
                   return (
@@ -95,16 +109,16 @@ function Post({ id, role, tags, body, user, date, upvotes, userUpvoted, id_usuar
                   );
                 })
               }
-              
-            </View>
-            
+            </ScrollView>
+
           </View>
-        </View>
-        <View style={styles.cardBody}>
-          <Text style={styles.textBody} numberOfLines={6}>{id}{body} </Text>
+          
         </View>
       </View>
-    </View>
+      <View style={styles.cardBody}>
+        <Text style={styles.textBody} numberOfLines={6}>{body} </Text>
+      </View>
+    </TouchableOpacity>
   );
 }
 
@@ -122,10 +136,13 @@ const styles = StyleSheet.create({
   upvoteIcon: {
     flexDirection: "column"
   },
+  dateContainer: {
+    width: 48,
+    alignItems: "center"
+  },
   dateText: {
     color: "#00000066",
-    flexDirection: "column",
-    paddingHorizontal: 15
+    flexDirection: "column"
   },
   postHeaderText: { flexDirection: "column", paddingLeft: 10, width: "80%" },
   userText: {
@@ -141,6 +158,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     marginTop: 2,
+    marginRight: 6,
     fontWeight: "600",
     borderRadius: 10
   },
