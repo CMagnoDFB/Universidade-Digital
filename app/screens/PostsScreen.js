@@ -36,10 +36,8 @@ export default function PostsScreen({ navigation }) {
 
     const tk = token ? token : codToken;
     const nPg = more ? numPagina+1 : 1
-
     if (tk) {
       const modo = modoExibicao=='recentes' ? "fetchRecentPosts" : "fetchPopularPosts";
-
       api.get(modo, {
         headers: {
           'Accept': 'application/json',
@@ -49,7 +47,8 @@ export default function PostsScreen({ navigation }) {
         params: {
           pageNumber: nPg,
           limit: 10,
-          id_usuario: usuarioObj.id
+          id_usuario: usuarioObj.id,
+          id_tags: usuarioObj.id_tags
         }
       }).then((result) => {
   
@@ -68,7 +67,7 @@ export default function PostsScreen({ navigation }) {
         
       }).catch(err => {
         showConnectionError();
-        console.log('dudu: ', err);
+        console.log('erro: ', err);
       });
 
     }
@@ -80,9 +79,16 @@ export default function PostsScreen({ navigation }) {
     if (data) {
       console.log(data.usuario + " está logado");
       setUsuario(data);
-      setToken(data.token,false,);
+      setToken(data.token,false);
+      
+      var tagIds = [];
+      if(uObj.tags) {
+        uObj.tags.forEach((tag, i) => {
+          tagIds.push(tag.id);
+        });
+        uObj.id_tags = tagIds;  
+      }
       setUsuarioObj(uObj);
-
       
 
     }else {
@@ -96,7 +102,7 @@ export default function PostsScreen({ navigation }) {
   }, []);
 
   useEffect(() => {
-    if (usuarioObj) {
+    if (usuarioObj &&  postList.length == 0) {
       fetchPosts(token, false, usuarioObj.id);
     }
   }, [usuarioObj]);
@@ -207,6 +213,7 @@ export default function PostsScreen({ navigation }) {
             return (
               <Post
                 key={postKey}
+                navigation={navigation}
                 id={post.id}
                 role={post.usuario.cargo + ' de ' + post.usuario.curso}
                 tags={tagNames}

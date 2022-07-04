@@ -5,6 +5,8 @@ import LoginScreen from "./app/screens/LoginScreen";
 import PostsScreen from "./app/screens/PostsScreen";
 import EditProfileScreen from "./app/screens/EditProfileScreen";
 import RegisterScreen from "./app/screens/RegisterScreen";
+import CreatePostScreen from "./app/screens/CreatePostScreen";
+import ViewPostScreen from "./app/screens/ViewPostScreen";
 
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
@@ -48,7 +50,7 @@ export default function App() {
     Mulish_900Black_Italic,
   });
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return <AppLoading/>;
   } else {
     
     return (
@@ -59,6 +61,8 @@ export default function App() {
           <Stack.Screen name="Register" component={RegisterScreen} options={{headerTitle: 'Cadastrar', headerTransparent: true, headerTintColor: '#fff', headerTitleStyle: {color: '#fff', fontSize: 25}}} />
           <Stack.Screen name="Posts" component={PostsScreen} options={{headerTitle: 'Página inicial', headerLeft: null,  headerTitleStyle: {color: '#000', fontSize: 25}}} />
           <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{headerTitle: 'Editar perfil', headerLeft: null,  headerTitleStyle: {color: '#000', fontSize: 25}}} />
+          <Stack.Screen name="CreatePosts" component={CreatePostScreen} options={{headerTitle: 'Criar publicação', headerLeft: null,  headerTitleStyle: {color: '#000', fontSize: 25}}} />
+          <Stack.Screen name="ViewPost" component={ViewPostScreen} options={{headerTitle: 'Publicação', headerLeft: null,  headerTitleStyle: {color: '#000', fontSize: 25}}} />
         </Stack.Navigator>
       </NavigationContainer>
     );

@@ -6,7 +6,7 @@ import FlashMessage, { showMessage } from "react-native-flash-message";
 import DropDownPicker from "react-native-dropdown-picker";
 
 import api from "./../../connectAPI"
-import {CARGO_VALUES, CURSO_VALUES, CAMPUS_VALUES, BADGE_COLORS, parseTags } from "./../config/consts"
+import { BADGE_COLORS, parseTags } from "./../config/consts"
 import { checkLoginState, saveUserObject, getUserObject } from "./../../loginState"
 
 const styles = StyleSheet.create({
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
 
 });
-export default function LoginScreen({ navigation }) {
+export default function CreatePostScreen({ navigation }) {
 
   const [loadingPage, setLoadingPage] = useState(true);
 
@@ -88,23 +88,10 @@ export default function LoginScreen({ navigation }) {
   const [token, setToken] = useState(null);
   const [id_usuario, setIdUsuario] = useState(null);
 
-  const [nomeInput, setNomeInput] = useState("");
-
-  const [openCargo, setOpenCargo] = useState(false);
-  const [valueCargo, setValueCargo] = useState(null);
-  const [itemsCargo, setItemsCargo] = useState(CARGO_VALUES);
-
-  const [openCurso, setOpenCurso] = useState(false);
-  const [valueCurso, setValueCurso] = useState(null);
-  const [itemsCurso, setItemsCurso] = useState(CURSO_VALUES);
-
-  const [openCampus, setOpenCampus] = useState(false);
-  const [valueCampus, setValueCampus] = useState(null);
-  const [itemsCampus, setItemsCampus] = useState(CAMPUS_VALUES);
+  const [conteudoInput, setConteudoInput] = useState("");
 
   const [openTags, setOpenTags] = useState(false);
   const [valueTags, setValueTags] = useState([]);
-  const [valueInitialTags, setValueInitialTags] = useState([]);
   const [itemsTags, setItemsTags] = useState(parseTags());
 
   const showConnectionError = (i) => {
@@ -127,16 +114,6 @@ export default function LoginScreen({ navigation }) {
       setValueCurso(uObj.curso);
       setValueCampus(uObj.campus);
       setIdUsuario(uObj.id);
-      var tagIds = [];
-      if(uObj.tags) {
-        uObj.tags.forEach((tag, i) => {
-          tagIds.push(tag.id);
-        });
-
-        setValueInitialTags(tagIds);  
-        setValueTags(tagIds); 
-        
-      }
       
       api.get("fetchTags", {
         headers: {
@@ -172,44 +149,39 @@ export default function LoginScreen({ navigation }) {
     setNomeInput(i.nativeEvent.text);
   };
 
-  const efetuarEdicao = async () => {
+  const criarPublicacao = async () => {
 
     if (!loading) {
       setLoading(true);
-      api.post("updateUser", {
+      api.post("createPost", {
         headers: {
           'Accept': 'application/json',
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        usuario: usuario,
-        nome: nomeInput,
-        cargo: valueCargo,
-        curso: valueCurso,
-        campus: valueCampus
-      } ).then((dbUsuario) => {
+        conteudo: conteudoInput,
+        id_usuario: id_usuario
+      } ).then((dbPost) => {
 
-        saveUserObject(dbUsuario.data.usuario).then(() => {
-          api.post("addUserTags", {
-            headers: {
-              'Accept': 'application/json',
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            },
-            id_usuario: id_usuario,
-            tags: valueTags,
-            initial_tags: valueInitialTags
-          }).then(() => {
-            setLoading(false);
-            navigation.pop();
-            navigation.navigate('Posts');
-          }).catch(err => {
-            setLoading(false);
-            showConnectionError();
-            console.log('error', err.response);
-          });
+        api.post("addPostTags", {
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          id_publicacao: dbPost.data.publicacao.id,
+          tags: valueTags,
+          initial_tags: []
+        }).then(() => {
+          setLoading(false);
+          navigation.pop();
+          navigation.navigate('Posts');
+        }).catch(err => {
+          setLoading(false);
+          showConnectionError();
+          console.log('error', err.response);
         });
-        
+
       }).catch(err => {
         setLoading(false);
         console.log('error', err.response);
@@ -225,7 +197,7 @@ export default function LoginScreen({ navigation }) {
     
   };
 
-  const ignorarEdicao = async () => {
+  const voltar = async () => {
     navigation.pop();
     navigation.navigate('Posts');
   };
@@ -246,6 +218,8 @@ export default function LoginScreen({ navigation }) {
             keyboardType="ascii-capable"
             onChange={nomeChangeHandler}
             value={nomeInput}
+            multiline={true}
+            numberOfLines = {6}
           />
           <Text style={styles.textInput}>Cargo</Text>
           <DropDownPicker
@@ -297,7 +271,7 @@ export default function LoginScreen({ navigation }) {
             setValue={setValueTags}
             setItems={setItemsTags}
             multiple={true}
-            min={0}
+            min={1}
             listMode="SCROLLVIEW"
             mode="BADGE"
             badgeDotColors={BADGE_COLORS}
@@ -305,7 +279,7 @@ export default function LoginScreen({ navigation }) {
           />
 
           <View style={styles.buttonsContainer}>
-            <TouchableOpacity onPress={() => efetuarEdicao()} disabled={loading}>
+            <TouchableOpacity onPress={() => criarPublicacao()} disabled={loading}>
               <View
                 style={{
                   ...styles.buttonLogin,
@@ -320,7 +294,7 @@ export default function LoginScreen({ navigation }) {
             </TouchableOpacity>
           </View>
           <View style={styles.buttonsContainer2}>
-            <TouchableOpacity onPress={() => ignorarEdicao()} >
+            <TouchableOpacity onPress={() => voltar()} >
               <View style={styles.buttonLogin}>
                 <Text style={styles.buttonText}>
                   Mais tarde
