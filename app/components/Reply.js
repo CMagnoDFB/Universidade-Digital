@@ -7,6 +7,7 @@ import { ScrollView } from "react-native-gesture-handler";
 
 function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, id_usuario, id_usuarioResp, id_publicacao, token }) {
 
+  const [nUpvotes, setNUpvotes] = useState(upvotes);
   const [upvoted, setUpvoted] = useState(userUpvoted);
   const [upvoteLoading, setUpvoteLoading] = useState(false);
 
@@ -14,10 +15,13 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, i
     setUpvoted(userUpvoted);
   }, [userUpvoted]);
 
-  const date1 = new Date(Date.now());
-  const date2 = new Date(date);
-  const diffTime = Math.abs(date2 - date1);
-  const hours = Math.ceil(diffTime / (1000 * 60 * 60)).toString() + "h";
+  const diffTime = Math.abs(new Date(date) - new Date(Date.now()));
+  var timeAgo = Math.ceil(diffTime / (1000 * 60 * 60));
+  if (timeAgo >= 24) {
+    timeAgo = Math.floor(diffTime / (1000 * 60 * 60 * 24)).toString() + "d";
+  }else {
+    timeAgo = timeAgo.toString() + "h";
+  }
 
   const upvoteReply = async () => {
     
@@ -28,10 +32,10 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, i
         var modoUpvote;
         if (!upvoted) {
             modoUpvote = "upvoteReply";
-            setUpvotes(upvotes+1);
+            setNUpvotes(nUpvotes+1);
         }else {
             modoUpvote = "removeUpvoteReply";
-            setUpvotes(upvotes-1);
+            setNUpvotes(nUpvotes-1);
         }
 
         api.post(modoUpvote, {
@@ -81,8 +85,8 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, i
           <View style={styles.upvote}>
             <Icon
               onPress={() => upvoteReply()}
-              raised={!upvoted}
               reverse={upvoted}
+              raised
               name='arrow-up'
               type='font-awesome'
               color={colors.escura2}
@@ -90,7 +94,7 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, i
               style={styles.upvoteIcon}
             />
             <View style={styles.dateContainer}>
-              <Text style={styles.dateText} numberOfLines={1}>{hours}</Text>
+              <Text style={styles.dateText} numberOfLines={1}>{timeAgo}</Text>
             </View>
           </View>
           <View style={styles.replyHeaderText}>
@@ -101,7 +105,7 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, i
               <Text style={styles.roleText} numberOfLines={1}>{role}</Text>
             </View>
             <View >
-              <Text style={styles.roleText} numberOfLines={1}>{upvotes} {upvotes!=1 ? "upvotes" : "upvote" }</Text>
+              <Text style={styles.roleText} numberOfLines={1}>{nUpvotes} {nUpvotes!=1 ? "upvotes" : "upvote" }</Text>
             </View>
             
           </View>

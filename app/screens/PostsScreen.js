@@ -137,7 +137,7 @@ export default function PostsScreen({ navigation }) {
   };
 
   const irEdicaoPerfil = async () => {
-    await saveUserObject(usuarioObj);
+    //await saveUserObject(usuarioObj);
     navigation.pop();
     navigation.navigate('EditProfile');
   };
@@ -145,6 +145,11 @@ export default function PostsScreen({ navigation }) {
   const carregarMais = async () => {
     setLoadingMorePosts(true);
     fetchPosts(null, true);
+  };
+
+  const criarPub = async () => {
+    navigation.pop();
+    navigation.navigate('CreatePosts');
   };
 
   return (
@@ -156,8 +161,8 @@ export default function PostsScreen({ navigation }) {
           name='schedule'
           type='material'
           color={colors.escura2}
-          raised={!(modoExibicao == 'recentes')}
           reverse={modoExibicao == 'recentes'}
+          raised
           size={25}
           style={styles.headerIcon}
         />
@@ -166,8 +171,8 @@ export default function PostsScreen({ navigation }) {
           name='local-fire-department'
           type='material'
           color={colors.escura2}
-          raised={!(modoExibicao == 'em alta')}
           reverse={modoExibicao == 'em alta'}
+          raised
           size={25}
           style={styles.headerIcon}
         />
@@ -247,6 +252,18 @@ export default function PostsScreen({ navigation }) {
          
       </View>
     </ScrollView>
+    <View style={styles.createPostButton}>
+      <Icon
+        onPress={() => criarPub()}
+        name='plus'
+        type='font-awesome'
+        color={colors.escura2}
+        reverse
+        raised
+        size={30}
+        style={styles.headerIcon}
+      />
+    </View>
     {loadingPage && 
       <View style={styles.loadingScreen}>
         <ActivityIndicator size={70} color={colors.media2} />
@@ -283,6 +300,11 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     marginVertical: 15,
+  },
+  createPostButton: {
+    position: 'absolute',
+    bottom:30,
+    right:30
   },
 });
 

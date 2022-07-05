@@ -105,12 +105,12 @@ const BADGE_COLORS = [
     "#603A94","#15EBC3","#C48627","#F1D7E2","#0AEE3E","#4D37FA","#04850D","#EBC01E","#23E8A0","#120F7B","#502C1E","#BE1288","#04C59C","#627AC5","#0F0B21","#52C0AA","#6187D9","#524727","#588A43","#A2A6C4","#BCF5CB","#79D860","#FF1313","#992B1C","#5182EA","#16EC7A","#5051E7","#6172AB","#884EDC","#AD8034",
 ];
 
-const parseTags = (tags) => {
+const parseTags = (tags, geral=false) => {
 
     var tagList = [];
     if (tags) {
         tags.forEach((tag, i) => {
-            if (tag.nome != 'Geral') {
+            if (geral || tag.nome != 'Geral') {
                 tagList.push({ label: tag.nome, value: tag.id });
             }
         });

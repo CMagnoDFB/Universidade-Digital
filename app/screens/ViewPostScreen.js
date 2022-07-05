@@ -237,7 +237,7 @@ export default function ViewPostScreen({ navigation, route }) {
               onPress={() => excluirPub()}
               name='trash'
               type='font-awesome'
-              color="#cc0000"
+              color="#c00"
               raised={true}
               size={25}
               style={styles.headerIcon}

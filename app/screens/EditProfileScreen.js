@@ -10,10 +10,6 @@ import {CARGO_VALUES, CURSO_VALUES, CAMPUS_VALUES, BADGE_COLORS, parseTags } fro
 import { checkLoginState, saveUserObject, getUserObject } from "./../../loginState"
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    backgroundColor: colors.branco
-  },
   inputContainer: {
     width: "100%",
     padding: 20,
@@ -232,105 +228,99 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <>
-      <ImageBackground
-        opacity={0.6}
-        style={styles.background}
-        blurRadius={3}
-      >
-        <ScrollView nestedScrollEnabled={true} style={styles.inputContainer}>
+      <ScrollView nestedScrollEnabled={true} style={styles.inputContainer}>
 
-          <Text style={styles.textInput}>Nome</Text>
-          <TextInput
-            style={[styles.input,styles.inputMargin]}
-            placeholder=""
-            keyboardType="ascii-capable"
-            onChange={nomeChangeHandler}
-            value={nomeInput}
-          />
-          <Text style={styles.textInput}>Cargo</Text>
-          <DropDownPicker
-            style={[styles.inputMargin, styles.dropdown]}
-            open={openCargo}
-            onOpen={() => {setOpenTags(false);setOpenCurso(false);setOpenCampus(false)}}
-            value={valueCargo}
-            items={itemsCargo}
-            setOpen={setOpenCargo}
-            setValue={setValueCargo}
-            setItems={setItemsCargo}
-            listMode="SCROLLVIEW"
-            scrollViewProps={{nestedScrollEnabled: true,}}
-          />
-          <Text style={styles.textInput}>Curso</Text>
-          <DropDownPicker
-            style={[styles.inputMargin, styles.dropdown]}
-            open={openCurso}
-            onOpen={() => {setOpenCargo(false);setOpenTags(false);setOpenCampus(false)}}
-            value={valueCurso}
-            items={itemsCurso}
-            setOpen={setOpenCurso}
-            setValue={setValueCurso}
-            setItems={setItemsCurso}
-            listMode="SCROLLVIEW"
-            scrollViewProps={{nestedScrollEnabled: true,}}
-          />
-          <Text style={styles.textInput}>Câmpus</Text>
-          <DropDownPicker
-            style={[styles.inputMargin, styles.dropdown]}
-            open={openCampus}
-            onOpen={() => {setOpenCargo(false);setOpenCurso(false);setOpenTags(false)}}
-            value={valueCampus}
-            items={itemsCampus}
-            setOpen={setOpenCampus}
-            setValue={setValueCampus}
-            setItems={setItemsCampus}
-            listMode="SCROLLVIEW"
-            scrollViewProps={{nestedScrollEnabled: true,}}
-          />
-          <Text style={styles.textInput}>Tags</Text>
-          <DropDownPicker
-            style={[styles.inputMargin, styles.dropdown]}
-            open={openTags}
-            onOpen={() => {setOpenCargo(false);setOpenCurso(false);setOpenCampus(false)}}
-            value={valueTags}
-            items={itemsTags}
-            setOpen={setOpenTags}
-            setValue={setValueTags}
-            setItems={setItemsTags}
-            multiple={true}
-            min={0}
-            listMode="SCROLLVIEW"
-            mode="BADGE"
-            badgeDotColors={BADGE_COLORS}
-            scrollViewProps={{nestedScrollEnabled: true,}}
-          />
+        <Text style={styles.textInput}>Nome</Text>
+        <TextInput
+          style={[styles.input,styles.inputMargin]}
+          placeholder=""
+          keyboardType="ascii-capable"
+          onChange={nomeChangeHandler}
+          value={nomeInput}
+        />
+        <Text style={styles.textInput}>Cargo</Text>
+        <DropDownPicker
+          style={[styles.inputMargin, styles.dropdown]}
+          open={openCargo}
+          onOpen={() => {setOpenTags(false);setOpenCurso(false);setOpenCampus(false)}}
+          value={valueCargo}
+          items={itemsCargo}
+          setOpen={setOpenCargo}
+          setValue={setValueCargo}
+          setItems={setItemsCargo}
+          listMode="SCROLLVIEW"
+          scrollViewProps={{nestedScrollEnabled: true,}}
+        />
+        <Text style={styles.textInput}>Curso</Text>
+        <DropDownPicker
+          style={[styles.inputMargin, styles.dropdown]}
+          open={openCurso}
+          onOpen={() => {setOpenCargo(false);setOpenTags(false);setOpenCampus(false)}}
+          value={valueCurso}
+          items={itemsCurso}
+          setOpen={setOpenCurso}
+          setValue={setValueCurso}
+          setItems={setItemsCurso}
+          listMode="SCROLLVIEW"
+          scrollViewProps={{nestedScrollEnabled: true,}}
+        />
+        <Text style={styles.textInput}>Câmpus</Text>
+        <DropDownPicker
+          style={[styles.inputMargin, styles.dropdown]}
+          open={openCampus}
+          onOpen={() => {setOpenCargo(false);setOpenCurso(false);setOpenTags(false)}}
+          value={valueCampus}
+          items={itemsCampus}
+          setOpen={setOpenCampus}
+          setValue={setValueCampus}
+          setItems={setItemsCampus}
+          listMode="SCROLLVIEW"
+          scrollViewProps={{nestedScrollEnabled: true,}}
+        />
+        <Text style={styles.textInput}>Tags</Text>
+        <DropDownPicker
+          style={[styles.inputMargin, styles.dropdown]}
+          open={openTags}
+          onOpen={() => {setOpenCargo(false);setOpenCurso(false);setOpenCampus(false)}}
+          value={valueTags}
+          items={itemsTags}
+          setOpen={setOpenTags}
+          setValue={setValueTags}
+          setItems={setItemsTags}
+          multiple={true}
+          min={0}
+          listMode="SCROLLVIEW"
+          mode="BADGE"
+          badgeDotColors={BADGE_COLORS}
+          scrollViewProps={{nestedScrollEnabled: true,}}
+        />
 
-          <View style={styles.buttonsContainer}>
-            <TouchableOpacity onPress={() => efetuarEdicao()} disabled={loading}>
-              <View
-                style={{
-                  ...styles.buttonLogin,
-                  backgroundColor: loading ? "#3A8F95" : colors.media2 ,
-                }}
-              >
-                {loading && <ActivityIndicator size="large" color="white" />}
-                <Text style={{...styles.buttonText, display: loading ? 'none' : 'flex' }}>
-                  Salvar
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.buttonsContainer2}>
-            <TouchableOpacity onPress={() => ignorarEdicao()} >
-              <View style={styles.buttonLogin}>
-                <Text style={styles.buttonText}>
-                  Mais tarde
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-        
-      </ImageBackground>
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity onPress={() => efetuarEdicao()} disabled={loading}>
+            <View
+              style={{
+                ...styles.buttonLogin,
+                backgroundColor: loading ? "#3A8F95" : colors.media2 ,
+              }}
+            >
+              {loading && <ActivityIndicator size="large" color="white" />}
+              <Text style={{...styles.buttonText, display: loading ? 'none' : 'flex' }}>
+                Salvar
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.buttonsContainer2}>
+          <TouchableOpacity onPress={() => ignorarEdicao()} >
+            <View style={styles.buttonLogin}>
+              <Text style={styles.buttonText}>
+                Mais tarde
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+
       {loadingPage && 
         <View style={styles.loadingScreen}>
           <ActivityIndicator size={70} color={colors.media2} />
