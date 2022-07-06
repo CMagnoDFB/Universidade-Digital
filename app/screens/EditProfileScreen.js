@@ -184,28 +184,29 @@ export default function LoginScreen({ navigation }) {
         curso: valueCurso,
         campus: valueCampus
       } ).then((dbUsuario) => {
+        var usuario = dbUsuario.data.usuario;
 
-        saveUserObject(dbUsuario.data.usuario).then(() => {
-          api.post("addUserTags", {
-            headers: {
-              'Accept': 'application/json',
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            },
-            id_usuario: id_usuario,
-            tags: valueTags,
-            initial_tags: valueInitialTags
-          }).then(() => {
-            setLoading(false);
-            navigation.pop();
-            navigation.navigate('Posts');
-          }).catch(err => {
-            setLoading(false);
-            showConnectionError();
-            console.log('error', err.response);
-          });
+        api.post("addUserTags", {
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          id_usuario: id_usuario,
+          tags: valueTags,
+          initial_tags: valueInitialTags
+        }).then((dbTags) => {
+          usuario.tags = dbTags.data.tags;
+          saveUserObject(usuario);
+          setLoading(false);
+          navigation.pop();
+          navigation.navigate('Posts');
+        }).catch(err => {
+          setLoading(false);
+          showConnectionError();
+          console.log('error', err.response);
         });
-        
+
       }).catch(err => {
         setLoading(false);
         console.log('error', err.response);

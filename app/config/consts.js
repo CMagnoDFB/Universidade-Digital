@@ -139,5 +139,6 @@ const dateDifference = (date) => {
 
     return timeAgo;
 }
+const PAGE_LIMIT = 10;
 
-module.exports = { CARGO_VALUES, CURSO_VALUES, CAMPUS_VALUES, BADGE_COLORS, parseTags, dateDifference };
+module.exports = { CARGO_VALUES, CURSO_VALUES, CAMPUS_VALUES, BADGE_COLORS, parseTags, dateDifference, PAGE_LIMIT };

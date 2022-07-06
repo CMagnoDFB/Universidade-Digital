@@ -110,23 +110,8 @@ export default function CreatePostScreen({ navigation }) {
       setToken(data.token);
       setIdUsuario(uObj.id);
       
-      api.get("fetchTags", {
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${data.token}`,
-          'Content-Type': 'application/json'
-        }
-      }).then((dbTags) => {
-        if(dbTags) {
-          setItemsTags(parseTags(dbTags.data.tags, true));
-          setLoadingPage(false); 
-        }
-        
-      }).catch(err => {
-        showConnectionError();
-        setLoadingPage(false); 
-        console.log('error', err.response);
-      });
+      setItemsTags(parseTags(uObj.tags, true));
+      setLoadingPage(false); 
 
     }else {
       navigation.pop();

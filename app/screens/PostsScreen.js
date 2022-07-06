@@ -3,16 +3,19 @@ import { StyleSheet, View, ActivityIndicator } from "react-native";
 import { Icon } from 'react-native-elements';
 import Post from "../components/Post";
 import FlashMessage, { showMessage } from "react-native-flash-message";
+import DropDownPicker from "react-native-dropdown-picker";
 
 import colors from "../config/colors"
 import api from "./../../connectAPI"
 import { checkLoginState, removeLoginState, getUserObject } from "./../../loginState"
+import { BADGE_COLORS, parseTags, PAGE_LIMIT } from "./../config/consts"
 import { ScrollView } from "react-native-gesture-handler";
 
 export default function PostsScreen({ navigation }) {
 
   const [loadingPage, setLoadingPage] = useState(true);
   const [loadingMorePosts, setLoadingMorePosts] = useState(false);
+  const [filterEnabled, setFilterEnabled] = useState(false);
 
   const [usuario, setUsuario] = useState(null);
   const [token, setToken] = useState(null);
@@ -23,6 +26,10 @@ export default function PostsScreen({ navigation }) {
 
   const [postList, setPostList] = useState([]);
 
+  const [openTags, setOpenTags] = useState(false);
+  const [valueTags, setValueTags] = useState([]);
+  const [itemsTags, setItemsTags] = useState(parseTags());
+
   const showConnectionError = (i) => {
     showMessage({
       message: "Erro",
@@ -31,12 +38,16 @@ export default function PostsScreen({ navigation }) {
     });
   };
 
-  const fetchPosts = (codToken=null, more=false, id_usuario) => {
+  const fetchPosts = (codToken=null, more=false) => {
 
     const tk = token ? token : codToken;
     const nPg = more ? numPagina+1 : 1
     if (tk) {
       const modo = modoExibicao=='recentes' ? "fetchRecentPosts" : "fetchPopularPosts";
+      var toSearchTags = usuarioObj.id_tags;
+      if (valueTags.length > 0) {
+        toSearchTags = valueTags;
+      }
       api.get(modo, {
         headers: {
           'Accept': 'application/json',
@@ -45,12 +56,11 @@ export default function PostsScreen({ navigation }) {
         },
         params: {
           pageNumber: nPg,
-          limit: 10,
+          limit: PAGE_LIMIT,
           id_usuario: usuarioObj.id,
-          id_tags: usuarioObj.id_tags
+          id_tags: toSearchTags
         }
       }).then((result) => {
-  
         if (result.data.publicacoes) {
           if (more) {
             setPostList(postList.concat(result.data.publicacoes));
@@ -60,6 +70,7 @@ export default function PostsScreen({ navigation }) {
           }else {
             setPostList(result.data.publicacoes);
           }
+          
           setTimeout(() => {
             setLoadingPage(false);
             setLoadingMorePosts(false);
@@ -94,6 +105,8 @@ export default function PostsScreen({ navigation }) {
         uObj.id_tags = tagIds;  
       }
       setUsuarioObj(uObj);
+      setItemsTags(parseTags(uObj.tags, true));
+      
       
 
     }else {
@@ -156,6 +169,23 @@ export default function PostsScreen({ navigation }) {
     navigation.navigate('CreatePosts');
   };
 
+  const alternarFiltro = async () => {
+    if (filterEnabled) {
+      setValueTags([]);
+    }
+    setFilterEnabled(!filterEnabled);
+  };
+
+  const filtrarPubs = () => {
+    fetchPosts();
+  }
+
+  useEffect(() => {
+    if (valueTags.length == 0) {
+      fetchPosts();
+    }
+  }, [valueTags]);
+
   return (
     <>
     <ScrollView>
@@ -181,13 +211,14 @@ export default function PostsScreen({ navigation }) {
           style={styles.headerIcon}
         />
         <Icon
-          onPress={() => efetuarLogout()}
-          name='sign-out'
+          onPress={() => alternarFiltro()}
+          name='filter'
           type='font-awesome'
           color={colors.escura2}
+          reverse={filterEnabled}
           raised
           size={25}
-          style={styles.headerIcon}
+          style={styles.headerIconRight}
         />
         <Icon
           onPress={() => irEdicaoPerfil()}
@@ -199,6 +230,16 @@ export default function PostsScreen({ navigation }) {
           style={styles.headerIcon}
         />
         <Icon
+          onPress={() => efetuarLogout()}
+          name='sign-out'
+          type='font-awesome'
+          color={colors.escura2}
+          raised
+          size={25}
+          style={styles.headerIcon}
+        />
+        {false && 
+        <Icon
           onPress={() => console.log("a ser feito..")}
           name='user'
           type='font-awesome'
@@ -207,8 +248,42 @@ export default function PostsScreen({ navigation }) {
           size={25}
           style={styles.headerIconRight}
         />
+        }
+        
       </View>
-      
+      {filterEnabled &&
+        <View style={styles.inputMargin}>
+          <View style={styles.dropdownContainer}>
+            <DropDownPicker
+              style={[styles.dropdown]}
+              open={openTags}
+              value={valueTags}
+              items={itemsTags}
+              setOpen={setOpenTags}
+              setValue={setValueTags}
+              setItems={setItemsTags}
+              multiple={true}
+              min={0}
+              listMode="SCROLLVIEW"
+              mode="BADGE"
+              badgeDotColors={BADGE_COLORS}
+              scrollViewProps={{nestedScrollEnabled: true}}
+            />
+          </View>
+          <View style={styles.filterButtonContainer}>
+            <Icon
+              onPress={() => filtrarPubs()}
+              name='search'
+              type='font-awesome'
+              color={colors.escura2}
+              raised
+              size={18}
+              style={styles.filterButton}
+            />
+          </View>
+          
+        </View>
+      }
       <View >
         { 
           postList.map((post, postKey) => {
@@ -304,12 +379,41 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     marginVertical: 15,
+    marginBottom: 120,
   },
   createPostButton: {
     position: 'absolute',
     bottom:30,
     right:30
   },
+  input: {
+    height: 40,
+    paddingHorizontal: "3%",
+    backgroundColor: colors.branco,
+    fontSize: 14,
+    borderRadius: 10,
+    color: colors.preto,
+    borderWidth: 1,
+    borderColor: colors.preto,
+  },
+  inputMargin: {
+    flexDirection: "row",
+    paddingHorizontal: 20,
+    paddingVertical: 10
+  },
+  dropdownContainer: {
+    flexDirection: "column",
+    width: "85%",
+  },
+  filterButtonContainer: {
+    flexDirection: "column",
+  },
+  dropdown: {
+    zIndex: 10,
+  },
+  filterButton: {
+    margin: 0
+  }
 });
 
 // Para simplificar o projeto, creio que devamos limitar uma tag por post
