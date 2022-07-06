@@ -3,6 +3,7 @@ import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { Icon } from 'react-native-elements';
 import colors from "../config/colors";
 import api from "./../../connectAPI";
+import { dateDifference } from "./../config/consts";
 import { ScrollView } from "react-native-gesture-handler";
 
 function Post({ navigation, id, role, tags, body, user, date, upvotes, userUpvoted, id_usuario, token }) {
@@ -14,14 +15,7 @@ function Post({ navigation, id, role, tags, body, user, date, upvotes, userUpvot
     setUpvoted(userUpvoted);
   }, [userUpvoted]);
 
-  const diffTime = Math.abs(new Date(date) - new Date(Date.now()));
-  var timeAgo = Math.ceil(diffTime / (1000 * 60 * 60));
-  if (timeAgo >= 24) {
-    timeAgo = Math.floor(diffTime / (1000 * 60 * 60 * 24)).toString() + "d";
-  }else {
-    timeAgo = timeAgo.toString() + "h";
-  }
-
+  var timeAgo = dateDifference(date);
 
   const upvotePost = async () => {
     

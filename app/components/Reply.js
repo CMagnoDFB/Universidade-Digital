@@ -1,27 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
 import { Icon } from 'react-native-elements';
 import colors from "../config/colors";
 import api from "./../../connectAPI";
+import { dateDifference } from "./../config/consts";
 import { ScrollView } from "react-native-gesture-handler";
 
-function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, id_usuario, id_usuarioResp, id_publicacao, token }) {
+function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, respostas, replyList, id_usuario, id_usuarioResp, id_publicacao, token }) {
 
   const [nUpvotes, setNUpvotes] = useState(upvotes);
+  const [nRespostas, setNRespostas] = useState(respostas);
   const [upvoted, setUpvoted] = useState(userUpvoted);
   const [upvoteLoading, setUpvoteLoading] = useState(false);
+  const [showReplies, setShowReplies] = useState(false);
+  const [conteudoInput, setConteudoInput] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setUpvoted(userUpvoted);
   }, [userUpvoted]);
 
-  const diffTime = Math.abs(new Date(date) - new Date(Date.now()));
-  var timeAgo = Math.ceil(diffTime / (1000 * 60 * 60));
-  if (timeAgo >= 24) {
-    timeAgo = Math.floor(diffTime / (1000 * 60 * 60 * 24)).toString() + "d";
-  }else {
-    timeAgo = timeAgo.toString() + "h";
-  }
+  var timeAgo = dateDifference(date);
+
+  const conteudoChangeHandler = (i) => {
+    setConteudoInput(i.nativeEvent.text);
+  };
 
   const upvoteReply = async () => {
     
@@ -78,55 +81,189 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, i
 
   }
 
+  const excluirRespParaResp = async (id_resp) => {
+    api.post("deleteReplyToReply", {
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+      id_resposta: id_resp,
+      id_resposta_pai: id
+    } ).then(() => {
+      navigation.pop();
+      navigation.navigate('ViewPost', {
+        id_publicacao: id_publicacao
+      });
+    }).catch(err => {
+      console.log('error', err.response);
+    });
+
+  }
+
+  const sendReply = async () => {
+    
+    if (!loading) {
+      setLoading(true);
+
+      api.post("createReplyToReply", {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+        conteudo: conteudoInput,
+        id_usuario: id_usuario,
+        id_resposta: id
+      } ).then(() => {
+        setLoading(false);
+        navigation.pop();
+        navigation.navigate('ViewPost', {
+          id_publicacao: id_publicacao
+        });
+      }).catch(err => {
+        setLoading(false);
+        console.log('error', err.response);
+      });
+
+    }
+  }
+
   return (
     <View style={styles.card}>
-      <View >
-        <View style={styles.replyHeader}>
-          <View style={styles.upvote}>
-            <Icon
-              onPress={() => upvoteReply()}
-              reverse={upvoted}
-              raised
-              name='arrow-up'
-              type='font-awesome'
-              color={colors.escura2}
-              size={15}
-              style={styles.upvoteIcon}
-            />
-            <View style={styles.dateContainer}>
-              <Text style={styles.dateText} numberOfLines={1}>{timeAgo}</Text>
-            </View>
+      <View style={styles.replyHeader}>
+        <View style={styles.upvote}>
+          <Icon
+            onPress={() => upvoteReply()}
+            reverse={upvoted}
+            raised
+            name='arrow-up'
+            type='font-awesome'
+            color={colors.escura2}
+            size={15}
+            style={styles.upvoteIcon}
+          />
+          <View style={styles.dateContainer}>
+            <Text style={styles.dateText} numberOfLines={1}>{timeAgo}</Text>
           </View>
-          <View style={styles.replyHeaderText}>
-            <View>
-              <Text style={styles.userText} numberOfLines={1}>{user}</Text>
-            </View>
-            <View >
-              <Text style={styles.roleText} numberOfLines={1}>{role}</Text>
-            </View>
-            <View >
-              <Text style={styles.roleText} numberOfLines={1}>{nUpvotes} {nUpvotes!=1 ? "upvotes" : "upvote" }</Text>
-            </View>
+        </View>
+        <View style={styles.replyHeaderText}>
+          <View>
+            <Text style={styles.userText} numberOfLines={1}>{user}</Text>
+          </View>
+          <View >
+            <Text style={styles.roleText} numberOfLines={1}>{role}</Text>
+          </View>
+          <View >
+            <Text style={styles.roleText} numberOfLines={1}>{nUpvotes} {nUpvotes!=1 ? "upvotes" : "upvote" }</Text>
+          </View>
+          
+        </View>
+      </View>
+      <View style={styles.cardBody}>
+        <Text style={styles.textBody}>{body} </Text>
+      </View>
+      <View style={styles.replyDeleteButton}>
+          {id_usuarioResp==id_usuario && 
+              <Icon
+              onPress={() => excluirResp()}
+              name='trash'
+              type='font-awesome'
+              color="#cc0000"
+              raised={true}
+              size={20}
+              style={styles.headerIcon}
+              />
+          }
+      </View>
+      {!showReplies && 
+      <TouchableOpacity style={styles.replyReplyContainer} onPress={() => setShowReplies(!showReplies)}>
+        <Text style={styles.replyReplyText}>{nRespostas} {nRespostas!=1 ? "respostas" : "resposta" }</Text>
+      </TouchableOpacity>
+      }
+      
+      {showReplies && 
+      <View>
+        <View style={styles.repliesContainer}>
+          <View style={styles.repliesPadding}></View>
+          <View style={styles.repliesContent}>
+            { 
+              replyList.map((reply, replyKey) => {
+                var timeAgoReply = dateDifference(reply.data_pub);
+                return (
+                  <View style={styles.replyHeader} key={replyKey}>
+                    <View style={styles.verticalLine}></View>
+                    <View style={styles.childReply}>
+                      <View>
+                        <View>
+                          <Text style={styles.childUserText} numberOfLines={1}>{reply.usuario.nome}</Text>
+                        </View>
+                        <View >
+                          <Text style={styles.roleText} numberOfLines={1}>{reply.usuario.cargo + ' de ' + reply.usuario.curso}</Text>
+                        </View>
+                        <View >
+                          <Text style={styles.timeAgoText} numberOfLines={1}>{timeAgoReply}</Text>
+                        </View>
+                      </View>
+                      <View>
+                        <Text style={styles.childTextBody}>{reply.conteudo} </Text>
+                      </View>
+                      <View style={styles.replyReplyDeleteButton}>
+                          {reply.usuario.id==id_usuario && 
+                            <Icon
+                            onPress={() => excluirRespParaResp(reply.id)}
+                            name='trash'
+                            type='font-awesome'
+                            color="#cc0000"
+                            raised={true}
+                            size={15}
+                            style={styles.headerIcon}
+                            />
+                          }
+                      </View>
+                    </View>
+                  </View>
+                  
+                );
+              })
+            }
+          </View>
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={[styles.input]}
+            placeholder=""
+            keyboardType="ascii-capable"
+            onChange={conteudoChangeHandler}
+            value={conteudoInput}
+            multiline={true}
+            numberOfLines = {3}
+          />
+          <View style={styles.sendContainer}>
+            {!loading && 
+              <Icon
+                onPress={() => sendReply()}
+                name='send'
+                type='material'
+                color={colors.escura2}
+                raised={true}
+                size={20}
+                style={styles.headerIcon}
+              />
+            }
+            {loading && 
+              <ActivityIndicator size={40} color={colors.escura2} />
+            }
+
             
           </View>
         </View>
-        <View style={styles.cardBody}>
-          <Text style={styles.textBody}>{body} </Text>
-        </View>
-        <View style={styles.replyDeleteContainer}>
-            {id_usuarioResp==id_usuario && 
-                <Icon
-                onPress={() => excluirResp()}
-                name='trash'
-                type='font-awesome'
-                color="#cc0000"
-                raised={true}
-                size={15}
-                style={styles.headerIcon}
-                />
-            }
-        </View>
+        <TouchableOpacity style={styles.replyReplyContainer} onPress={() => setShowReplies(!showReplies)}>
+          <Text style={styles.replyReplyText}>Ocultar respostas</Text>
+        </TouchableOpacity>
       </View>
+      }
+      
     </View>
   );
 }
@@ -138,10 +275,13 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: colors.branco,
     borderRadius: 30,
-    elevation: 6
+    elevation: 6,
   },
   replyHeader: { flexDirection: "row", padding: 0 },
   upvote: { flexDirection: "column" },
+  childReply: {
+    flexDirection: "column",
+  },
   upvoteIcon: {
     flexDirection: "column"
   },
@@ -158,8 +298,19 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
     fontSize: 20
   },
+  childUserText: {
+    textTransform: "capitalize",
+    fontSize: 16,
+    paddingTop: 20
+  },
   roleText: {
     color: "#00000066"
+  },
+  timeAgoText: {
+    color: "#00000066",
+    position: 'absolute',
+    left:     -34,
+    top:      -30,
   },
   tags: { flexDirection: "row" },
   tag: { 
@@ -171,7 +322,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     borderRadius: 10
   },
-
   cardBody: { 
     flexDirection:'row',
     padding: 10
@@ -180,10 +330,63 @@ const styles = StyleSheet.create({
     flex: 1, 
     flexWrap: "wrap" 
   },
-  replyDeleteContainer: {
+  childTextBody: {
+    flex: 1, 
+    flexWrap: "wrap",
+    paddingTop: 5
+  },
+  replyReplyContainer: {
     width: "100%",
     flexDirection: "row",
-    justifyContent: 'flex-end'
+    justifyContent: 'center',
+    marginTop: 5
+  },
+  replyReplyText: {
+    color: "#00000066"
+  },
+  repliesContainer: {
+    flexDirection: "row",
+  },
+  repliesPadding: {
+    flexDirection: "column",
+    paddingLeft: 45
+  },
+  repliesContent: {
+    flexDirection: "column"
+  },
+  verticalLine: {
+    height: '100%',
+    width: 2,
+    backgroundColor: '#00000066',
+    flexDirection: "column",
+    marginRight: 40
+  },
+  replyDeleteButton: {
+    position: 'absolute',
+    left:     310,
+    top:      20,
+  },
+  replyReplyDeleteButton: {
+    position: 'absolute',
+    left:     -92,
+    top:      16,
+  },
+  inputContainer: {
+    marginTop: 40
+  },
+  input: {
+    padding: 10,
+    backgroundColor: colors.branco,
+    fontSize: 14,
+    borderRadius: 10,
+    color: colors.preto,
+    elevation: 6,
+    textAlignVertical: 'top'
+  },
+  sendContainer: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: 'flex-end',
   },
 });
 

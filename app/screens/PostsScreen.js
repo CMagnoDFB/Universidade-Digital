@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, FlatList, ActivityIndicator } from "react-native";
-import AppButton from "../components/AppButton";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
 import { Icon } from 'react-native-elements';
 import Post from "../components/Post";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 
 import colors from "../config/colors"
 import api from "./../../connectAPI"
-import { checkLoginState, removeLoginState, saveUserObject, getUserObject } from "./../../loginState"
+import { checkLoginState, removeLoginState, getUserObject } from "./../../loginState"
 import { ScrollView } from "react-native-gesture-handler";
 
 export default function PostsScreen({ navigation }) {
@@ -137,7 +136,6 @@ export default function PostsScreen({ navigation }) {
   };
 
   const irEdicaoPerfil = async () => {
-    //await saveUserObject(usuarioObj);
     navigation.pop();
     navigation.navigate('EditProfile');
   };

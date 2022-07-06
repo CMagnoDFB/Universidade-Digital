@@ -121,4 +121,23 @@ const parseTags = (tags, geral=false) => {
 
 }
 
-module.exports = { CARGO_VALUES, CURSO_VALUES, CAMPUS_VALUES, BADGE_COLORS, parseTags };
+const dateDifference = (date) => {
+
+    const diffTime = Math.abs(new Date(date) - new Date(Date.now()-10800000));
+    var timeAgo = Math.ceil(diffTime / (1000 * 60));
+    if (timeAgo >= 60) {
+        timeAgo = Math.ceil(diffTime / (1000 * 60 * 60));
+        if (timeAgo >= 24) {
+            timeAgo = Math.floor(diffTime / (1000 * 60 * 60 * 24)).toString() + "d";
+        }else {
+            timeAgo = timeAgo.toString() + "h";
+        }
+    }else {
+        timeAgo = timeAgo.toString() + "m";
+    }
+    
+
+    return timeAgo;
+}
+
+module.exports = { CARGO_VALUES, CURSO_VALUES, CAMPUS_VALUES, BADGE_COLORS, parseTags, dateDifference };

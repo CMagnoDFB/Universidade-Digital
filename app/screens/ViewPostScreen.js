@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TextInput, ActivityIndicator } from "react-native";
-import AppButton from "../components/AppButton";
 import { Icon } from 'react-native-elements';
 import Reply from "../components/Reply";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 
 import colors from "../config/colors"
 import api from "./../../connectAPI"
-import { checkLoginState, removeLoginState, saveUserObject, getUserObject } from "./../../loginState"
+import { checkLoginState, getUserObject } from "./../../loginState"
 import { ScrollView } from "react-native-gesture-handler";
 
 export default function ViewPostScreen({ navigation, route }) {
@@ -178,7 +177,6 @@ export default function ViewPostScreen({ navigation, route }) {
         'Content-Type': 'application/json'
       },
         conteudo: conteudoResposta,
-        upvotes: 0,
         id_usuario: usuarioObj.id,
         id_publicacao: id_publicacao
       } ).then(() => {
@@ -338,6 +336,8 @@ export default function ViewPostScreen({ navigation, route }) {
                 user={reply.usuario.nome}
                 date={reply.data_pub}
                 upvotes={reply.upvotes}
+                respostas={reply.num_respostas}
+                replyList={reply.resposta}
                 userUpvoted={reply.upvote_resposta.length > 0}
                 id_usuario={usuarioObj.id}
                 id_usuarioResp={reply.usuario.id}
@@ -368,7 +368,6 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: 'flex-end',
-    
   },
   headerIcon: {
     flexDirection: "column",
@@ -391,8 +390,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     borderRadius: 10,
     color: colors.preto,
-    borderWidth: 1,
-    borderColor: colors.preto,
+    elevation: 6,
     textAlignVertical: 'top'
   },
   inputMargin: {
