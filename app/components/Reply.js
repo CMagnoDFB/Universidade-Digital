@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, StyleSheet, View, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
+import { Text, StyleSheet, View, TextInput, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
 import { Icon } from 'react-native-elements';
 import colors from "../config/colors";
 import api from "./../../connectAPI";
@@ -258,13 +258,13 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, r
         </View>
         <View style={styles.inputContainer}>
           <TextInput
-            style={[styles.input]}
+            style={[styles.inputReplyReply]}
             placeholder=""
             keyboardType="ascii-capable"
             onChange={conteudoChangeHandler}
             value={conteudoInput}
             multiline={true}
-            numberOfLines = {3}
+            numberOfLines = {4}
           />
           <View style={styles.sendContainer}>
             {!loading && 
@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
   verticalLine: {
     height: '100%',
     width: 2,
-    backgroundColor: '#00000066',
+    backgroundColor: '#bbb',
     flexDirection: "column",
     marginRight: 40
   },
@@ -408,6 +408,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     color: colors.preto,
     elevation: 6,
+    textAlignVertical: 'top'
+  },
+  inputReplyReply: {
+    padding: 10,
+    backgroundColor: colors.branco,
+    fontSize: 14,
+    borderRadius: 10,
+    color: colors.preto,
+    borderWidth: 2,
+    borderColor: "#bbb",
+    elevation: 1,
     textAlignVertical: 'top'
   },
   sendContainer: {

@@ -25,7 +25,8 @@
         "foregroundImage": "./app/assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "pan",
+      "package": "com.rod111xd.UniversidadeDigital"
     },
     "web": {
       "favicon": "./assets/favicon.png"
