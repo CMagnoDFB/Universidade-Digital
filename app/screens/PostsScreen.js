@@ -60,8 +60,12 @@ export default function PostsScreen({ navigation }) {
           }else {
             setPostList(result.data.publicacoes);
           }
-          setLoadingPage(false);
-          setLoadingMorePosts(false);
+          setTimeout(() => {
+            setLoadingPage(false);
+            setLoadingMorePosts(false);
+          },
+              800
+          );
         }
         
       }).catch(err => {
@@ -79,7 +83,9 @@ export default function PostsScreen({ navigation }) {
       console.log(data.usuario + " está logado");
       setUsuario(data);
       setToken(data.token,false);
-      
+      var nomePerfil = uObj.nome;
+      navigation.setOptions({ headerTitle: "Página inicial de " + nomePerfil.substring(0, nomePerfil.indexOf(' ')) });
+
       var tagIds = [];
       if(uObj.tags) {
         uObj.tags.forEach((tag, i) => {

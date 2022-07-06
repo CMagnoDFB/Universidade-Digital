@@ -62,43 +62,70 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, r
   }
 
   const excluirResp = async () => {
-    api.post("deleteReply", {
-    headers: {
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    },
-      id_resposta: id,
-      id_publicacao: id_publicacao
-    } ).then(() => {
-      navigation.pop();
-      navigation.navigate('ViewPost', {
-        id_publicacao: id_publicacao
-      });
-    }).catch(err => {
-      console.log('error', err.response);
-    });
+    return Alert.alert(
+      "Apagar resposta?",
+      "Tem certeza que deseja apagar essa resposta?",
+      [
+        {
+          text: "Sim",
+          onPress: () => {
+            api.post("deleteReply", {
+            headers: {
+              'Accept': 'application/json',
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+              id_resposta: id,
+              id_publicacao: id_publicacao
+            } ).then(() => {
+              navigation.pop();
+              navigation.navigate('ViewPost', {
+                id_publicacao: id_publicacao
+              });
+            }).catch(err => {
+              console.log('error', err.response);
+            });
+          },
+        },
+        {
+          text: "Cancelar",
+        },
+      ]
+    );
 
   }
 
   const excluirRespParaResp = async (id_resp) => {
-    api.post("deleteReplyToReply", {
-    headers: {
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    },
-      id_resposta: id_resp,
-      id_resposta_pai: id
-    } ).then(() => {
-      navigation.pop();
-      navigation.navigate('ViewPost', {
-        id_publicacao: id_publicacao
-      });
-    }).catch(err => {
-      console.log('error', err.response);
-    });
-
+    return Alert.alert(
+      "Apagar resposta?",
+      "Tem certeza que deseja apagar essa resposta?",
+      [
+        {
+          text: "Sim",
+          onPress: () => {
+            api.post("deleteReplyToReply", {
+            headers: {
+              'Accept': 'application/json',
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+              id_resposta: id_resp,
+              id_resposta_pai: id
+            } ).then(() => {
+              navigation.pop();
+              navigation.navigate('ViewPost', {
+                id_publicacao: id_publicacao
+              });
+            }).catch(err => {
+              console.log('error', err.response);
+            });
+          },
+        },
+        {
+          text: "Cancelar",
+        },
+      ]
+    );
   }
 
   const sendReply = async () => {

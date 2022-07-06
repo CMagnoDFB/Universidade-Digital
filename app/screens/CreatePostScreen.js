@@ -8,7 +8,7 @@ import { Icon } from 'react-native-elements';
 
 import api from "./../../connectAPI"
 import { BADGE_COLORS, parseTags } from "./../config/consts"
-import { checkLoginState, saveUserObject, getUserObject } from "./../../loginState"
+import { checkLoginState, getUserObject } from "./../../loginState"
 
 const styles = StyleSheet.create({
   inputContainer: {
@@ -202,10 +202,9 @@ export default function CreatePostScreen({ navigation }) {
       <View style={styles.buttonsContainerHeader}>
         <Icon
           onPress={() => voltar()}
-          name='close'
+          name='chevron-left'
           type='font-awesome'
-          color="#c00"
-          reverse
+          color={colors.escura2}
           raised
           size={25}
           style={styles.headerIcon}

@@ -59,7 +59,7 @@ export default function App() {
         <Stack.Screen name="Welcome" component={WelcomeScreen} options={{headerShown: false}} />
           <Stack.Screen name="Login" component={LoginScreen} options={{headerTitle: 'Entrar', headerTransparent: true, headerTintColor: '#fff', headerTitleStyle: {color: '#fff', fontSize: 25}}} />
           <Stack.Screen name="Register" component={RegisterScreen} options={{headerTitle: 'Cadastrar', headerTransparent: true, headerTintColor: '#fff', headerTitleStyle: {color: '#fff', fontSize: 25}}} />
-          <Stack.Screen name="Posts" component={PostsScreen} options={{headerTitle: 'Página inicial', headerLeft: null,  headerTitleStyle: {color: '#000', fontSize: 25}}} />
+          <Stack.Screen name="Posts" component={PostsScreen} options={{headerTitle: '', headerLeft: null,  headerTitleStyle: {color: '#000', fontSize: 25}}} />
           <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{headerTitle: 'Editar perfil', headerLeft: null,  headerTitleStyle: {color: '#000', fontSize: 25}}} />
           <Stack.Screen name="CreatePosts" component={CreatePostScreen} options={{headerTitle: 'Criar publicação', headerLeft: null,  headerTitleStyle: {color: '#000', fontSize: 25}}} />
           <Stack.Screen name="ViewPost" component={ViewPostScreen} options={{headerTitle: 'Publicação', headerLeft: null,  headerTitleStyle: {color: '#000', fontSize: 25}}} />

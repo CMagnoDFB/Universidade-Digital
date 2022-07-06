@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TextInput, ActivityIndicator } from "react-native";
+import { StyleSheet, View, Text, TextInput, ActivityIndicator, Alert } from "react-native";
 import { Icon } from 'react-native-elements';
 import Reply from "../components/Reply";
 import FlashMessage, { showMessage } from "react-native-flash-message";
@@ -194,20 +194,34 @@ export default function ViewPostScreen({ navigation, route }) {
   }
 
   const excluirPub = async () => {
-    api.post("deletePost", {
-    headers: {
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    },
-      id_publicacao: id_publicacao
-    } ).then(() => {
-      navigation.pop();
-      navigation.navigate('Posts');
-    }).catch(err => {
-      console.log('error', err.response);
-    });
 
+    return Alert.alert(
+      "Apagar publicação?",
+      "Tem certeza que deseja apagar essa publicação?",
+      [
+        {
+          text: "Sim",
+          onPress: () => {
+            api.post("deletePost", {
+            headers: {
+              'Accept': 'application/json',
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+              id_publicacao: id_publicacao
+            } ).then(() => {
+              navigation.pop();
+              navigation.navigate('Posts');
+            }).catch(err => {
+              console.log('error', err.response);
+            });
+          },
+        },
+        {
+          text: "Cancelar",
+        },
+      ]
+    );
   }
 
 
