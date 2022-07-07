@@ -121,7 +121,11 @@ export default function App() {
           <Stack.Screen
             name="Welcome"
             component={WelcomeScreen}
-            options={{ headerShown: true }}
+            options={{ 
+              headerTitle: "Bem-vindo", 
+              headerShown: true,
+              headerTitleStyle: { fontSize: 25 },
+            }}
           />
           <Stack.Screen
             name="Login"

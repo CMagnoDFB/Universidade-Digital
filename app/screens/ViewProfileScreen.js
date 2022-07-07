@@ -96,6 +96,10 @@ export default function ViewProfileScreen({ navigation, route }) {
 
   const [tagNames, setTagNames] = useState([]);
 
+  const [numPubs, setNumPubs] = useState(0);
+
+  const [numResps, setNumResps] = useState(0);
+
   const showConnectionError = (i) => {
     showMessage({
       message: "Erro",
@@ -124,6 +128,8 @@ export default function ViewProfileScreen({ navigation, route }) {
           setCargo(usuRetrieved.cargo);
           setCurso(usuRetrieved.curso);
           setCampus(usuRetrieved.campus);
+          setNumPubs(usuRetrieved.numPubs);
+          setNumResps(usuRetrieved.numRespostas);
           var tagNames = [];
           if (usuRetrieved.tags) {
             usuRetrieved.tags.forEach((tag, i) => {
@@ -177,6 +183,12 @@ export default function ViewProfileScreen({ navigation, route }) {
 
         <Text style={styles.label}>Câmpus</Text>
         <Text style={styles.showText}>{campusShow}</Text>
+
+        <Text style={styles.label}>Publicações</Text>
+        <Text style={styles.showText}>{numPubs}</Text>
+
+        <Text style={styles.label}>Respostas</Text>
+        <Text style={styles.showText}>{numResps}</Text>
 
         <Text style={styles.label}>Tags</Text>
         <View style={styles.tags}>
