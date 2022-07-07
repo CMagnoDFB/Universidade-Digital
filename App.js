@@ -8,15 +8,10 @@ import RegisterScreen from "./app/screens/RegisterScreen";
 import CreatePostScreen from "./app/screens/CreatePostScreen";
 import ViewPostScreen from "./app/screens/ViewPostScreen";
 import ViewProfileScreen from "./app/screens/ViewProfileScreen";
-
+import { Dark, Light } from "./app/themes/index";
 import React from "react";
 import {
-  DefaultTheme,
-  LightTheme,
-  DarkTheme,
-  NavigationContainer,
-  ThemeProvider,
-  useTheme,
+  NavigationContainer
 } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useColorScheme } from "react-native";
@@ -42,65 +37,9 @@ import {
   Mulish_900Black_Italic,
 } from "@expo-google-fonts/mulish";
 
-// É melhor separar em 2 arquivos depois
-const MyDarkTheme = {
-  ...DarkTheme,
-  dark: true,
-  colors: {
-    ...DarkTheme.colors,
-    background: "#141414",
-    input: "#0A0A0A",
-    post: "#1D1D1D",
-    clara1: "#d9ed92",
-    clara2: "#b5e48c",
-    clara3: "#99d98c",
-    media1: "#76c893",
-    media2: "#52b69a",
-    media3: "#34a0a4",
-    media4: "#168aad",
-    escura1: "#1a759f",
-    escura2: "#1e6091",
-    escura3: "#184e77",
-    text: "#C0C0C0",
-    text2: "#FFFFFF66",
-    buttonText: "#fff",
-    icon: "#000",
-    loading: "#C0C0C0",
-    header: "#1D1D1D",
-    red: "#FF4449"
-  },
-};
-
-const MyLightTheme = {
-  ...DefaultTheme,
-  dark: false,
-  colors: {
-    ...DefaultTheme.colors,
-    background: "#E8E8E8",
-    input: "#FFFFFF",
-    post: "#FFFFFF",
-    clara1: "#d9ed92",
-    clara2: "#b5e48c",
-    clara3: "#99d98c",
-    media1: "#76c893",
-    media2: "#52b69a",
-    media3: "#34a0a4",
-    media4: "#168aad",
-    escura1: "#1a759f",
-    escura2: "#1e6091",
-    escura3: "#184e77",
-    text2: "#00000066",
-    buttonText: "#fff",
-    icon: "#000",
-    loading: "#168aad",
-    header: "#F0F0F0",
-    red: "#FF4449"
-  },
-};
-
 export default function App() {
   const deviceTheme = useColorScheme();
-  const theme = deviceTheme === "dark" ? MyDarkTheme : MyLightTheme;
+  const theme = deviceTheme === "dark" ? Dark : Light;
   const colors = theme.colors;
   let fontsLoaded = useFonts({
     Mulish_200ExtraLight,
