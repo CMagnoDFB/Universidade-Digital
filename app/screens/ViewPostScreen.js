@@ -394,12 +394,11 @@ export default function ViewPostScreen({ navigation, route }) {
               <View style={styles.upvote}>
                 <Icon
                   onPress={() => upvotePost()}
-                  raised={upvoted}
                   reverse={true}
                   name="arrow-up"
                   type="font-awesome"
-                  color={!upvoted ? colors.background : colors.escura1}
-                  reverseColor={colors.buttonText}
+                  color={!upvoted ? colors.background : colors.escura2}
+                  reverseColor={!upvoted ? colors.text : colors.buttonText}
                   size={15}
                   style={styles.upvoteIcon}
                 />
@@ -484,7 +483,7 @@ export default function ViewPostScreen({ navigation, route }) {
                 style={styles.headerIcon}
               />
             )}
-            {loading && <ActivityIndicator size={40} color={colors.escura2} />}
+            {loading && <ActivityIndicator size={40} color={colors.loading} />}
           </View>
         </View>
 
@@ -515,7 +514,7 @@ export default function ViewPostScreen({ navigation, route }) {
       </ScrollView>
       {loadingPage && (
         <View style={styles.loadingScreen}>
-          <ActivityIndicator size={70} color={colors.media2} />
+          <ActivityIndicator size={70} color={colors.loading} />
         </View>
       )}
     </>

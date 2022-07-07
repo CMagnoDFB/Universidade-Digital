@@ -256,7 +256,7 @@ export default function CreatePostScreen({ navigation }) {
         </View>
         {loadingPage && 
           <View style={styles.loadingScreen}>
-            <ActivityIndicator size={70} color={colors.media2} />
+            <ActivityIndicator size={70} color={colors.loading} />
           </View>
         }
         <FlashMessage position="bottom" />

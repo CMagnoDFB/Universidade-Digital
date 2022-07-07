@@ -282,7 +282,7 @@ export default function PostsScreen({ navigation }) {
             raised
             size={25}
             reverse={dark || modoExibicao === "recentes"}
-            color={modoExibicao !== "recentes" ? colors.posts : colors.escura1}
+            color={modoExibicao !== "recentes" ? colors.posts : colors.escura2}
             reverseColor={colors.buttonText}
             style={styles.headerIcon}
           />
@@ -292,7 +292,7 @@ export default function PostsScreen({ navigation }) {
             type="material"
             raised
             reverse={dark || modoExibicao === "em alta"}
-            color={modoExibicao !== "em alta" ? colors.posts : colors.escura1}
+            color={modoExibicao !== "em alta" ? colors.posts : colors.escura2}
             reverseColor={colors.buttonText}
             size={25}
             style={styles.headerIcon}
@@ -304,7 +304,7 @@ export default function PostsScreen({ navigation }) {
             raised
             size={25}
             reverse={dark || filterEnabled}
-            color={!filterEnabled ? colors.posts : colors.escura1}
+            color={!filterEnabled ? colors.posts : colors.escura2}
             reverseColor={colors.buttonText}
             style={styles.headerIconRight}
           />
@@ -418,13 +418,15 @@ export default function PostsScreen({ navigation }) {
               onPress={() => carregarMais()}
               name="chevron-down"
               type="font-awesome"
-              color={colors.text}
+              color={colors.post}
+              reverseColor={colors.text}
               raised
+              reverse
               size={25}
               style={styles.headerIcon}
             />
           )}
-          {loadingMorePosts && <ActivityIndicator size={70} />}
+          {loadingMorePosts && <ActivityIndicator size={70} color={colors.loading}/>}
         </View>
       </ScrollView>
       <View style={styles.createPostButton}>
@@ -441,7 +443,7 @@ export default function PostsScreen({ navigation }) {
       </View>
       {loadingPage && (
         <View style={styles.loadingScreen}>
-          <ActivityIndicator size={70} color={colors.card} />
+          <ActivityIndicator size={70} color={colors.loading} />
         </View>
       )}
     </>

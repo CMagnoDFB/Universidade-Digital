@@ -26,13 +26,13 @@ export default function ViewProfileScreen({ navigation, route }) {
       padding: 20,
     },
     label: {
-      color: colors.preto,
+      color: colors.text,
       height: 40,
       fontSize: 18,
       fontWeight: "600"
     },
     showText: {
-      color: colors.preto,
+      color: colors.text2,
       height: 40,
       fontSize: 18,
       fontWeight: "300"
@@ -69,7 +69,7 @@ export default function ViewProfileScreen({ navigation, route }) {
       bottom: 0,
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: "#fff",
+      backgroundColor: colors.background,
     },
     tags: { flexDirection: "row" },
     tag: {
@@ -245,7 +245,7 @@ export default function ViewProfileScreen({ navigation, route }) {
       
       {loadingPage && (
         <View style={styles.loadingScreen}>
-          <ActivityIndicator size={70} color={colors.media2} />
+          <ActivityIndicator size={70} color={colors.loading} />
         </View>
       )} 
     </>

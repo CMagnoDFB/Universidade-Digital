@@ -48,9 +48,9 @@ const MyDarkTheme = {
   dark: true,
   colors: {
     ...DarkTheme.colors,
-    background: "#181818",
+    background: "#141414",
     input: "#0A0A0A",
-    post: "#202020",
+    post: "#1D1D1D",
     clara1: "#d9ed92",
     clara2: "#b5e48c",
     clara3: "#99d98c",
@@ -65,6 +65,8 @@ const MyDarkTheme = {
     text2: "#FFFFFF66",
     buttonText: "#fff",
     icon: "#000",
+    loading: "#C0C0C0",
+    header: "#1D1D1D"
   },
 };
 
@@ -89,13 +91,15 @@ const MyLightTheme = {
     text2: "#00000066",
     buttonText: "#fff",
     icon: "#000",
+    loading: "#168aad",
+    header: "#F0F0F0"
   },
 };
 
 export default function App() {
   const deviceTheme = useColorScheme();
   const theme = deviceTheme === "dark" ? MyDarkTheme : MyLightTheme;
-  const { colors } = useTheme();
+  const colors = theme.colors;
   let fontsLoaded = useFonts({
     Mulish_200ExtraLight,
     Mulish_300Light,
@@ -113,7 +117,7 @@ export default function App() {
     Mulish_900Black_Italic,
   });
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return <AppLoading backgroundColor={colors.background} color={colors.text}/>;
   } else {
     return (
       <NavigationContainer theme={theme}>
@@ -132,9 +136,9 @@ export default function App() {
             component={LoginScreen}
             options={{
               headerTitle: "Entrar",
-              headerTransparent: true,
-              headerStyle: { backgroundColor: colors.background },
-              headerTitleStyle: { color: colors.background, fontSize: 25 },
+              headerShown: true,
+              headerStyle: { backgroundColor: colors.header },
+              headerTitleStyle: { color: colors.text, fontSize: 25 },
             }}
           />
           <Stack.Screen
@@ -143,8 +147,8 @@ export default function App() {
             options={{
               headerTitle: "Cadastrar",
               headerTransparent: true,
-              headerStyle: { backgroundColor: colors.background },
-              headerTitleStyle: { color: colors.background, fontSize: 25 },
+              headerStyle: { backgroundColor: colors.header },
+              headerTitleStyle: { color: colors.text, fontSize: 25 },
             }}
           />
           <Stack.Screen
@@ -153,10 +157,9 @@ export default function App() {
             options={{
               headerTitle: "",
               headerLeft: null,
-              headerStyle: { backgroundColor: colors.text },
+              headerStyle: { backgroundColor: colors.header },
               headerTitleStyle: {
-                backgroundColor: colors.text,
-                color: colors.background,
+                color: colors.text,
                 fontSize: 25,
               },
             }}
@@ -167,10 +170,9 @@ export default function App() {
             options={{
               headerTitle: "Editar perfil",
               headerLeft: null,
-              headerStyle: { backgroundColor: colors.text },
+              headerStyle: { backgroundColor: colors.header },
               headerTitleStyle: {
-                backgroundColor: colors.text,
-                color: colors.background,
+                color: colors.text,
                 fontSize: 25,
               },
             }}
@@ -181,10 +183,9 @@ export default function App() {
             options={{
               headerTitle: "Criar publicação",
               headerLeft: null,
-              headerStyle: { backgroundColor: colors.text },
+              headerStyle: { backgroundColor: colors.header },
               headerTitleStyle: {
-                backgroundColor: colors.text,
-                color: colors.background,
+                color: colors.text,
                 fontSize: 25,
               },
             }}
@@ -195,10 +196,9 @@ export default function App() {
             options={{
               headerTitle: "Publicação",
               headerLeft: null,
-              headerStyle: { backgroundColor: colors.text },
+              headerStyle: { backgroundColor: colors.header },
               headerTitleStyle: {
-                backgroundColor: colors.text,
-                color: colors.background,
+                color: colors.text,
                 fontSize: 25,
               },
             }}
@@ -209,10 +209,9 @@ export default function App() {
             options={{
               headerTitle: "Perfil de Usuário",
               headerLeft: null,
-              headerStyle: { backgroundColor: colors.text },
+              headerStyle: { backgroundColor: colors.header },
               headerTitleStyle: {
-                backgroundColor: colors.text,
-                color: colors.background,
+                color: colors.text,
                 fontSize: 25,
               },
             }}

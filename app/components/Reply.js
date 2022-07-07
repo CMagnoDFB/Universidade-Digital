@@ -316,13 +316,12 @@ function Reply({ navigation, id, role, body, user, nomeUser, date, upvotes, user
         <View style={styles.upvote}>
           <Icon
             onPress={() => upvoteReply()}
-            raised
             name='arrow-up'
             type='font-awesome'
             size={15}
             reverse={true}
-            color={!upvoted ? colors.background : colors.escura1}
-            reverseColor={colors.buttonText}
+            color={!upvoted ? colors.background : colors.escura2}
+            reverseColor={!upvoted ? colors.text : colors.buttonText}
             style={styles.upvoteIcon}
           />
           <View style={styles.dateContainer}>

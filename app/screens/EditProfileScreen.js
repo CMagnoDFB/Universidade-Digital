@@ -354,7 +354,7 @@ export default function LoginScreen({ navigation }) {
 
         {loadingPage && 
           <View style={styles.loadingScreen}>
-            <ActivityIndicator size={70} color={colors.media2} />
+            <ActivityIndicator size={70} color={colors.loading} />
           </View>
         }
         <FlashMessage position="bottom" />

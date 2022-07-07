@@ -139,12 +139,11 @@ function Post({ navigation, id, role, tags, body, user, nomeUser, date, upvotes,
         <View style={styles.upvote}>
           <Icon
             onPress={() => upvotePost()}
-            raised={upvoted}
-            reverse={!upvoted}
+            reverse={true}
             name='arrow-up'
             type='font-awesome'
-            color={!upvoted ? colors.background : colors.escura1}
-            reverseColor={colors.buttonText}
+            color={!upvoted ? colors.background : colors.escura2}
+            reverseColor={!upvoted ? colors.text : colors.buttonText}
             size={15}
             style={styles.upvoteIcon}
           />

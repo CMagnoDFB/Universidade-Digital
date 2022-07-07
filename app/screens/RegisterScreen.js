@@ -375,7 +375,7 @@ export default function RegisterScreen({ navigation }) {
                     backgroundColor: loading ? "#3A8F95" : colors.media2 ,
                   }}
                 >
-                  {loading && <ActivityIndicator size="large" color="white" />}
+                  {loading && <ActivityIndicator size="large" color={colors.loading} />}
                   <Text style={{...styles.buttonText, display: loading ? 'none' : 'flex' }}>
                     Cadastrar
                   </Text>

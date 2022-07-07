@@ -32,16 +32,16 @@ export default function WelcomeScreen({ navigation }) {
     },
     uni: {
       fontSize: 28,
-      color: colors.text,
+      color: colors.black,
     },
     digi: {
       fontSize: 55,
       lineHeight: 55,
-      color: colors.text,
+      color: colors.black,
     },
     moto: {
       fontSize: 11.6,
-      color: colors.text,
+      color: colors.black,
     },
   });
   return (
