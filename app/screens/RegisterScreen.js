@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { StatusBar } from "expo-status-bar";
-import { ImageBackground, StyleSheet, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator, SafeAreaView, ScrollView, KeyboardAvoidingView } from "react-native";
+import { StyleSheet, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator, SafeAreaView, ScrollView, KeyboardAvoidingView, BackHandler } from "react-native";
 import CheckBox from "expo-checkbox";
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import PassMeter from "react-native-passmeter";
 
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import { useTheme } from '@react-navigation/native';
 import api from "./../../connectAPI"
 import { saveLoginState, checkLoginState, saveUserObject } from "./../../loginState"
-import { color } from "react-native-elements/dist/helpers";
 
 const USER_MAX_LEN = 30,
   USER_MIN_LEN = 3,
@@ -302,7 +299,10 @@ export default function RegisterScreen({ navigation }) {
     
   };
 
-
+  BackHandler.addEventListener('hardwareBackPress', () => {
+    navigation.navigate('Welcome');
+    return true;
+  });
 
 
   return (
