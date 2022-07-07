@@ -258,6 +258,7 @@ export default function PostsScreen({ navigation }) {
   };
 
   const filtrarPubs = () => {
+    setOpenTags(false);
     fetchPosts();
   };
 
@@ -397,7 +398,8 @@ export default function PostsScreen({ navigation }) {
                 role={post.usuario.cargo + " de " + post.usuario.curso}
                 tags={tagNames}
                 body={post.conteudo}
-                user={post.usuario.nome}
+                user={post.usuario.usuario}
+                nomeUser={post.usuario.nome}
                 date={post.data_pub}
                 upvotes={post.upvotes}
                 userUpvoted={post.upvote_publicacaos.length > 0}

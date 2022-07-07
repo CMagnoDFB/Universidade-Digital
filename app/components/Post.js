@@ -6,7 +6,7 @@ import { dateDifference } from "./../config/consts";
 import { ScrollView } from "react-native-gesture-handler";
 import { useTheme } from '@react-navigation/native';
 
-function Post({ navigation, id, role, tags, body, user, date, upvotes, userUpvoted, id_usuario, token }) {
+function Post({ navigation, id, role, tags, body, user, nomeUser, date, upvotes, userUpvoted, id_usuario, token }) {
 
   const { colors } = useTheme();
   
@@ -116,6 +116,14 @@ function Post({ navigation, id, role, tags, body, user, date, upvotes, userUpvot
     
   }
 
+  const visitarPerfil = async (usuarioClicked) => {
+    navigation.pop();
+    navigation.navigate("ViewProfile", {
+      visitedUsuario: usuarioClicked,
+      from: "Posts"
+    });
+  };
+
   const goToPost = async () => {
 
     navigation.pop();
@@ -135,7 +143,6 @@ function Post({ navigation, id, role, tags, body, user, date, upvotes, userUpvot
             reverse={!upvoted}
             name='arrow-up'
             type='font-awesome'
-            reverse={true}
             color={!upvoted ? colors.background : colors.escura1}
             reverseColor={colors.buttonText}
             size={15}
@@ -146,9 +153,11 @@ function Post({ navigation, id, role, tags, body, user, date, upvotes, userUpvot
           </View>
         </View>
         <View style={styles.postHeaderText}>
-          <View>
-            <Text style={styles.userText} numberOfLines={1}>{user}</Text>
-          </View>
+          <TouchableOpacity
+            onPress={() => visitarPerfil(user)}
+          >
+            <Text style={styles.userText} numberOfLines={1}>{nomeUser}</Text>
+          </TouchableOpacity>
           <View >
             <Text style={styles.roleText} numberOfLines={1}>{role}</Text>
           </View>

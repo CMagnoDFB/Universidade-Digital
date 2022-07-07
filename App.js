@@ -7,6 +7,7 @@ import EditProfileScreen from "./app/screens/EditProfileScreen";
 import RegisterScreen from "./app/screens/RegisterScreen";
 import CreatePostScreen from "./app/screens/CreatePostScreen";
 import ViewPostScreen from "./app/screens/ViewPostScreen";
+import ViewProfileScreen from "./app/screens/ViewProfileScreen";
 
 import React from "react";
 import {

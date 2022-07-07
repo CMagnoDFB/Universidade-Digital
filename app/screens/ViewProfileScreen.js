@@ -1,125 +1,100 @@
 import React, { useState, useEffect } from "react";
 import {
-  ImageBackground,
   StyleSheet,
   ScrollView,
   View,
   Text,
-  Image,
-  TextInput,
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
 
-import colors from "../config/colors";
 import FlashMessage, { showMessage } from "react-native-flash-message";
-import DropDownPicker from "react-native-dropdown-picker";
+import { useTheme } from "@react-navigation/native";
 
 import api from "./../../connectAPI";
 import {
-  CARGO_VALUES,
-  CURSO_VALUES,
-  CAMPUS_VALUES,
-  BADGE_COLORS,
-  parseTags,
-} from "./../config/consts";
-import {
   checkLoginState,
-  saveUserObject,
-  getUserObject,
 } from "./../../loginState";
 
-const styles = StyleSheet.create({
-  inputContainer: {
-    width: "100%",
-    padding: 20,
-  },
-  textInput: {
-    color: colors.preto,
-    height: 40,
-    fontSize: 18,
-  },
-  input: {
-    height: 40,
-    paddingHorizontal: "3%",
-    backgroundColor: colors.branco,
-    fontSize: 14,
-    borderRadius: 10,
-    color: colors.preto,
-    borderWidth: 1,
-    borderColor: colors.preto,
-  },
-  inputMargin: {
-    marginBottom: 20,
-  },
-  dropdown: {
-    zIndex: 10,
-  },
-  buttonsContainer: {
-    width: "100%",
-    padding: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  buttonsContainer2: {
-    width: "100%",
-    padding: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 20,
-  },
-  buttonLogin: {
-    display: "flex",
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    width: 280,
-    height: 70,
-    borderRadius: 20,
-    backgroundColor: colors.media2,
-  },
-  buttonText: {
-    padding: 15,
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 28,
-  },
-  loadingScreen: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff",
-  },
-});
 export default function ViewProfileScreen({ navigation, route }) {
-  const [loadingPage, setLoadingPage] = useState(true);
+  const { colors, dark } = useTheme();
 
-  const [usuario, setUsuario] = useState(null);
-  const [token, setToken] = useState(null);
-  const [id_usuario, setIdUsuario] = useState(null);
+  const styles = StyleSheet.create({
+    profileContainer: {
+      width: "100%",
+      padding: 20,
+    },
+    label: {
+      color: colors.preto,
+      height: 40,
+      fontSize: 18,
+      fontWeight: "600"
+    },
+    showText: {
+      color: colors.preto,
+      height: 40,
+      fontSize: 18,
+      fontWeight: "300"
+    },
+    buttonsContainer: {
+      width: "100%",
+      padding: 20,
+      alignItems: "center",
+      justifyContent: "center",
+      marginTop: 40,
+      marginBottom: 20,
+    },
+    buttonLogin: {
+      display: "flex",
+      alignItems: "center",
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      width: 280,
+      height: 70,
+      borderRadius: 20,
+      backgroundColor: colors.media2,
+    },
+    buttonText: {
+      padding: 15,
+      color: "#fff",
+      fontWeight: "bold",
+      fontSize: 28,
+    },
+    loadingScreen: {
+      position: "absolute",
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "#fff",
+    },
+    tags: { flexDirection: "row" },
+    tag: {
+      backgroundColor: colors.media1,
+      paddingHorizontal: 8,
+      paddingVertical: 4,
+      marginTop: 2,
+      marginRight: 6,
+      fontWeight: "600",
+      borderRadius: 10,
+    },
+  });
+
+  const [loadingPage, setLoadingPage] = useState(true);
 
   const [nomeShow, setNome] = useState("");
 
-  const [openCargo, setOpenCargo] = useState(false);
+  const [usuarioShow, setUsuario] = useState("");
+
   const [cargoShow, setCargo] = useState("");
-  const [itemsCargo, setItemsCargo] = useState(CARGO_VALUES);
 
-  const [openCurso, setOpenCurso] = useState(false);
   const [cursoShow, setCurso] = useState("");
-  const [itemsCurso, setItemsCurso] = useState(CURSO_VALUES);
 
-  const [openCampus, setOpenCampus] = useState(false);
   const [campusShow, setCampus] = useState("");
-  const [itemsCampus, setItemsCampus] = useState(CAMPUS_VALUES);
 
-  const [openTags, setOpenTags] = useState(false);
-  const [valueTags, setValueTags] = useState([]);
-  const [valueInitialTags, setValueInitialTags] = useState([]);
-  const [itemsTags, setItemsTags] = useState(parseTags());
+  const [tagNames, setTagNames] = useState([]);
 
   const showConnectionError = (i) => {
     showMessage({
@@ -129,27 +104,34 @@ export default function ViewProfileScreen({ navigation, route }) {
     });
   };
 
-  const checkIfLogged = async (profileVisited) => {
+  const checkIfLogged = async () => {
     var data = await checkLoginState();
-    console.log(profileVisited);
     if (data) {
-      api
-        .get("fetchUser", {
+      api.get("fetchUser", {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${data.token}`,
             "Content-Type": "application/json",
           },
           params: {
-            usuario: profileVisited,
+            usuario: route.params.visitedUsuario,
           },
         })
         .then((dbUsuario) => {
-          console.log(dbUsuario);
-          //setNome(dbUsuario.datanome)
-          //setCargos
-          //setCursos
-          //SetCampus
+          var usuRetrieved = dbUsuario.data.usuario;
+          setNome(usuRetrieved.nome)
+          setUsuario(usuRetrieved.usuario);
+          setCargo(usuRetrieved.cargo);
+          setCurso(usuRetrieved.curso);
+          setCampus(usuRetrieved.campus);
+          var tagNames = [];
+          if (usuRetrieved.tags) {
+            usuRetrieved.tags.forEach((tag, i) => {
+              tagNames.push(tag.nome);
+            });
+          }
+          setTagNames(tagNames);
+          setLoadingPage(false);
         })
         .catch((err) => {
           showConnectionError();
@@ -163,50 +145,69 @@ export default function ViewProfileScreen({ navigation, route }) {
   };
 
   useEffect(() => {
-    checkIfLogged(route.params.visitedUsuario);
+    checkIfLogged();
   }, []);
 
-  const [loading, setLoading] = useState(false);
-
-  const nomeChangeHandler = (i) => {
-    setNomeInput(i.nativeEvent.text);
-  };
-
-  const ignorarEdicao = async () => {
+  const voltar = async () => {
     navigation.pop();
-    navigation.navigate("Posts");
+    if (route.params.from == 'Post') {
+      navigation.navigate("ViewPost", {
+        id_publicacao: route.params.id_publicacao
+      });
+    }else {
+      navigation.navigate("Posts");
+    }
+    
   };
 
   return (
     <>
-      <ScrollView nestedScrollEnabled={true} style={styles.inputContainer}>
-        <Text style={styles.textInput}>Nome</Text>
-        <Text style={styles.textInput}>{nomeShow}</Text>
+      <ScrollView nestedScrollEnabled={true} style={styles.profileContainer}>
+        <Text style={styles.label}>Nome</Text>
+        <Text style={styles.showText}>{nomeShow}</Text>
 
-        <Text style={styles.textInput}>Cargo</Text>
-        <Text style={styles.textInput}>{cargoShow}</Text>
+        <Text style={styles.label}>Usuário</Text>
+        <Text style={styles.showText}>{usuarioShow}</Text>
 
-        <Text style={styles.textInput}>Curso</Text>
-        <Text style={styles.textInput}>{cursoShow}</Text>
+        <Text style={styles.label}>Cargo</Text>
+        <Text style={styles.showText}>{cargoShow}</Text>
 
-        <Text style={styles.textInput}>Campus</Text>
-        <Text style={styles.textInput}>{campusShow}</Text>
+        <Text style={styles.label}>Curso</Text>
+        <Text style={styles.showText}>{cursoShow}</Text>
 
-        <View style={styles.buttonsContainer2}>
-          <TouchableOpacity onPress={() => ignorarEdicao()}>
+        <Text style={styles.label}>Câmpus</Text>
+        <Text style={styles.showText}>{campusShow}</Text>
+
+        <Text style={styles.label}>Tags</Text>
+        <View style={styles.tags}>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+          >
+            {tagNames.map((tag, tagKey) => {
+              return (
+                <Text key={tagKey} style={styles.tag}>
+                  {tag}{" "}
+                </Text>
+              );
+            })}
+          </ScrollView>
+        </View>
+
+
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity onPress={() => voltar()}>
             <View style={styles.buttonLogin}>
               <Text style={styles.buttonText}>Voltar</Text>
             </View>
           </TouchableOpacity>
         </View>
       </ScrollView>
-
-      {/* {loadingPage && (
+      {loadingPage && (
         <View style={styles.loadingScreen}>
           <ActivityIndicator size={70} color={colors.media2} />
         </View>
-      )} */}
-      <FlashMessage position="bottom" />
+      )} 
     </>
   );
 }

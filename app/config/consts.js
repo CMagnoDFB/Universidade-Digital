@@ -128,7 +128,7 @@ const dateDifference = (date) => {
     if (timeAgo >= 60) {
         timeAgo = Math.ceil(diffTime / (1000 * 60 * 60));
         if (timeAgo >= 24) {
-            timeAgo = Math.floor(diffTime / (1000 * 60 * 60 * 24)).toString() + "d";
+            timeAgo = Math.ceil(diffTime / (1000 * 60 * 60 * 24)).toString() + "d";
         }else {
             timeAgo = timeAgo.toString() + "h";
         }

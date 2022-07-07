@@ -13,10 +13,10 @@ import Reply from "../components/Reply";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 
 import api from "./../../connectAPI";
+import { dateDifference } from "./../config/consts";
 import { checkLoginState, getUserObject } from "./../../loginState";
 import { ScrollView } from "react-native-gesture-handler";
 import { useTheme } from "@react-navigation/native";
-import { color } from "react-native-elements/dist/helpers";
 
 export default function ViewPostScreen({ navigation, route }) {
   const { colors } = useTheme();
@@ -144,10 +144,12 @@ export default function ViewPostScreen({ navigation, route }) {
   const [conteudo, setConteudo] = useState("");
   const [idUsuarioPub, setIdUsuarioPub] = useState(null);
   const [descUsuario, setDescUsuario] = useState("");
+  const [usuarioPub, setUsuarioPub] = useState("");
   const [nomeUsuario, setNomeUsuario] = useState("");
   const [dataPub, setDataPub] = useState("");
-  const [horas, setHoras] = useState("");
+  const [timeAgo, setTimeAgo] = useState("");
   const [upvotes, setUpvotes] = useState(0);
+  const [nRespostas, setNRespostas] = useState(0);
   const [tagNames, setTagNames] = useState([]);
   const [userUpvoted, setUserUpvoted] = useState(false);
 
@@ -191,23 +193,14 @@ export default function ViewPostScreen({ navigation, route }) {
           setConteudo(pub.conteudo);
           setIdUsuarioPub(pub.usuario.id);
           setDescUsuario(pub.usuario.cargo + " de " + pub.usuario.curso);
+          setUsuarioPub(pub.usuario.usuario);
           setNomeUsuario(pub.usuario.nome);
           setDataPub(pub.data_pub);
           setUpvotes(pub.upvotes);
+          setNRespostas(pub.num_respostas);
           setUserUpvoted(pub.upvote_publicacaos.length > 0);
           setReplyList(pub.resposta);
-
-          const diffTime = Math.abs(
-            new Date(pub.data_pub) - new Date(Date.now())
-          );
-          var timeAgo = Math.ceil(diffTime / (1000 * 60 * 60));
-          if (timeAgo >= 24) {
-            timeAgo =
-              Math.floor(diffTime / (1000 * 60 * 60 * 24)).toString() + "d";
-          } else {
-            timeAgo = timeAgo.toString() + "h";
-          }
-          setHoras(timeAgo);
+          setTimeAgo(dateDifference(pub.data_pub));
 
           var tagNames = [];
           if (pub.tags) {
@@ -352,7 +345,11 @@ export default function ViewPostScreen({ navigation, route }) {
 
   const visitarPerfil = async (usuarioClicked) => {
     navigation.pop();
-    navigation.navigate("ViewProfile", { visitedUsuario: usuarioClicked });
+    navigation.navigate("ViewProfile", {
+      visitedUsuario: usuarioClicked,
+      from: "Post",
+      id_publicacao: id_publicacao
+    });
   };
 
   const voltar = async () => {
@@ -408,14 +405,14 @@ export default function ViewPostScreen({ navigation, route }) {
                 />
                 <View style={styles.dateContainer}>
                   <Text style={styles.dateText} numberOfLines={1}>
-                    {horas}
+                    {timeAgo}
                   </Text>
                 </View>
               </View>
               <View style={styles.postHeaderText}>
                 <View>
                   <TouchableOpacity
-                    onPress={() => visitarPerfil(nomeUsuario)}
+                    onPress={() => visitarPerfil(usuarioPub)}
                     disabled={loading}
                   >
                     <Text style={styles.userText} numberOfLines={1}>
@@ -459,8 +456,8 @@ export default function ViewPostScreen({ navigation, route }) {
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.textInput}>
-            {replyList.length}{" "}
-            {replyList.length != 1 ? "respostas" : "resposta"}
+            {nRespostas}{" "}
+            {nRespostas != 1 ? "respostas" : "resposta"}
           </Text>
           <TextInput
             style={[styles.input, styles.inputMargin]}
@@ -500,7 +497,8 @@ export default function ViewPostScreen({ navigation, route }) {
                 id={reply.id}
                 role={reply.usuario.cargo + " de " + reply.usuario.curso}
                 body={reply.conteudo}
-                user={reply.usuario.nome}
+                user={reply.usuario.usuario}
+                nomeUser={reply.usuario.nome}
                 date={reply.data_pub}
                 upvotes={reply.upvotes}
                 respostas={reply.num_respostas}

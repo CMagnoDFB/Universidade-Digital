@@ -8,7 +8,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useTheme } from '@react-navigation/native';
 import { color } from "react-native-elements/dist/helpers";
 
-function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, respostas, replyList, id_usuario, id_usuarioResp, id_publicacao, token }) {
+function Reply({ navigation, id, role, body, user, nomeUser, date, upvotes, userUpvoted, respostas, replyList, id_usuario, id_usuarioResp, id_publicacao, token }) {
   const {colors} = useTheme();  
   const styles = StyleSheet.create({
     card: {
@@ -45,10 +45,15 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, r
       textTransform: "capitalize",
       fontSize: 16,
       paddingTop: 20,
-      color: colors.text
+      color: colors.text,
+      width: "86%"
     },
     roleText: {
       color: colors.text2
+    },
+    childRoleText: {
+      color: colors.text2,
+      width: "86%", 
     },
     timeAgoText: {
       color: colors.text2,
@@ -79,7 +84,8 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, r
       flex: 1, 
       flexWrap: "wrap",
       paddingTop: 5,
-      color: colors.text
+      color: colors.text,
+      width: "70%"
     },
     replyReplyContainer: {
       width: "100%",
@@ -295,6 +301,15 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, r
     }
   }
 
+  const visitarPerfil = async (usuarioClicked) => {
+    navigation.pop();
+    navigation.navigate("ViewProfile", {
+      visitedUsuario: usuarioClicked,
+      from: "Post",
+      id_publicacao: id_publicacao
+    });
+  };
+
   return (
     <View style={styles.card}>
       <View style={styles.replyHeader}>
@@ -306,8 +321,6 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, r
             type='font-awesome'
             size={15}
             reverse={true}
-            name='arrow-up'
-            type='font-awesome'
             color={!upvoted ? colors.background : colors.escura1}
             reverseColor={colors.buttonText}
             style={styles.upvoteIcon}
@@ -317,9 +330,11 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, r
           </View>
         </View>
         <View style={styles.replyHeaderText}>
-          <View>
-            <Text style={styles.userText} numberOfLines={1}>{user}</Text>
-          </View>
+          <TouchableOpacity
+              onPress={() => visitarPerfil(user)}
+          >
+            <Text style={styles.userText} numberOfLines={1}>{nomeUser}</Text>
+          </TouchableOpacity>
           <View >
             <Text style={styles.roleText} numberOfLines={1}>{role}</Text>
           </View>
@@ -366,13 +381,15 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, r
                     <View style={styles.verticalLine}></View>
                     <View style={styles.childReply}>
                       <View>
-                        <View>
+                        <TouchableOpacity
+                            onPress={() => visitarPerfil(reply.usuario.usuario)}
+                        >
                           <Text style={styles.childUserText} numberOfLines={1}>{reply.usuario.nome}</Text>
-                        </View>
+                        </TouchableOpacity>
                         <View >
-                          <Text style={styles.roleText} numberOfLines={1}>{reply.usuario.cargo + ' de ' + reply.usuario.curso}</Text>
+                          <Text style={styles.childRoleText} numberOfLines={1}>{reply.usuario.cargo + ' de ' + reply.usuario.curso}</Text>
                         </View>
-                        <View >
+                        <View>
                           <Text style={styles.timeAgoText} numberOfLines={1}>{timeAgoReply}</Text>
                         </View>
                       </View>
