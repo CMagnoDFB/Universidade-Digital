@@ -4,12 +4,125 @@ import { Icon } from 'react-native-elements';
 import Reply from "../components/Reply";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 
-import colors from "../config/colors"
 import api from "./../../connectAPI"
 import { checkLoginState, getUserObject } from "./../../loginState"
 import { ScrollView } from "react-native-gesture-handler";
+import { useTheme } from '@react-navigation/native';
+import { color } from "react-native-elements/dist/helpers";
 
 export default function ViewPostScreen({ navigation, route }) {
+  const { colors } = useTheme();
+
+  const styles = StyleSheet.create({
+    buttonsContainer: {
+      width: "100%",
+      flexDirection: "row",
+      marginHorizontal: 20,
+    },
+    sendContainer: {
+      width: "100%",
+      flexDirection: "row",
+      justifyContent: 'flex-end',
+    },
+    headerIcon: {
+      flexDirection: "column",
+    },
+    headerIconRight: {
+      flexDirection: "column",
+    },
+    inputContainer: {
+      width: "100%",
+      padding: 20,
+    },
+    textInput: {
+      color: colors.text,
+      height: 40,
+      fontSize: 18,
+    },
+    input: {
+      padding: 10,
+      backgroundColor: colors.input,
+      fontSize: 14,
+      borderRadius: 10,
+      color: colors.text,
+      elevation: 6,
+      textAlignVertical: 'top'
+    },
+    inputMargin: {
+      marginBottom: 20
+    },
+    card: {
+      marginHorizontal: 20,
+      marginVertical: 15,
+      padding: 10,
+      backgroundColor: colors.post,
+      borderRadius: 30,
+      elevation: 6
+    },
+    postHeader: { flexDirection: "row", padding: 0 },
+    upvote: { flexDirection: "column" },
+    upvoteIcon: {
+      flexDirection: "column"
+    },
+    dateContainer: {
+      width: 48,
+      alignItems: "center"
+    },
+    dateText: {
+      color: colors.text2,
+      flexDirection: "column"
+    },
+    postHeaderText: { flexDirection: "column", paddingLeft: 10, width: "80%" },
+    userText: {
+      textTransform: "capitalize",
+      fontSize: 20,
+      color: colors.text
+    },
+    roleText: {
+      color: colors.text2
+    },
+    tags: { flexDirection: "row" },
+    tag: { 
+      backgroundColor: colors.media1, 
+      paddingHorizontal: 8,
+      paddingVertical: 4,
+      marginTop: 2,
+      marginRight: 6,
+      fontWeight: "600",
+      borderRadius: 10
+    },
+
+    cardBody: { 
+      flexDirection: 'row',
+      padding: 10
+    },
+    textBody: {
+      flex: 1, 
+      flexWrap: "wrap",
+      color: colors.text
+    },
+    upvotesNumber: {
+      padding: 10
+    },
+    repliesContainer: {
+      marginBottom: 60
+    },
+    loadingScreen: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors.background
+    },
+    loadPostsContainer: {
+      width: "100%",
+      alignItems: "center",
+      marginVertical: 15,
+    },
+  });
 
   const { id_publicacao } = route.params;
 
@@ -239,7 +352,9 @@ export default function ViewPostScreen({ navigation, route }) {
             onPress={() => voltar()}
             name='chevron-left'
             type='font-awesome'
-            color={colors.escura2}
+            reverse={true}
+            reverseColor={colors.text}
+            color={colors.post}
             raised={true}
             size={25}
             style={styles.headerIcon}
@@ -249,9 +364,11 @@ export default function ViewPostScreen({ navigation, route }) {
               onPress={() => excluirPub()}
               name='trash'
               type='font-awesome'
-              color="#c00"
+              reverseColor="#f00"
               raised={true}
               size={25}
+              reverse={true}
+              color={colors.post}
               style={styles.headerIcon}
             />
           }
@@ -264,11 +381,12 @@ export default function ViewPostScreen({ navigation, route }) {
             <View style={styles.upvote}>
               <Icon
                 onPress={() => upvotePost()}
-                raised={!upvoted}
-                reverse={upvoted}
+                raised={upvoted}
+                reverse={true}
                 name='arrow-up'
                 type='font-awesome'
-                color={colors.escura2}
+                color={!upvoted ? colors.background : colors.escura1}
+                reverseColor={colors.buttonText}
                 size={15}
                 style={styles.upvoteIcon}
               />
@@ -302,7 +420,7 @@ export default function ViewPostScreen({ navigation, route }) {
             <Text style={styles.textBody} >{id}{conteudo} </Text>
           </View>
           <View style={styles.upvotesNumber}>
-            <Text>{upvotes} {upvotes!=1 ? "upvotes" : "upvote" }</Text>
+            <Text style={{color: colors.text}}>{upvotes} {upvotes!=1 ? "upvotes" : "upvote" }</Text>
           </View>
         </View>
       </View>
@@ -315,6 +433,8 @@ export default function ViewPostScreen({ navigation, route }) {
           onChange={conteudoRespostaChangeHandler}
           value={conteudoResposta}
           multiline={true}
+          placeholder="Escreva uma resposta..."
+          placeholderTextColor={colors.text2}
           numberOfLines = {8}
         />
         <View style={styles.sendContainer}>
@@ -323,9 +443,11 @@ export default function ViewPostScreen({ navigation, route }) {
               onPress={() => sendReply()}
               name='send'
               type='material'
-              color={colors.escura2}
               raised={true}
               size={25}
+              reverse={true}
+              color={colors.post}
+              reverseColor={colors.escura1}
               style={styles.headerIcon}
             />
           }
@@ -371,114 +493,5 @@ export default function ViewPostScreen({ navigation, route }) {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  buttonsContainer: {
-    width: "100%",
-    flexDirection: "row",
-    marginHorizontal: 20,
-  },
-  sendContainer: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: 'flex-end',
-  },
-  headerIcon: {
-    flexDirection: "column",
-  },
-  headerIconRight: {
-    flexDirection: "column",
-  },
-  inputContainer: {
-    width: "100%",
-    padding: 20,
-  },
-  textInput: {
-    color: colors.preto,
-    height: 40,
-    fontSize: 18,
-  },
-  input: {
-    padding: 10,
-    backgroundColor: colors.branco,
-    fontSize: 14,
-    borderRadius: 10,
-    color: colors.preto,
-    elevation: 6,
-    textAlignVertical: 'top'
-  },
-  inputMargin: {
-    marginBottom: 20
-  },
-  card: {
-    marginHorizontal: 20,
-    marginVertical: 15,
-    padding: 10,
-    backgroundColor: colors.branco,
-    borderRadius: 30,
-    elevation: 6
-  },
-  postHeader: { flexDirection: "row", padding: 0 },
-  upvote: { flexDirection: "column" },
-  upvoteIcon: {
-    flexDirection: "column"
-  },
-  dateContainer: {
-    width: 48,
-    alignItems: "center"
-  },
-  dateText: {
-    color: "#00000066",
-    flexDirection: "column"
-  },
-  postHeaderText: { flexDirection: "column", paddingLeft: 10, width: "80%" },
-  userText: {
-    textTransform: "capitalize",
-    fontSize: 20
-  },
-  roleText: {
-    color: "#00000066"
-  },
-  tags: { flexDirection: "row" },
-  tag: { 
-    backgroundColor: colors.media1, 
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    marginTop: 2,
-    marginRight: 6,
-    fontWeight: "600",
-    borderRadius: 10
-  },
-
-  cardBody: { 
-    flexDirection:'row',
-    padding: 10
-  },
-  textBody: {
-    flex: 1, 
-    flexWrap: "wrap" 
-  },
-  upvotesNumber: {
-    padding: 10,
-  },
-  repliesContainer: {
-    marginBottom: 60
-  },
-  loadingScreen: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: "#fff"
-  },
-  loadPostsContainer: {
-    width: "100%",
-    alignItems: "center",
-    marginVertical: 15,
-  },
-});
 
 // Para simplificar o projeto, creio que devamos limitar uma tag por post

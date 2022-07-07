@@ -1,12 +1,149 @@
 import React, { useState, useEffect } from "react";
 import { Text, StyleSheet, View, TextInput, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
 import { Icon } from 'react-native-elements';
-import colors from "../config/colors";
+
 import api from "./../../connectAPI";
 import { dateDifference } from "./../config/consts";
 import { ScrollView } from "react-native-gesture-handler";
+import { useTheme } from '@react-navigation/native';
+import { color } from "react-native-elements/dist/helpers";
 
 function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, respostas, replyList, id_usuario, id_usuarioResp, id_publicacao, token }) {
+  const {colors} = useTheme();  
+  const styles = StyleSheet.create({
+    card: {
+      marginHorizontal: 20,
+      marginVertical: 15,
+      padding: 10,
+      backgroundColor: colors.post,
+      borderRadius: 30,
+      elevation: 6,
+    },
+    replyHeader: { flexDirection: "row", padding: 0 },
+    upvote: { flexDirection: "column" },
+    childReply: {
+      flexDirection: "column",
+    },
+    upvoteIcon: {
+      flexDirection: "column"
+    },
+    dateContainer: {
+      width: 48,
+      alignItems: "center"
+    },
+    dateText: {
+      color: colors.text,
+      flexDirection: "column"
+    },
+    replyHeaderText: { flexDirection: "column", paddingLeft: 10, width: "80%" },
+    userText: {
+      textTransform: "capitalize",
+      fontSize: 20,
+      color: colors.text
+    },
+    childUserText: {
+      textTransform: "capitalize",
+      fontSize: 16,
+      paddingTop: 20
+    },
+    roleText: {
+      color: colors.text
+    },
+    timeAgoText: {
+      color: colors.text,
+      position: 'absolute',
+      left:     -34,
+      top:      -30,
+    },
+    tags: { flexDirection: "row" },
+    tag: { 
+      backgroundColor: colors.media1, 
+      paddingHorizontal: 8,
+      paddingVertical: 4,
+      marginTop: 2,
+      marginRight: 6,
+      fontWeight: "600",
+      borderRadius: 10
+    },
+    cardBody: { 
+      flexDirection:'row',
+      padding: 10
+    },
+    textBody: {
+      flex: 1, 
+      flexWrap: "wrap",
+      color: colors.text
+    },
+    childTextBody: {
+      flex: 1, 
+      flexWrap: "wrap",
+      paddingTop: 5
+    },
+    replyReplyContainer: {
+      width: "100%",
+      flexDirection: "row",
+      justifyContent: 'center',
+      marginTop: 5
+    },
+    replyReplyText: {
+      color: colors.text
+    },
+    repliesContainer: {
+      flexDirection: "row",
+    },
+    repliesPadding: {
+      flexDirection: "column",
+      paddingLeft: 45
+    },
+    repliesContent: {
+      flexDirection: "column"
+    },
+    verticalLine: {
+      height: '100%',
+      width: 2,
+      backgroundColor: '#bbb',
+      flexDirection: "column",
+      marginRight: 40
+    },
+    replyDeleteButton: {
+      position: 'absolute',
+      left:     310,
+      top:      20,
+    },
+    replyReplyDeleteButton: {
+      position: 'absolute',
+      left:     -92,
+      top:      16,
+    },
+    inputContainer: {
+      marginTop: 40
+    },
+    input: {
+      padding: 10,
+      backgroundColor: colors.input,
+      fontSize: 14,
+      borderRadius: 10,
+      color: colors.text,
+      elevation: 6,
+      textAlignVertical: 'top'
+    },
+    inputReplyReply: {
+      padding: 10,
+      backgroundColor: colors.input,
+      fontSize: 14,
+      borderRadius: 10,
+      color: colors.text,
+      borderWidth: 2,
+      borderColor: "#bbb",
+      elevation: 1,
+      textAlignVertical: 'top'
+    },
+    sendContainer: {
+      width: "100%",
+      flexDirection: "row",
+      justifyContent: 'flex-end',
+    },
+  });
 
   const [nUpvotes, setNUpvotes] = useState(upvotes);
   const [nRespostas, setNRespostas] = useState(respostas);
@@ -294,139 +431,6 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, r
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    marginHorizontal: 20,
-    marginVertical: 15,
-    padding: 10,
-    backgroundColor: colors.branco,
-    borderRadius: 30,
-    elevation: 6,
-  },
-  replyHeader: { flexDirection: "row", padding: 0 },
-  upvote: { flexDirection: "column" },
-  childReply: {
-    flexDirection: "column",
-  },
-  upvoteIcon: {
-    flexDirection: "column"
-  },
-  dateContainer: {
-    width: 48,
-    alignItems: "center"
-  },
-  dateText: {
-    color: "#00000066",
-    flexDirection: "column"
-  },
-  replyHeaderText: { flexDirection: "column", paddingLeft: 10, width: "80%" },
-  userText: {
-    textTransform: "capitalize",
-    fontSize: 20
-  },
-  childUserText: {
-    textTransform: "capitalize",
-    fontSize: 16,
-    paddingTop: 20
-  },
-  roleText: {
-    color: "#00000066"
-  },
-  timeAgoText: {
-    color: "#00000066",
-    position: 'absolute',
-    left:     -34,
-    top:      -30,
-  },
-  tags: { flexDirection: "row" },
-  tag: { 
-    backgroundColor: colors.media1, 
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    marginTop: 2,
-    marginRight: 6,
-    fontWeight: "600",
-    borderRadius: 10
-  },
-  cardBody: { 
-    flexDirection:'row',
-    padding: 10
-  },
-  textBody: {
-    flex: 1, 
-    flexWrap: "wrap" 
-  },
-  childTextBody: {
-    flex: 1, 
-    flexWrap: "wrap",
-    paddingTop: 5
-  },
-  replyReplyContainer: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: 'center',
-    marginTop: 5
-  },
-  replyReplyText: {
-    color: "#00000066"
-  },
-  repliesContainer: {
-    flexDirection: "row",
-  },
-  repliesPadding: {
-    flexDirection: "column",
-    paddingLeft: 45
-  },
-  repliesContent: {
-    flexDirection: "column"
-  },
-  verticalLine: {
-    height: '100%',
-    width: 2,
-    backgroundColor: '#bbb',
-    flexDirection: "column",
-    marginRight: 40
-  },
-  replyDeleteButton: {
-    position: 'absolute',
-    left:     310,
-    top:      20,
-  },
-  replyReplyDeleteButton: {
-    position: 'absolute',
-    left:     -92,
-    top:      16,
-  },
-  inputContainer: {
-    marginTop: 40
-  },
-  input: {
-    padding: 10,
-    backgroundColor: colors.branco,
-    fontSize: 14,
-    borderRadius: 10,
-    color: colors.preto,
-    elevation: 6,
-    textAlignVertical: 'top'
-  },
-  inputReplyReply: {
-    padding: 10,
-    backgroundColor: colors.branco,
-    fontSize: 14,
-    borderRadius: 10,
-    color: colors.preto,
-    borderWidth: 2,
-    borderColor: "#bbb",
-    elevation: 1,
-    textAlignVertical: 'top'
-  },
-  sendContainer: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: 'flex-end',
-  },
-});
 
 //Talvez remover o padding deste component depois pq ele e um card. A pagina que tem ele e que precisa resolver o padding
 

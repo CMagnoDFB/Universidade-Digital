@@ -5,14 +5,84 @@ import Post from "../components/Post";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import DropDownPicker from "react-native-dropdown-picker";
 
-import colors from "../config/colors"
 import api from "./../../connectAPI"
 import { checkLoginState, removeLoginState, getUserObject } from "./../../loginState"
 import { BADGE_COLORS, parseTags, PAGE_LIMIT } from "./../config/consts"
 import { ScrollView } from "react-native-gesture-handler";
+import { useTheme } from '@react-navigation/native';
+import { color } from "react-native-elements/dist/helpers";
 
 export default function PostsScreen({ navigation }) {
+  const { colors } = useTheme();
 
+  const styles = StyleSheet.create({
+    buttonsContainer: {
+      width: "100%",
+      flexDirection: "row",
+      marginHorizontal: 20,
+      
+    },
+    headerIcon: {
+      flexDirection: "column"
+    },
+    headerIconRight: {
+      color: colors.background,
+      flexDirection: "column"
+    },
+    loadingScreen: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors.background
+    },
+    loadPostsContainer: {
+      width: "100%",
+      alignItems: "center",
+      marginVertical: 15,
+      marginBottom: 120,
+    },
+    createPostButton: {
+      position: 'absolute',
+      bottom:30,
+      right:30
+    },
+    input: {
+      height: 40,
+      paddingHorizontal: "3%",
+      backgroundColor: colors.text,
+      fontSize: 14,
+      borderRadius: 10,
+      color: colors.text,
+      borderWidth: 1,
+      borderColor: colors.text,
+    },
+    inputMargin: {
+      flexDirection: "row",
+      paddingHorizontal: 20,
+      paddingVertical: 10
+    },
+    dropdownContainer: {
+      flexDirection: "column",
+      width: "85%",
+    },
+    filterButtonContainer: {
+      flexDirection: "column"
+    },
+    dropdown: {
+      zIndex: 10,
+      backgroundColor: colors.input,
+      borderColor: colors.border,
+      borderWidth: 1
+    },
+    filterButton: {
+      margin: 0
+    }
+  });
+  
   const [loadingPage, setLoadingPage] = useState(true);
   const [loadingMorePosts, setLoadingMorePosts] = useState(false);
   const [filterEnabled, setFilterEnabled] = useState(false);
@@ -194,19 +264,21 @@ export default function PostsScreen({ navigation }) {
           onPress={() => modoRecentes()}
           name='schedule'
           type='material'
-          color={colors.escura2}
-          reverse={modoExibicao == 'recentes'}
           raised
           size={25}
+          reverse={true}
+          color={modoExibicao !== 'recentes' ? colors.posts : colors.escura1}
+          reverseColor={colors.buttonText}
           style={styles.headerIcon}
         />
         <Icon
           onPress={() => modoEmAlta()}
           name='local-fire-department'
           type='material'
-          color={colors.escura2}
-          reverse={modoExibicao == 'em alta'}
           raised
+          reverse={true}
+          color={modoExibicao !== 'em alta' ? colors.posts : colors.escura1}
+          reverseColor={colors.buttonText}
           size={25}
           style={styles.headerIcon}
         />
@@ -214,17 +286,18 @@ export default function PostsScreen({ navigation }) {
           onPress={() => alternarFiltro()}
           name='filter'
           type='font-awesome'
-          color={colors.escura2}
-          reverse={filterEnabled}
           raised
           size={25}
+          reverse={true}
+          color={!filterEnabled ? colors.posts : colors.escura1}
+          reverseColor={colors.buttonText}
           style={styles.headerIconRight}
         />
         <Icon
           onPress={() => irEdicaoPerfil()}
           name='edit'
           type='font-awesome'
-          color={colors.escura2}
+          reverse
           raised
           size={25}
           style={styles.headerIcon}
@@ -233,7 +306,7 @@ export default function PostsScreen({ navigation }) {
           onPress={() => efetuarLogout()}
           name='sign-out'
           type='font-awesome'
-          color={colors.escura2}
+          reverse
           raised
           size={25}
           style={styles.headerIcon}
@@ -243,7 +316,7 @@ export default function PostsScreen({ navigation }) {
           onPress={() => console.log("a ser feito..")}
           name='user'
           type='font-awesome'
-          color={colors.escura2}
+          color={colors.card}
           raised
           size={25}
           style={styles.headerIconRight}
@@ -267,7 +340,16 @@ export default function PostsScreen({ navigation }) {
               listMode="SCROLLVIEW"
               mode="BADGE"
               badgeDotColors={BADGE_COLORS}
+              badgeColors={colors.background}
+              badgeTextStyle={{color: colors.text}}
+              placeholderStyle={{color: colors.text}}
+              badgeStyle={{borderColor: colors.border, borderWidth: 1}}
+              labelStyle={{color: colors.text}}
+              dropDownContainerStyle={{backgroundColor: colors.card, borderColor: colors.border}}
+              arrowStyle={{color: colors.text}}
+              listItemLabelStyle={{color: colors.text}}
               scrollViewProps={{nestedScrollEnabled: true}}
+              placeholder="Selecione um item"
             />
           </View>
           <View style={styles.filterButtonContainer}>
@@ -275,9 +357,11 @@ export default function PostsScreen({ navigation }) {
               onPress={() => filtrarPubs()}
               name='search'
               type='font-awesome'
-              color={colors.escura2}
               raised
               size={18}
+              reverse={true}
+              color={colors.background1}
+              reverseColor={colors.buttonText}
               style={styles.filterButton}
             />
           </View>
@@ -319,14 +403,14 @@ export default function PostsScreen({ navigation }) {
             onPress={() => carregarMais()}
             name='chevron-down'
             type='font-awesome'
-            color={colors.escura2}
+            color={colors.text}
             raised
             size={25}
             style={styles.headerIcon}
           />
         }
         {loadingMorePosts && 
-          <ActivityIndicator size={70} color={colors.escura2} />
+          <ActivityIndicator size={70}/>
         }
          
       </View>
@@ -345,75 +429,11 @@ export default function PostsScreen({ navigation }) {
     </View>
     {loadingPage && 
       <View style={styles.loadingScreen}>
-        <ActivityIndicator size={70} color={colors.media2} />
+        <ActivityIndicator size={70} color={colors.card} />
       </View>
     }
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  buttonsContainer: {
-    width: "100%",
-    flexDirection: "row",
-    marginHorizontal: 20,
-    
-  },
-  headerIcon: {
-    flexDirection: "column",
-  },
-  headerIconRight: {
-    flexDirection: "column",
-  },
-  loadingScreen: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: "#fff"
-  },
-  loadPostsContainer: {
-    width: "100%",
-    alignItems: "center",
-    marginVertical: 15,
-    marginBottom: 120,
-  },
-  createPostButton: {
-    position: 'absolute',
-    bottom:30,
-    right:30
-  },
-  input: {
-    height: 40,
-    paddingHorizontal: "3%",
-    backgroundColor: colors.branco,
-    fontSize: 14,
-    borderRadius: 10,
-    color: colors.preto,
-    borderWidth: 1,
-    borderColor: colors.preto,
-  },
-  inputMargin: {
-    flexDirection: "row",
-    paddingHorizontal: 20,
-    paddingVertical: 10
-  },
-  dropdownContainer: {
-    flexDirection: "column",
-    width: "85%",
-  },
-  filterButtonContainer: {
-    flexDirection: "column",
-  },
-  dropdown: {
-    zIndex: 10,
-  },
-  filterButton: {
-    margin: 0
-  }
-});
 
 // Para simplificar o projeto, creio que devamos limitar uma tag por post

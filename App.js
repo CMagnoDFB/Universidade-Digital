@@ -9,8 +9,10 @@ import CreatePostScreen from "./app/screens/CreatePostScreen";
 import ViewPostScreen from "./app/screens/ViewPostScreen";
 
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { DefaultTheme, LightTheme, DarkTheme, NavigationContainer, ThemeProvider, useTheme} from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { useColorScheme } from "react-native";
+
 const Stack = createStackNavigator();
 
 import AppLoading from "expo-app-loading";
@@ -32,7 +34,61 @@ import {
   Mulish_900Black_Italic,
 } from "@expo-google-fonts/mulish";
 
+// É melhor separar em 2 arquivos depois
+const MyDarkTheme = {
+  ...DarkTheme,
+  dark: true,
+  colors: {
+    ...DarkTheme.colors,
+    background: '#181818',
+    input: '#0A0A0A',
+    post: '#202020',
+    clara1: "#d9ed92",
+    clara2: "#b5e48c",
+    clara3: "#99d98c",
+    media1: "#76c893",
+    media2: "#52b69a",
+    media3: "#34a0a4",
+    media4: "#168aad",
+    escura1: "#1a759f",
+    escura2: "#1e6091",
+    escura3: "#184e77",
+    text: "#C0C0C0",
+    text2: "#FFFFFF66",
+    buttonText: "#fff",
+    icon: "#000"
+  },
+};
+
+const MyLightTheme = {
+  ...DefaultTheme,
+  dark: false,
+  colors: {
+    ...DefaultTheme.colors,
+    background: '#E8E8E8',
+    input: '#FFFFFF',
+    post: '#FFFFFF',
+    clara1: "#d9ed92",
+    clara2: "#b5e48c",
+    clara3: "#99d98c",
+    media1: "#76c893",
+    media2: "#52b69a",
+    media3: "#34a0a4",
+    media4: "#168aad",
+    escura1: "#1a759f",
+    escura2: "#1e6091",
+    escura3: "#184e77",
+    text2: "#00000066",
+    buttonText: "#fff",
+    icon: "#000"
+  },
+};
+
+
 export default function App() {
+  const deviceTheme = useColorScheme();
+  const theme = deviceTheme === 'dark' ? MyDarkTheme : MyLightTheme;
+  const {colors} = useTheme();
   let fontsLoaded = useFonts({
     Mulish_200ExtraLight,
     Mulish_300Light,
@@ -54,17 +110,41 @@ export default function App() {
   } else {
     
     return (
-      <NavigationContainer >
-        <Stack.Navigator>
-        <Stack.Screen name="Welcome" component={WelcomeScreen} options={{headerShown: false}} />
-          <Stack.Screen name="Login" component={LoginScreen} options={{headerTitle: 'Entrar', headerTransparent: true, headerTintColor: '#fff', headerTitleStyle: {color: '#fff', fontSize: 25}}} />
-          <Stack.Screen name="Register" component={RegisterScreen} options={{headerTitle: 'Cadastrar', headerTransparent: true, headerTintColor: '#fff', headerTitleStyle: {color: '#fff', fontSize: 25}}} />
-          <Stack.Screen name="Posts" component={PostsScreen} options={{headerTitle: '', headerLeft: null,  headerTitleStyle: {color: '#000', fontSize: 25}}} />
-          <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{headerTitle: 'Editar perfil', headerLeft: null,  headerTitleStyle: {color: '#000', fontSize: 25}}} />
-          <Stack.Screen name="CreatePosts" component={CreatePostScreen} options={{headerTitle: 'Criar publicação', headerLeft: null,  headerTitleStyle: {color: '#000', fontSize: 25}}} />
-          <Stack.Screen name="ViewPost" component={ViewPostScreen} options={{headerTitle: 'Publicação', headerLeft: null,  headerTitleStyle: {color: '#000', fontSize: 25}}} />
-        </Stack.Navigator>
-      </NavigationContainer>
+        <NavigationContainer theme={theme}>
+          <Stack.Navigator>
+          <Stack.Screen name="Welcome" component={WelcomeScreen} options={{headerShown: true}} />
+            <Stack.Screen name="Login" component={LoginScreen} options={{
+              headerTitle: 'Entrar',
+              headerTransparent: true,
+              headerStyle: {backgroundColor: colors.background},
+              headerTitleStyle: {color: colors.background, fontSize: 25}}} />
+            <Stack.Screen name="Register" component={RegisterScreen} options={{
+              headerTitle: 'Cadastrar',
+              headerTransparent: true,
+              headerStyle: {backgroundColor: colors.background},
+              headerTitleStyle: {color: colors.background, fontSize: 25}}} />
+            <Stack.Screen name="Posts" component={PostsScreen} options={{
+              headerTitle: '',
+              headerLeft: null,
+              headerStyle: {backgroundColor: colors.text},
+              headerTitleStyle: {backgroundColor: colors.text, color: colors.background, fontSize: 25}}} />
+            <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{
+              headerTitle: 'Editar perfil',
+              headerLeft: null,
+              headerStyle: {backgroundColor: colors.text},
+              headerTitleStyle: {backgroundColor: colors.text, color: colors.background, fontSize: 25}}} />
+            <Stack.Screen name="CreatePosts" component={CreatePostScreen} options={{
+              headerTitle: 'Criar publicação',
+              headerLeft: null,
+              headerStyle: {backgroundColor: colors.text},
+              headerTitleStyle: {backgroundColor: colors.text, color: colors.background, fontSize: 25}}} />
+            <Stack.Screen name="ViewPost" component={ViewPostScreen} options={{
+              headerTitle: 'Publicação',
+              headerLeft: null,
+              headerStyle: {backgroundColor: colors.text},
+              headerTitleStyle: {backgroundColor: colors.text, color: colors.background, fontSize: 25}}} />
+          </Stack.Navigator>
+        </NavigationContainer>
     );
   }
 }

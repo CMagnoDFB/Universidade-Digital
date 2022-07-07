@@ -1,12 +1,68 @@
 import React, { useState, useEffect } from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { Icon } from 'react-native-elements';
-import colors from "../config/colors";
 import api from "./../../connectAPI";
 import { dateDifference } from "./../config/consts";
 import { ScrollView } from "react-native-gesture-handler";
+import { useTheme } from '@react-navigation/native';
 
 function Post({ navigation, id, role, tags, body, user, date, upvotes, userUpvoted, id_usuario, token }) {
+
+  const { colors } = useTheme();
+  
+  const styles = StyleSheet.create({
+    card: {
+      marginHorizontal: 20,
+      marginVertical: 15,
+      padding: 10,
+      backgroundColor: colors.post,
+      borderRadius: 30,
+      elevation: 6
+    },
+    postHeader: { flexDirection: "row", padding: 0 },
+    upvote: { flexDirection: "column" },
+    upvoteIcon: {
+      flexDirection: "column"
+    },
+    dateContainer: {
+      width: 48,
+      alignItems: "center"
+    },
+    dateText: {
+      color: colors.text2,
+      flexDirection: "column"
+    },
+    postHeaderText: { flexDirection: "column", paddingLeft: 10, width: "80%" },
+    userText: {
+      textTransform: "capitalize",
+      fontSize: 20,
+      color: colors.text
+    },
+    roleText: {
+      color: colors.text2
+    },
+    tags: { flexDirection: "row" },
+    tag: { 
+      backgroundColor: colors.media1, 
+      paddingHorizontal: 8,
+      paddingVertical: 4,
+      marginTop: 2,
+      marginRight: 6,
+      fontWeight: "600",
+      borderRadius: 10
+    },
+
+    cardBody: { 
+      flexDirection:'row',
+      padding: 10
+    },
+    textBody: {
+      flex: 1, 
+      flexWrap: "wrap",
+      color: colors.text
+    },
+  });
+
 
   const [upvoted, setUpvoted] = useState(userUpvoted);
   const [upvoteLoading, setUpvoteLoading] = useState(false);
@@ -75,11 +131,13 @@ function Post({ navigation, id, role, tags, body, user, date, upvotes, userUpvot
         <View style={styles.upvote}>
           <Icon
             onPress={() => upvotePost()}
-            raised={!upvoted}
-            reverse={upvoted}
+            raised={upvoted}
+            reverse={!upvoted}
             name='arrow-up'
             type='font-awesome'
-            color={colors.escura2}
+            reverse={true}
+            color={!upvoted ? colors.background : colors.escura1}
+            reverseColor={colors.buttonText}
             size={15}
             style={styles.upvoteIcon}
           />
@@ -115,57 +173,6 @@ function Post({ navigation, id, role, tags, body, user, date, upvotes, userUpvot
     </TouchableOpacity>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    marginHorizontal: 20,
-    marginVertical: 15,
-    padding: 10,
-    backgroundColor: colors.branco,
-    borderRadius: 30,
-    elevation: 6
-  },
-  postHeader: { flexDirection: "row", padding: 0 },
-  upvote: { flexDirection: "column" },
-  upvoteIcon: {
-    flexDirection: "column"
-  },
-  dateContainer: {
-    width: 48,
-    alignItems: "center"
-  },
-  dateText: {
-    color: "#00000066",
-    flexDirection: "column"
-  },
-  postHeaderText: { flexDirection: "column", paddingLeft: 10, width: "80%" },
-  userText: {
-    textTransform: "capitalize",
-    fontSize: 20
-  },
-  roleText: {
-    color: "#00000066"
-  },
-  tags: { flexDirection: "row" },
-  tag: { 
-    backgroundColor: colors.media1, 
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    marginTop: 2,
-    marginRight: 6,
-    fontWeight: "600",
-    borderRadius: 10
-  },
-
-  cardBody: { 
-    flexDirection:'row',
-    padding: 10
-  },
-  textBody: {
-    flex: 1, 
-    flexWrap: "wrap" 
-  },
-});
 
 //Talvez remover o padding deste component depois pq ele e um card. A pagina que tem ele e que precisa resolver o padding
 

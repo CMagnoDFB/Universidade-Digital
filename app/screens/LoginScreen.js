@@ -1,89 +1,94 @@
 import React, { useState, useEffect } from "react";
 import { ImageBackground, StyleSheet, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
 
-import colors from "../config/colors";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 
 import api from "./../../connectAPI"
 import { saveLoginState, checkLoginState, saveUserObject } from "./../../loginState"
 
+import { useTheme } from '@react-navigation/native';
 
-
-const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    backgroundColor: colors.escura2
-  },
-  inputContainer: {
-    width: "100%",
-    padding: 20,
-    position: "absolute",
-    bottom: "30%",
-  },
-  usuarioSenha: {
-    color: colors.branco,
-    height: 40,
-    fontSize: 18
-  },
-  input: {
-    height: 40,
-    paddingHorizontal: "3%",
-    backgroundColor: colors.branco,
-    fontSize: 14,
-    bottom: "5%",
-    borderRadius: 10
-  },
-  buttonsContainer: {
-    width: "100%",
-    padding: 20,
-    position: "absolute",
-    bottom: 20,
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  buttonLogin: {
-    display: "flex",
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    width: 280,
-    height: 70,
-    borderRadius: 20
-  },
-  buttonText: {
-    padding:15,
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 28
-  },
-  logoContainer: {
-    justifyContent: "center",
-    flexDirection: "row",
-    bottom: "5%"
-  },
-  u: {
-    width: 105,
-    height: 117,
-  },
-  textContainer: {
-    justifyContent: "center",
-    paddingLeft: 8,
-  },
-  uni: {
-    fontSize: 28,
-    color: colors.branco
-  },
-  digi: {
-    fontSize: 55,
-    lineHeight: 55,
-    color: colors.branco
-  },
-  moto: {
-    fontSize: 11.6,
-    color: colors.branco
-  }
-});
 export default function LoginScreen({ navigation }) {
+  const { colors } = useTheme();
+  const styles = StyleSheet.create({
+    background: {
+      flex: 1,
+      backgroundColor: colors.background
+    },
+    inputContainer: {
+      width: "100%",
+      padding: 20,
+      position: "absolute",
+      bottom: "30%"
+    },
+    usuarioSenha: {
+      height: 40,
+      fontSize: 18,
+      color: colors.text
+    },
+    input: {
+      height: 40,
+      paddingHorizontal: "3%",
+      fontSize: 14,
+      bottom: "5%",
+      borderRadius: 10,
+      color: colors.text,
+      backgroundColor: colors.input,
+      borderWidth: 2,
+      borderColor: colors.border
+    },
+    buttonsContainer: {
+      width: "100%",
+      padding: 20,
+      position: "absolute",
+      bottom: 20,
+      alignItems: "center",
+      justifyContent: "center"
+    },
+    buttonLogin: {
+      display: "flex",
+      alignItems: "center",
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      width: 280,
+      height: 70,
+      borderRadius: 20,
+      borderColor: colors.text
+    },
+    buttonText: {
+      padding:15,
+      fontWeight: "bold",
+      fontSize: 28,
+      color: colors.buttonText
+    },
+    logoContainer: {
+      justifyContent: "center",
+      flexDirection: "row",
+      bottom: "5%"
+    },
+    u: {
+      width: 105,
+      height: 117,
+    },
+    textContainer: {
+      justifyContent: "center",
+      paddingLeft: 8,
+    },
+    uni: {
+      fontSize: 28,
+      color: colors.text
+    },
+    digi: {
+      fontSize: 55,
+      lineHeight: 55,
+      color: colors.text
+    },
+    moto: {
+      fontSize: 11.6,
+      color: colors.text
+    }
+  });
+
 
   const showConnectionError = (i) => {
     showMessage({

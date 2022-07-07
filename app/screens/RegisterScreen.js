@@ -6,10 +6,10 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import PassMeter from "react-native-passmeter";
 
 import FlashMessage, { showMessage } from "react-native-flash-message";
-import colors from "../config/colors";
-
+import { useTheme } from '@react-navigation/native';
 import api from "./../../connectAPI"
 import { saveLoginState, checkLoginState, saveUserObject } from "./../../loginState"
+import { color } from "react-native-elements/dist/helpers";
 
 const USER_MAX_LEN = 30,
   USER_MIN_LEN = 3,
@@ -17,98 +17,104 @@ const USER_MAX_LEN = 30,
   PASS_MIN_LEN = 8,
   PASS_LABELS = ["Muito curta", "Fraca", "Normal", "Forte", "Muito Forte"];
 
-const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    backgroundColor: colors.escura2,
-    heigth: "100%"
-  },
-  inputContainer: {
-    width: "100%",
-    paddingTop: 110,
-    paddingVertical: 60,
-    paddingHorizontal: 20,
-    backgroundColor: colors.escura2,
-    bottom: "0%"
-  },
-  textInput: {
-    color: colors.branco,
-    height: 40,
-    fontSize: 18,
-    fontFamily: "Mulish_500Medium"
-  },
-  input: {
-    height: 40,
-    paddingHorizontal: "3%",
-    backgroundColor: colors.branco,
-    fontSize: 14,
-    bottom: "2%",
-    fontFamily: "Mulish_500Medium",
-    borderRadius: 10
-  },
-  checkboxContainer: {
-    width: "100%",
-    paddingVertical: "14%",
-    flexDirection: "row"
-  },
-  checkbox: {
-    backgroundColor: colors.branco
-  }, 
-  buttonsContainer: {
-    width: "100%",
-    padding: 20,
-    paddingTop: 0,
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  buttonLogin: {
-    display: "flex",
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    width: 280,
-    height: 70,
-    borderRadius: 20
-  },
-  buttonText: {
-    padding:15,
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 28
-  },
-  logoContainer: {
-    justifyContent: "center",
-    flexDirection: "row",
-    paddingVertical: "2%",
-    bottom: "0%"
-  },
-  u: {
-    width: 105,
-    height: 117,
-  },
-  textContainer: {
-    justifyContent: "center",
-    paddingLeft: 8
-  },
-  uni: {
-    fontSize: 28,
-    color: colors.branco
-  },
-  digi: {
-    fontSize: 55,
-    lineHeight: 55,
-    color: colors.branco
-  },
-  moto: {
-    fontSize: 11.6,
-    color: colors.branco,
-  },
-  termos: {
-    color: colors.branco,
-    paddingHorizontal: "3%"
-  }
-});
 export default function RegisterScreen({ navigation }) {
+  const { colors } = useTheme();
+  const styles = StyleSheet.create({
+    background: {
+      flex: 1,
+      backgroundColor: colors.background,
+      heigth: "100%"
+    },
+    inputContainer: {
+      width: "100%",
+      paddingTop: 110,
+      paddingVertical: 60,
+      paddingHorizontal: 20,
+      backgroundColor: colors.background,
+      bottom: "0%"
+    },
+    textInput: {
+      color: colors.text,
+      height: 40,
+      fontSize: 18,
+      fontFamily: "Mulish_500Medium"
+    },
+    input: {
+      height: 40,
+      paddingHorizontal: "3%",
+      backgroundColor: colors.input,
+      borderColor: colors.border,
+      color: colors.text,
+      borderWidth: 2,
+      fontSize: 14,
+      bottom: "2%",
+      fontFamily: "Mulish_500Medium",
+      borderRadius: 10
+    },
+    checkboxContainer: {
+      width: "100%",
+      paddingVertical: "14%",
+      flexDirection: "row"
+    },
+    checkbox: {
+      backgroundColor: colors.background
+    }, 
+    buttonsContainer: {
+      width: "100%",
+      padding: 20,
+      paddingTop: 0,
+      alignItems: "center",
+      justifyContent: "center"
+    },
+    buttonLogin: {
+      display: "flex",
+      alignItems: "center",
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      width: 280,
+      height: 70,
+      borderRadius: 20,
+      borderWidth: 2,
+      borderColor: colors.border
+    },
+    buttonText: {
+      padding:15,
+      color: colors.buttonText,
+      fontWeight: "bold",
+      fontSize: 28
+    },
+    logoContainer: {
+      justifyContent: "center",
+      flexDirection: "row",
+      paddingVertical: "2%",
+      bottom: "0%"
+    },
+    u: {
+      width: 105,
+      height: 117,
+    },
+    textContainer: {
+      justifyContent: "center",
+      paddingLeft: 8
+    },
+    uni: {
+      fontSize: 28,
+      color: colors.text
+    },
+    digi: {
+      fontSize: 55,
+      lineHeight: 55,
+      color: colors.text
+    },
+    moto: {
+      fontSize: 11.6,
+      color: colors.text,
+    },
+    termos: {
+      color: colors.text,
+      paddingHorizontal: "3%"
+    }
+  });
 
   const showConnectionError = (i) => {
     showMessage({

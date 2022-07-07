@@ -3,50 +3,51 @@ import { render } from "react-dom";
 import { ImageBackground, StyleSheet, View, Text, Image } from "react-native";
 
 import AppButton from "../components/AppButton";
-import colors from "../config/colors";
+import { useTheme } from '@react-navigation/native';
 
-const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-  },
-  buttonsContainer: {
-    width: "100%",
-    padding: 20,
-    position: "absolute",
-    bottom: 20,
-  },
-  logoContainer: {
-    justifyContent: "center",
-    marginTop: 100,
-    flexDirection: "row",
-  },
-  u: {
-    width: 105,
-    height: 117,
-  },
-  textContainer: {
-    justifyContent: "center",
-    paddingLeft: 8,
-  },
-  uni: {
-    fontSize: 28,
-    color: colors.cinzaEscuro
-  },
-  digi: {
-    fontSize: 55,
-    lineHeight: 55,
-    color: colors.cinzaEscuro
-  },
-  moto: {
-    fontSize: 11.6,
-    color: colors.cinzaEscuro
-  },
-});
 export default function WelcomeScreen({ navigation }) {
+  const { colors } = useTheme();
+  const styles = StyleSheet.create({
+    background: {
+      flex: 1,
+    },
+    buttonsContainer: {
+      width: "100%",
+      padding: 20,
+      position: "absolute",
+      bottom: 20,
+    },
+    logoContainer: {
+      justifyContent: "center",
+      marginTop: 100,
+      flexDirection: "row",
+    },
+    u: {
+      width: 105,
+      height: 117,
+    },
+    textContainer: {
+      justifyContent: "center",
+      paddingLeft: 8,
+    },
+    uni: {
+      fontSize: 28,
+      color: colors.text
+    },
+    digi: {
+      fontSize: 55,
+      lineHeight: 55,
+      color: colors.text
+    },
+    moto: {
+      fontSize: 11.6,
+      color: colors.text
+    },
+  });
   return (
     <>
       <ImageBackground
-        opacity={0.6}
+        opacity={0}
         source={require("../assets/background.jpg")}
         style={styles.background}
         blurRadius={3}
