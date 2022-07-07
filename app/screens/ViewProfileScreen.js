@@ -221,7 +221,7 @@ export default function ViewProfileScreen({ navigation, route }) {
         <Text style={styles.label}>Curso</Text>
         <Text style={styles.showText}>{cursoShow}</Text>
 
-        <Text style={styles.label}>Câmpus</Text>
+        <Text style={styles.label}>Campus</Text>
         <Text style={styles.showText}>{campusShow}</Text>
 
         <Text style={styles.label}>Publicações</Text>

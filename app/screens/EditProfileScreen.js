@@ -244,7 +244,7 @@ export default function LoginScreen({ navigation }) {
     <>
       <ScrollView nestedScrollEnabled={true} style={styles.inputContainer}
       >
-        <TouchableWithoutFeedback onPress={() => {setOpenCargo(false);setOpenCurso(false);setOpenCampus(false)}}>
+        <TouchableWithoutFeedback onPress={() => {setOpenCargo(false);setOpenCurso(false);setOpenCampus(false);setOpenTags(false)}}>
           <Text style={styles.textInput}>Nome</Text>
           <TextInput
             style={[styles.input,styles.inputMargin]}
@@ -264,6 +264,8 @@ export default function LoginScreen({ navigation }) {
             setValue={setValueCargo}
             setItems={setItemsCargo}
             listMode="SCROLLVIEW"
+            placeholder="Selecione um Curso"
+            placeholderStyle={{color: colors.text}}
             labelStyle={{color: colors.text}}
             dropDownContainerStyle={{backgroundColor: colors.card, borderColor: colors.border}}
             placeholderStyle={{color: colors.text}}
@@ -282,6 +284,8 @@ export default function LoginScreen({ navigation }) {
             setValue={setValueCurso}
             setItems={setItemsCurso}
             listMode="SCROLLVIEW"
+            placeholder="Selecione um Campus"
+            placeholderStyle={{color: colors.text}}
             labelStyle={{color: colors.text}}
             dropDownContainerStyle={{backgroundColor: colors.card, borderColor: colors.border}}
             arrowIconStyle={{tintColor: colors.text2}}
@@ -299,6 +303,8 @@ export default function LoginScreen({ navigation }) {
             setValue={setValueCampus}
             setItems={setItemsCampus}
             listMode="SCROLLVIEW"
+            placeholder="Selecione um Curso"
+            placeholderStyle={{color: colors.text}}
             labelStyle={{color: colors.text}}
             dropDownContainerStyle={{backgroundColor: colors.card, borderColor: colors.border}}
             listItemLabelStyle={{color: colors.text}}
@@ -319,6 +325,8 @@ export default function LoginScreen({ navigation }) {
             min={0}
             listMode="SCROLLVIEW"
             mode="BADGE"
+            placeholder="Selecione as Tags"
+            placeholderStyle={{color: colors.text}}
             badgeDotColors={BADGE_COLORS}
             badgeColors={colors.background}
             badgeTextStyle={{color: colors.text}}
