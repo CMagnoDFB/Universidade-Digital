@@ -157,7 +157,7 @@ export default function App() {
             name="Posts"
             component={PostsScreen}
             options={{
-              headerTitle: "",
+              headerTitle: "Página inicial",
               headerLeft: null,
               headerStyle: { backgroundColor: colors.header },
               headerTitleStyle: {

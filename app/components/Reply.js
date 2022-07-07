@@ -94,7 +94,7 @@ function Reply({ navigation, id, role, body, user, nomeUser, date, upvotes, user
       marginTop: 5
     },
     replyReplyText: {
-      color: colors.text
+      color: colors.text2
     },
     repliesContainer: {
       flexDirection: "row",
@@ -115,7 +115,7 @@ function Reply({ navigation, id, role, body, user, nomeUser, date, upvotes, user
     },
     replyDeleteButton: {
       position: 'absolute',
-      left:     310,
+      left:     "94%",
       top:      20,
     },
     replyReplyDeleteButton: {

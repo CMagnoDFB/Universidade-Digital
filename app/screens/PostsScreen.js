@@ -174,13 +174,6 @@ export default function PostsScreen({ navigation }) {
       console.log(data.usuario + " está logado");
       setUsuario(data);
       setToken(data.token, false);
-      var nomePerfil = uObj.nome;
-      navigation.setOptions({
-        headerTitle:
-          "Página inicial de " +
-          nomePerfil.substring(0, nomePerfil.indexOf(" ")),
-      });
-
       var tagIds = [];
       if (uObj.tags) {
         uObj.tags.forEach((tag, i) => {
@@ -328,17 +321,6 @@ export default function PostsScreen({ navigation }) {
             size={25}
             style={styles.headerIcon}
           />
-          {false && (
-            <Icon
-              onPress={() => console.log("a ser feito..")}
-              name="user"
-              type="font-awesome"
-              color={colors.card}
-              raised
-              size={25}
-              style={styles.headerIconRight}
-            />
-          )}
         </View>
         {filterEnabled && (
           <View style={styles.inputMargin}>
@@ -366,6 +348,7 @@ export default function PostsScreen({ navigation }) {
                   borderColor: colors.border,
                 }}
                 arrowStyle={{ color: colors.text }}
+                arrowIconStyle={{tintColor: colors.text2}}
                 listItemLabelStyle={{ color: colors.text }}
                 scrollViewProps={{ nestedScrollEnabled: true }}
                 placeholder="Selecione um item"
@@ -407,6 +390,7 @@ export default function PostsScreen({ navigation }) {
                 nomeUser={post.usuario.nome}
                 date={post.data_pub}
                 upvotes={post.upvotes}
+                nRespostas={post.num_respostas}
                 userUpvoted={post.upvote_publicacaos.length > 0}
                 id_usuario={usuarioObj.id}
                 token={token}

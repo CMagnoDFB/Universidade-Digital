@@ -6,7 +6,7 @@ import { dateDifference } from "./../config/consts";
 import { ScrollView } from "react-native-gesture-handler";
 import { useTheme } from '@react-navigation/native';
 
-function Post({ navigation, id, role, tags, body, user, nomeUser, date, upvotes, userUpvoted, id_usuario, token }) {
+function Post({ navigation, id, role, tags, body, user, nomeUser, date, upvotes, nRespostas, userUpvoted, id_usuario, token }) {
 
   const { colors } = useTheme();
   
@@ -60,6 +60,15 @@ function Post({ navigation, id, role, tags, body, user, nomeUser, date, upvotes,
       flex: 1, 
       flexWrap: "wrap",
       color: colors.text
+    },
+    nRespostasContainer: {
+      width: "100%",
+      flexDirection: "row",
+      justifyContent: 'center',
+      marginTop: 5
+    },
+    nRespostasText: {
+      color: colors.text2
     },
   });
 
@@ -177,6 +186,9 @@ function Post({ navigation, id, role, tags, body, user, nomeUser, date, upvotes,
       </View>
       <View style={styles.cardBody}>
         <Text style={styles.textBody} numberOfLines={6}>{body} </Text>
+      </View>
+      <View style={styles.nRespostasContainer}>
+        <Text style={styles.nRespostasText}>{nRespostas} {nRespostas!=1 ? "respostas" : "resposta" }</Text>
       </View>
     </TouchableOpacity>
   );

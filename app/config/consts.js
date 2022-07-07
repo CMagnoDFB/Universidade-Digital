@@ -92,13 +92,14 @@ const CURSO_VALUES = [
 ];
 
 const CAMPUS_VALUES = [
-    { label: 'Fortaleza', value: 'Fortaleza' },
+    { label: 'Benfica', value: 'Benfica' },
+    { label: 'Pici', value: 'Pici' },
+    { label: 'Porangabuçu', value: 'Porangabuçu' },
     { label: 'Crateús', value: 'Crateús' },
     { label: 'Itapajé', value: 'Itapajé' },
     { label: 'Quixadá', value: 'Quixadá' },
     { label: 'Russas', value: 'Russas' },
     { label: 'Sobral', value: 'Sobral' },
-    { label: 'EAD', value: 'EAD' },
 ];
 
 const BADGE_COLORS = [

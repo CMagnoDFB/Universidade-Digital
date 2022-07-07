@@ -460,7 +460,6 @@ export default function ViewPostScreen({ navigation, route }) {
           </Text>
           <TextInput
             style={[styles.input, styles.inputMargin]}
-            placeholder=""
             keyboardType="ascii-capable"
             onChange={conteudoRespostaChangeHandler}
             value={conteudoResposta}
