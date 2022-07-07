@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { StyleSheet, View, ActivityIndicator, BackHandler } from "react-native";
 import { Icon } from "react-native-elements";
 import Post from "../components/Post";
@@ -14,7 +14,7 @@ import {
 import { BADGE_COLORS, parseTags, PAGE_LIMIT } from "./../config/consts";
 import { ScrollView } from "react-native-gesture-handler";
 import { useTheme } from "@react-navigation/native";
-
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 export default function PostsScreen({ navigation }) {
   const { colors, dark } = useTheme();
 
@@ -264,6 +264,23 @@ export default function PostsScreen({ navigation }) {
     });
   };
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Icon
+            onPress={() => efetuarLogout()}
+            name="sign-out"
+            type="font-awesome"
+            reverse={dark}
+            reverseColor={colors.text}
+            color={colors.post}
+            size={25}
+            style={styles.headerIcon}
+          />
+      ),
+    });
+  }, [navigation])
+
   BackHandler.addEventListener('hardwareBackPress', () => {
     efetuarLogout();
     return true;
@@ -272,171 +289,174 @@ export default function PostsScreen({ navigation }) {
   return (
     <>
       <ScrollView>
-        <View style={styles.buttonsContainer}>
-          <Icon
-            onPress={() => modoRecentes()}
-            name="schedule"
-            type="material"
-            raised
-            size={25}
-            reverse={dark || modoExibicao === "recentes"}
-            color={modoExibicao !== "recentes" ? colors.posts : colors.escura2}
-            reverseColor={modoExibicao !== "recentes" ? colors.text: colors.buttonText}
-            style={styles.headerIcon}
-          />
-          <Icon
-            onPress={() => modoEmAlta()}
-            name="local-fire-department"
-            type="material"
-            raised
-            reverse={dark || modoExibicao === "em alta"}
-            color={modoExibicao !== "em alta" ? colors.posts : colors.escura2}
-            reverseColor={modoExibicao !== "em alta" ? colors.text: colors.buttonText}
-            size={25}
-            style={styles.headerIcon}
-          />
-          <Icon
-            onPress={() => alternarFiltro()}
-            name="filter"
-            type="font-awesome"
-            raised
-            size={25}
-            reverse={dark || filterEnabled}
-            color={!filterEnabled ? colors.posts : colors.escura2}
-            reverseColor={!filterEnabled ? colors.text: colors.buttonText}
-            style={styles.headerIconRight}
-          />
-          <Icon
-            onPress={() => irPerfil()}
-            name="user"
-            type="font-awesome"
-            reverse={dark}
-            raised
-            reverseColor={colors.text}
-            size={25}
-            style={styles.headerIcon}
-          />
-          <Icon
-            onPress={() => efetuarLogout()}
-            name="sign-out"
-            type="font-awesome"
-            reverse={dark}
-            raised
-            reverseColor={colors.text}
-            size={25}
-            style={styles.headerIcon}
-          />
-        </View>
-        {filterEnabled && (
-          <View style={styles.inputMargin}>
-            <View style={styles.dropdownContainer}>
-              <DropDownPicker
-                style={[styles.dropdown]}
-                open={openTags}
-                value={valueTags}
-                items={itemsTags}
-                setOpen={setOpenTags}
-                setValue={setValueTags}
-                setItems={setItemsTags}
-                multiple={true}
-                min={0}
-                listMode="SCROLLVIEW"
-                mode="BADGE"
-                badgeDotColors={BADGE_COLORS}
-                badgeColors={colors.background}
-                badgeTextStyle={{ color: colors.text }}
-                placeholderStyle={{ color: colors.text }}
-                badgeStyle={{ borderColor: colors.border, borderWidth: 1 }}
-                labelStyle={{ color: colors.text }}
-                dropDownContainerStyle={{
-                  backgroundColor: colors.card,
-                  borderColor: colors.border,
-                }}
-                arrowStyle={{ color: colors.text }}
-                arrowIconStyle={{tintColor: colors.text2}}
-                listItemLabelStyle={{ color: colors.text }}
-                scrollViewProps={{ nestedScrollEnabled: true }}
-                placeholder="Selecione um item"
-              />
-            </View>
-            <View style={styles.filterButtonContainer}>
-              <Icon
-                onPress={() => filtrarPubs()}
-                name="search"
-                type="font-awesome"
-                raised
-                size={18}
-                reverse={true}
-                color={colors.post}
-                reverseColor={colors.text}
-                style={styles.filterButton}
-              />
-            </View>
-          </View>
-        )}
-        <View>
-          {postList.map((post, postKey) => {
-            var tagNames = [];
-            if (post.tags) {
-              post.tags.forEach((tag, i) => {
-                tagNames.push(tag.nome);
-              });
-            }
-
-            return (
-              <Post
-                key={postKey}
-                navigation={navigation}
-                id={post.id}
-                role={post.usuario.cargo + " de " + post.usuario.curso}
-                tags={tagNames}
-                body={post.conteudo}
-                user={post.usuario.usuario}
-                nomeUser={post.usuario.nome}
-                date={post.data_pub}
-                upvotes={post.upvotes}
-                nRespostas={post.num_respostas}
-                userUpvoted={post.upvote_publicacaos.length > 0}
-                id_usuario={usuarioObj.id}
-                token={token}
-              />
-            );
-          })}
-        </View>
-        <View style={styles.loadPostsContainer}>
-          {!loadingMorePosts && (
+        <TouchableWithoutFeedback onPress={() => {setOpenTags(false)}}>
+          <View style={styles.buttonsContainer}>
             <Icon
-              onPress={() => carregarMais()}
-              name="chevron-down"
-              type="font-awesome"
-              color={colors.post}
-              reverseColor={colors.text}
+              onPress={() => modoRecentes()}
+              name="schedule"
+              type="material"
               raised
-              reverse
+              size={25}
+              reverse={dark || modoExibicao === "recentes"}
+              color={modoExibicao !== "recentes" ? colors.posts : colors.escura2}
+              reverseColor={modoExibicao !== "recentes" ? colors.text: colors.buttonText}
+              style={styles.headerIcon}
+            />
+            <Icon
+              onPress={() => modoEmAlta()}
+              name="local-fire-department"
+              type="material"
+              raised
+              reverse={dark || modoExibicao === "em alta"}
+              color={modoExibicao !== "em alta" ? colors.posts : colors.escura2}
+              reverseColor={modoExibicao !== "em alta" ? colors.text: colors.buttonText}
               size={25}
               style={styles.headerIcon}
             />
+            <Icon
+              onPress={() => alternarFiltro()}
+              name="filter"
+              type="font-awesome"
+              raised
+              size={25}
+              reverse={dark || filterEnabled}
+              color={!filterEnabled ? colors.posts : colors.escura2}
+              reverseColor={!filterEnabled ? colors.text: colors.buttonText}
+              style={styles.headerIconRight}
+            />
+            <Icon
+              onPress={() => irPerfil()}
+              name="user"
+              type="font-awesome"
+              reverse={dark}
+              raised
+              reverseColor={colors.text}
+              size={25}
+              style={styles.headerIcon}
+            />
+            <Icon
+              onPress={() => efetuarLogout()}
+              name="sign-out"
+              type="font-awesome"
+              reverse={dark}
+              raised
+              reverseColor={colors.text}
+              size={25}
+              style={styles.headerIcon}
+            />
+          </View>
+          {filterEnabled && (
+            <View style={styles.inputMargin}>
+              <View style={styles.dropdownContainer}>
+                <DropDownPicker
+                  style={[styles.dropdown]}
+                  open={openTags}
+                  value={valueTags}
+                  items={itemsTags}
+                  setOpen={setOpenTags}
+                  setValue={setValueTags}
+                  setItems={setItemsTags}
+                  multiple={true}
+                  min={0}
+                  listMode="SCROLLVIEW"
+                  mode="BADGE"
+                  badgeDotColors={BADGE_COLORS}
+                  badgeColors={colors.background}
+                  badgeTextStyle={{ color: colors.text }}
+                  placeholderStyle={{ color: colors.text }}
+                  badgeStyle={{ borderColor: colors.border, borderWidth: 1 }}
+                  labelStyle={{ color: colors.text }}
+                  dropDownContainerStyle={{
+                    backgroundColor: colors.card,
+                    borderColor: colors.border,
+                  }}
+                  arrowStyle={{ color: colors.text }}
+                  arrowIconStyle={{tintColor: colors.text2}}
+                  listItemLabelStyle={{ color: colors.text }}
+                  scrollViewProps={{ nestedScrollEnabled: true }}
+                  placeholder="Selecione um item"
+                />
+              </View>
+              <View style={styles.filterButtonContainer}>
+                <Icon
+                  onPress={() => filtrarPubs()}
+                  name="search"
+                  type="font-awesome"
+                  raised
+                  size={18}
+                  reverse={true}
+                  color={colors.post}
+                  reverseColor={colors.text}
+                  style={styles.filterButton}
+                />
+              </View>
+            </View>
           )}
-          {loadingMorePosts && <ActivityIndicator size={70} color={colors.loading}/>}
+          <View>
+            {postList.map((post, postKey) => {
+              var tagNames = [];
+              if (post.tags) {
+                post.tags.forEach((tag, i) => {
+                  tagNames.push(tag.nome);
+                });
+              }
+
+              return (
+                <Post
+                  key={postKey}
+                  navigation={navigation}
+                  id={post.id}
+                  role={post.usuario.cargo + " de " + post.usuario.curso}
+                  tags={tagNames}
+                  body={post.conteudo}
+                  user={post.usuario.usuario}
+                  nomeUser={post.usuario.nome}
+                  date={post.data_pub}
+                  upvotes={post.upvotes}
+                  nRespostas={post.num_respostas}
+                  userUpvoted={post.upvote_publicacaos.length > 0}
+                  id_usuario={usuarioObj.id}
+                  token={token}
+                />
+              );
+            })}
+          </View>
+          <View style={styles.loadPostsContainer}>
+            {!loadingMorePosts && (
+              <Icon
+                onPress={() => carregarMais()}
+                name="chevron-down"
+                type="font-awesome"
+                color={colors.post}
+                reverseColor={colors.text}
+                raised
+                reverse
+                size={25}
+                style={styles.headerIcon}
+              />
+            )}
+            {loadingMorePosts && <ActivityIndicator size={70} color={colors.loading}/>}
+          </View>
+          
+        </TouchableWithoutFeedback>
+        </ScrollView>
+        <View style={styles.createPostButton}>
+          <Icon
+            onPress={() => criarPub()}
+            name="plus"
+            type="font-awesome"
+            color={colors.escura2}
+            reverse
+            raised
+            size={30}
+            style={styles.headerIcon}
+          />
         </View>
-      </ScrollView>
-      <View style={styles.createPostButton}>
-        <Icon
-          onPress={() => criarPub()}
-          name="plus"
-          type="font-awesome"
-          color={colors.escura2}
-          reverse
-          raised
-          size={30}
-          style={styles.headerIcon}
-        />
-      </View>
-      {loadingPage && (
-        <View style={styles.loadingScreen}>
-          <ActivityIndicator size={70} color={colors.loading} />
-        </View>
-      )}
+        {loadingPage && (
+          <View style={styles.loadingScreen}>
+            <ActivityIndicator size={70} color={colors.loading} />
+          </View>
+        )}
     </>
   );
 }

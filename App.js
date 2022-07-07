@@ -9,13 +9,14 @@ import CreatePostScreen from "./app/screens/CreatePostScreen";
 import ViewPostScreen from "./app/screens/ViewPostScreen";
 import ViewProfileScreen from "./app/screens/ViewProfileScreen";
 import { Dark, Light } from "./app/themes/index";
-import React from "react";
+import React,{ useRef }  from "react";
+import {getUserObject} from "./loginState"
 import {
   NavigationContainer
 } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { useColorScheme } from "react-native";
-
+import { useColorScheme, Pressable } from "react-native";
+import { Icon } from "react-native-elements/dist/icons/Icon";
 const Stack = createStackNavigator();
 
 import AppLoading from "expo-app-loading";
@@ -39,8 +40,10 @@ import {
 
 export default function App() {
   const deviceTheme = useColorScheme();
-  const theme = deviceTheme === "dark" ? Dark : Light;
+  const dark = deviceTheme === "dark";
+  const theme = dark ? Dark : Light;
   const colors = theme.colors;
+  const navigation = useRef(null);
   let fontsLoaded = useFonts({
     Mulish_200ExtraLight,
     Mulish_300Light,
@@ -57,12 +60,21 @@ export default function App() {
     Mulish_800ExtraBold_Italic,
     Mulish_900Black_Italic,
   });
+
+  const irPerfil = async () => {
+    navigation.pop();
+    navigation.navigate("ViewProfile", {
+      visitedUsuario: await getUserObject().usuario,
+      from: "Posts"
+    });
+  };
+
   if (!fontsLoaded) {
     return <AppLoading backgroundColor={colors.background} color={colors.text}/>;
   } else {
     return (
       <NavigationContainer theme={theme}>
-        <Stack.Navigator>
+        <Stack.Navigator headerShown={true} ref={navigation}>
           <Stack.Screen
             name="Welcome"
             component={WelcomeScreen}
@@ -96,14 +108,23 @@ export default function App() {
             name="Posts"
             component={PostsScreen}
             options={{
-              headerTitle: "Página inicial",
-              headerLeft: null,
               headerStyle: { backgroundColor: colors.header },
               headerTitleStyle: {
                 color: colors.text,
                 fontSize: 25,
               },
-            }}
+              headerLeft: (props) => (
+                <Pressable
+                  onPress={() => {irPerfil()}}>
+                  <Icon
+                    name="user"
+                    type="font-awesome"
+                    reverse={dark}
+                    reverseColor={colors.text}
+                    size={25}/>
+                </Pressable>
+              )
+            }}            
           />
           <Stack.Screen
             name="EditProfile"
