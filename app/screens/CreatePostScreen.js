@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ImageBackground, StyleSheet, ScrollView, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
+import { ImageBackground, StyleSheet, ScrollView, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator, BackHandler } from "react-native";
 
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -186,6 +186,11 @@ export default function CreatePostScreen({ navigation }) {
     navigation.pop();
     navigation.navigate('Posts');
   };
+
+  BackHandler.addEventListener('hardwareBackPress', () => {
+    voltar();
+    return true;
+  });
 
   return (
     <>

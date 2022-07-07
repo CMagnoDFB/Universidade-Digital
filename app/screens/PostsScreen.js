@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, ActivityIndicator } from "react-native";
+import { StyleSheet, View, ActivityIndicator, BackHandler } from "react-native";
 import { Icon } from "react-native-elements";
 import Post from "../components/Post";
 import FlashMessage, { showMessage } from "react-native-flash-message";
@@ -263,6 +263,11 @@ export default function PostsScreen({ navigation }) {
       from: "Posts"
     });
   };
+
+  BackHandler.addEventListener('hardwareBackPress', () => {
+    efetuarLogout();
+    return true;
+  });
 
   return (
     <>

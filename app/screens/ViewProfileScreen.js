@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
+  BackHandler,
 } from "react-native";
 
 import FlashMessage, { showMessage } from "react-native-flash-message";
@@ -174,6 +175,11 @@ export default function ViewProfileScreen({ navigation, route }) {
     }
     
   };
+
+  BackHandler.addEventListener('hardwareBackPress', () => {
+    voltar();
+    return true;
+  });
 
   const irEdicaoPerfil = async () => {
     navigation.pop();

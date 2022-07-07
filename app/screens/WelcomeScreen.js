@@ -1,6 +1,5 @@
 import React from "react";
-import { render } from "react-dom";
-import { ImageBackground, StyleSheet, View, Text, Image } from "react-native";
+import { ImageBackground, StyleSheet, View, Text, Image, BackHandler } from "react-native";
 
 import AppButton from "../components/AppButton";
 import { useTheme } from "@react-navigation/native";
@@ -45,6 +44,12 @@ export default function WelcomeScreen({ navigation }) {
       color: colors.buttonText,
     },
   });
+
+  BackHandler.addEventListener('hardwareBackPress', () => {
+    BackHandler.exitApp();
+    return true;
+  });
+
   return (
     <>
       <ImageBackground

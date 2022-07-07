@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ImageBackground, StyleSheet, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
+import { ImageBackground, StyleSheet, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator, BackHandler } from "react-native";
 
 import FlashMessage, { showMessage } from "react-native-flash-message";
 
@@ -181,6 +181,11 @@ export default function LoginScreen({ navigation }) {
     }
     
   };
+
+  BackHandler.addEventListener('hardwareBackPress', () => {
+    navigation.navigate('Welcome');
+    return true;
+  });
 
   return (
     <>

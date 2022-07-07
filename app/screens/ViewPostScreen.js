@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Alert,
   TouchableOpacity,
+  BackHandler,
 } from "react-native";
 import { Icon } from "react-native-elements";
 import Reply from "../components/Reply";
@@ -356,6 +357,11 @@ export default function ViewPostScreen({ navigation, route }) {
     navigation.pop();
     navigation.navigate("Posts");
   };
+
+  BackHandler.addEventListener('hardwareBackPress', () => {
+    voltar();
+    return true;
+  });
 
   return (
     <>
