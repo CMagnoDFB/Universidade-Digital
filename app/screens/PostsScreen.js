@@ -10,10 +10,9 @@ import { checkLoginState, removeLoginState, getUserObject } from "./../../loginS
 import { BADGE_COLORS, parseTags, PAGE_LIMIT } from "./../config/consts"
 import { ScrollView } from "react-native-gesture-handler";
 import { useTheme } from '@react-navigation/native';
-import { color } from "react-native-elements/dist/helpers";
 
 export default function PostsScreen({ navigation }) {
-  const { colors } = useTheme();
+  const { colors, dark } = useTheme();
 
   const styles = StyleSheet.create({
     buttonsContainer: {
@@ -266,7 +265,7 @@ export default function PostsScreen({ navigation }) {
           type='material'
           raised
           size={25}
-          reverse={true}
+          reverse={dark || modoExibicao === 'recentes'}
           color={modoExibicao !== 'recentes' ? colors.posts : colors.escura1}
           reverseColor={colors.buttonText}
           style={styles.headerIcon}
@@ -276,7 +275,7 @@ export default function PostsScreen({ navigation }) {
           name='local-fire-department'
           type='material'
           raised
-          reverse={true}
+          reverse={dark || modoExibicao === 'em alta'}
           color={modoExibicao !== 'em alta' ? colors.posts : colors.escura1}
           reverseColor={colors.buttonText}
           size={25}
@@ -288,7 +287,7 @@ export default function PostsScreen({ navigation }) {
           type='font-awesome'
           raised
           size={25}
-          reverse={true}
+          reverse={dark || filterEnabled}
           color={!filterEnabled ? colors.posts : colors.escura1}
           reverseColor={colors.buttonText}
           style={styles.headerIconRight}
@@ -297,7 +296,7 @@ export default function PostsScreen({ navigation }) {
           onPress={() => irEdicaoPerfil()}
           name='edit'
           type='font-awesome'
-          reverse
+          reverse={dark}
           raised
           size={25}
           style={styles.headerIcon}
@@ -306,7 +305,7 @@ export default function PostsScreen({ navigation }) {
           onPress={() => efetuarLogout()}
           name='sign-out'
           type='font-awesome'
-          reverse
+          reverse={dark}
           raised
           size={25}
           style={styles.headerIcon}

@@ -32,7 +32,7 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, r
       alignItems: "center"
     },
     dateText: {
-      color: colors.text,
+      color: colors.text2,
       flexDirection: "column"
     },
     replyHeaderText: { flexDirection: "column", paddingLeft: 10, width: "80%" },
@@ -44,13 +44,14 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, r
     childUserText: {
       textTransform: "capitalize",
       fontSize: 16,
-      paddingTop: 20
-    },
-    roleText: {
+      paddingTop: 20,
       color: colors.text
     },
+    roleText: {
+      color: colors.text2
+    },
     timeAgoText: {
-      color: colors.text,
+      color: colors.text2,
       position: 'absolute',
       left:     -34,
       top:      -30,
@@ -77,7 +78,8 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, r
     childTextBody: {
       flex: 1, 
       flexWrap: "wrap",
-      paddingTop: 5
+      paddingTop: 5,
+      color: colors.text
     },
     replyReplyContainer: {
       width: "100%",
@@ -133,8 +135,8 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, r
       fontSize: 14,
       borderRadius: 10,
       color: colors.text,
-      borderWidth: 2,
-      borderColor: "#bbb",
+      borderColor: colors.border,
+      borderWidth: 1,
       elevation: 1,
       textAlignVertical: 'top'
     },
@@ -299,12 +301,15 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, r
         <View style={styles.upvote}>
           <Icon
             onPress={() => upvoteReply()}
-            reverse={upvoted}
             raised
             name='arrow-up'
             type='font-awesome'
-            color={colors.escura2}
             size={15}
+            reverse={true}
+            name='arrow-up'
+            type='font-awesome'
+            color={!upvoted ? colors.background : colors.escura1}
+            reverseColor={colors.buttonText}
             style={styles.upvoteIcon}
           />
           <View style={styles.dateContainer}>
@@ -333,9 +338,11 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, r
               onPress={() => excluirResp()}
               name='trash'
               type='font-awesome'
-              color="#cc0000"
               raised={true}
               size={20}
+              reverseColor="#f00"
+              reverse={true}
+              color={colors.background}
               style={styles.headerIcon}
               />
           }
@@ -378,9 +385,11 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, r
                             onPress={() => excluirRespParaResp(reply.id)}
                             name='trash'
                             type='font-awesome'
-                            color="#cc0000"
                             raised={true}
                             size={15}
+                            reverseColor="#f00"
+                            reverse={true}
+                            color={colors.background}
                             style={styles.headerIcon}
                             />
                           }
@@ -396,7 +405,8 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, r
         <View style={styles.inputContainer}>
           <TextInput
             style={[styles.inputReplyReply]}
-            placeholder=""
+            placeholder="Escreva uma resposta..."
+            placeholderTextColor={colors.text2}
             keyboardType="ascii-capable"
             onChange={conteudoChangeHandler}
             value={conteudoInput}
@@ -409,9 +419,10 @@ function Reply({ navigation, id, role, body, user, date, upvotes, userUpvoted, r
                 onPress={() => sendReply()}
                 name='send'
                 type='material'
-                color={colors.escura2}
-                raised={true}
                 size={20}
+                reverse={true}
+                color={colors.background}
+                reverseColor={colors.escura1}
                 style={styles.headerIcon}
               />
             }

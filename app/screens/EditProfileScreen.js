@@ -283,7 +283,7 @@ export default function LoginScreen({ navigation }) {
             listItemLabelStyle={{color: colors.text}}
             scrollViewProps={{nestedScrollEnabled: true,}}
           />
-          <Text style={styles.textInput}>Câmpus</Text>
+          <Text style={styles.textInput}>Campus</Text>
           <DropDownPicker
             style={[styles.inputMargin, styles.dropdown]}
             open={openCampus}
