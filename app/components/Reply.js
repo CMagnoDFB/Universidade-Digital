@@ -354,7 +354,7 @@ function Reply({ navigation, id, role, body, user, nomeUser, date, upvotes, user
               type='font-awesome'
               raised={true}
               size={20}
-              reverseColor="#f00"
+              reverseColor={colors.red}
               reverse={true}
               color={colors.background}
               style={styles.headerIcon}
@@ -403,7 +403,7 @@ function Reply({ navigation, id, role, body, user, nomeUser, date, upvotes, user
                             type='font-awesome'
                             raised={true}
                             size={15}
-                            reverseColor="#f00"
+                            reverseColor={colors.red}
                             reverse={true}
                             color={colors.background}
                             style={styles.headerIcon}

@@ -34,7 +34,7 @@ export default function PostsScreen({ navigation }) {
       marginHorizontal: 20,
     },
     headerIcon: {
-      flexDirection: "column",
+      flexDirection: "column"
     },
     headerIconRight: {
       color: colors.background,
@@ -283,7 +283,7 @@ export default function PostsScreen({ navigation }) {
             size={25}
             reverse={dark || modoExibicao === "recentes"}
             color={modoExibicao !== "recentes" ? colors.posts : colors.escura2}
-            reverseColor={colors.buttonText}
+            reverseColor={modoExibicao !== "recentes" ? colors.text: colors.buttonText}
             style={styles.headerIcon}
           />
           <Icon
@@ -293,7 +293,7 @@ export default function PostsScreen({ navigation }) {
             raised
             reverse={dark || modoExibicao === "em alta"}
             color={modoExibicao !== "em alta" ? colors.posts : colors.escura2}
-            reverseColor={colors.buttonText}
+            reverseColor={modoExibicao !== "em alta" ? colors.text: colors.buttonText}
             size={25}
             style={styles.headerIcon}
           />
@@ -305,7 +305,7 @@ export default function PostsScreen({ navigation }) {
             size={25}
             reverse={dark || filterEnabled}
             color={!filterEnabled ? colors.posts : colors.escura2}
-            reverseColor={colors.buttonText}
+            reverseColor={!filterEnabled ? colors.text: colors.buttonText}
             style={styles.headerIconRight}
           />
           <Icon
@@ -314,6 +314,7 @@ export default function PostsScreen({ navigation }) {
             type="font-awesome"
             reverse={dark}
             raised
+            reverseColor={colors.text}
             size={25}
             style={styles.headerIcon}
           />
@@ -323,6 +324,7 @@ export default function PostsScreen({ navigation }) {
             type="font-awesome"
             reverse={dark}
             raised
+            reverseColor={colors.text}
             size={25}
             style={styles.headerIcon}
           />
@@ -377,8 +379,8 @@ export default function PostsScreen({ navigation }) {
                 raised
                 size={18}
                 reverse={true}
-                color={colors.background1}
-                reverseColor={colors.buttonText}
+                color={colors.post}
+                reverseColor={colors.text}
                 style={styles.filterButton}
               />
             </View>

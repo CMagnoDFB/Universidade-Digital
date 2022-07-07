@@ -263,6 +263,7 @@ export default function LoginScreen({ navigation }) {
             dropDownContainerStyle={{backgroundColor: colors.card, borderColor: colors.border}}
             placeholderStyle={{color: colors.text}}
             listItemLabelStyle={{color: colors.text}}
+            arrowIconStyle={{tintColor: colors.text2}}
             scrollViewProps={{nestedScrollEnabled: false,}}
           />
           <Text style={styles.textInput}>Curso</Text>
@@ -278,8 +279,7 @@ export default function LoginScreen({ navigation }) {
             listMode="SCROLLVIEW"
             labelStyle={{color: colors.text}}
             dropDownContainerStyle={{backgroundColor: colors.card, borderColor: colors.border}}
-            arrowStyle={{color: colors.text}}
-
+            arrowIconStyle={{tintColor: colors.text2}}
             listItemLabelStyle={{color: colors.text}}
             scrollViewProps={{nestedScrollEnabled: true,}}
           />
@@ -296,8 +296,8 @@ export default function LoginScreen({ navigation }) {
             listMode="SCROLLVIEW"
             labelStyle={{color: colors.text}}
             dropDownContainerStyle={{backgroundColor: colors.card, borderColor: colors.border}}
-            arrowStyle={{color: colors.text}}
             listItemLabelStyle={{color: colors.text}}
+            arrowIconStyle={{tintColor: colors.text2}}
             scrollViewProps={{nestedScrollEnabled: true,}}
           />
           <Text style={styles.textInput}>Tags</Text>
@@ -320,8 +320,8 @@ export default function LoginScreen({ navigation }) {
             badgeStyle={{borderColor: colors.border, borderWidth: 1}}
             labelStyle={{color: colors.text}}
             dropDownContainerStyle={{backgroundColor: colors.card, borderColor: colors.border}}
-            arrowStyle={{color: colors.text}}
             listItemLabelStyle={{color: colors.text}}
+            arrowIconStyle={{tintColor: colors.text2}}
             scrollViewProps={{nestedScrollEnabled: true,}}
           />
 

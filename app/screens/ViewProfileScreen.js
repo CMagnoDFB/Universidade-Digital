@@ -235,9 +235,11 @@ export default function ViewProfileScreen({ navigation, route }) {
             onPress={() => irEdicaoPerfil()}
             name="edit"
             type="font-awesome"
-            color={colors.branco}
             raised
             size={30}
+            reverse={true}
+            color={colors.post}
+            reverseColor={colors.text}
             style={styles.headerIcon}
           />
         </View>

@@ -66,7 +66,8 @@ const MyDarkTheme = {
     buttonText: "#fff",
     icon: "#000",
     loading: "#C0C0C0",
-    header: "#1D1D1D"
+    header: "#1D1D1D",
+    red: "#FF4449"
   },
 };
 
@@ -92,7 +93,8 @@ const MyLightTheme = {
     buttonText: "#fff",
     icon: "#000",
     loading: "#168aad",
-    header: "#F0F0F0"
+    header: "#F0F0F0",
+    red: "#FF4449"
   },
 };
 

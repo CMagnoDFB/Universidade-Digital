@@ -378,7 +378,7 @@ export default function ViewPostScreen({ navigation, route }) {
                 onPress={() => excluirPub()}
                 name="trash"
                 type="font-awesome"
-                reverseColor="#f00"
+                reverseColor={colors.red}
                 raised={true}
                 size={25}
                 reverse={true}
