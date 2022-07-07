@@ -3,7 +3,7 @@ import { render } from "react-dom";
 import { ImageBackground, StyleSheet, View, Text, Image } from "react-native";
 
 import AppButton from "../components/AppButton";
-import { useTheme } from '@react-navigation/native';
+import { useTheme } from "@react-navigation/native";
 
 export default function WelcomeScreen({ navigation }) {
   const { colors } = useTheme();
@@ -32,25 +32,25 @@ export default function WelcomeScreen({ navigation }) {
     },
     uni: {
       fontSize: 28,
-      color: colors.text
+      color: colors.text,
     },
     digi: {
       fontSize: 55,
       lineHeight: 55,
-      color: colors.text
+      color: colors.text,
     },
     moto: {
       fontSize: 11.6,
-      color: colors.text
+      color: colors.text,
     },
   });
   return (
     <>
       <ImageBackground
-        opacity={0}
+        opacity={0.8}
         source={require("../assets/background.jpg")}
         style={styles.background}
-        blurRadius={3}
+        blurRadius={2}
       >
         <View style={styles.logoContainer}>
           <Image style={styles.u} source={require("../assets/U.png")} />
@@ -63,12 +63,12 @@ export default function WelcomeScreen({ navigation }) {
         <View style={styles.buttonsContainer}>
           <AppButton
             title="Entrar"
-            onPress={() => navigation.navigate('Login')}
+            onPress={() => navigation.navigate("Login")}
             color="media2"
           />
           <AppButton
             title="Registrar-se"
-            onPress={() => navigation.navigate('Register')}
+            onPress={() => navigation.navigate("Register")}
             color="escura1"
           />
         </View>
