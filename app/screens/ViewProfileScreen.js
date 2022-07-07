@@ -16,9 +16,10 @@ import api from "./../../connectAPI";
 import {
   checkLoginState,
 } from "./../../loginState";
+import {Gravatar} from 'react-native-gravatar';
 
 export default function ViewProfileScreen({ navigation, route }) {
-  const { colors, dark } = useTheme();
+  const { colors } = useTheme();
 
   const styles = StyleSheet.create({
     profileContainer: {
@@ -86,9 +87,21 @@ export default function ViewProfileScreen({ navigation, route }) {
       top: 20,
       right: 20,
     },
+    userAvatarContainer: {
+
+    },
+    roundedProfileImage: {
+      width: 100,
+      height: 100,
+      borderWidth: 3,
+      borderColor: colors.border,
+      borderRadius: 50
+  }
   });
 
   const [username, setUsername] = useState("");
+
+  const [email, setEmail] = useState("");
 
   const [loadingPage, setLoadingPage] = useState(true);
 
@@ -139,6 +152,7 @@ export default function ViewProfileScreen({ navigation, route }) {
           setCampus(usuRetrieved.campus);
           setNumPubs(usuRetrieved.numPubs);
           setNumResps(usuRetrieved.numRespostas);
+          setEmail(usuRetrieved.email);
           var tagNames = [];
           if (usuRetrieved.tags) {
             usuRetrieved.tags.forEach((tag, i) => {
@@ -183,6 +197,12 @@ export default function ViewProfileScreen({ navigation, route }) {
   return (
     <>
       <ScrollView nestedScrollEnabled={true} style={styles.profileContainer}>
+        <Gravatar options={{
+              email: email,
+              parameters: { "size": "200", "d": "mm" },
+              secure: true
+            }}
+            style={styles.roundedProfileImage} />
         <Text style={styles.label}>Nome</Text>
         <Text style={styles.showText}>{nomeShow}</Text>
 
