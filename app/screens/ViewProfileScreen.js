@@ -10,6 +10,7 @@ import {
 
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import { useTheme } from "@react-navigation/native";
+import { Icon } from "react-native-elements";
 
 import api from "./../../connectAPI";
 import {
@@ -80,7 +81,14 @@ export default function ViewProfileScreen({ navigation, route }) {
       fontWeight: "600",
       borderRadius: 10,
     },
+    editUserButton: {
+      position: "absolute",
+      top: 20,
+      right: 20,
+    },
   });
+
+  const [username, setUsername] = useState("");
 
   const [loadingPage, setLoadingPage] = useState(true);
 
@@ -111,6 +119,7 @@ export default function ViewProfileScreen({ navigation, route }) {
   const checkIfLogged = async () => {
     var data = await checkLoginState();
     if (data) {
+      setUsername(data.usuario);
       api.get("fetchUser", {
           headers: {
             Accept: "application/json",
@@ -166,6 +175,11 @@ export default function ViewProfileScreen({ navigation, route }) {
     
   };
 
+  const irEdicaoPerfil = async () => {
+    navigation.pop();
+    navigation.navigate("EditProfile");
+  };
+
   return (
     <>
       <ScrollView nestedScrollEnabled={true} style={styles.profileContainer}>
@@ -215,6 +229,20 @@ export default function ViewProfileScreen({ navigation, route }) {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      {username==usuarioShow &&
+        <View style={styles.editUserButton}>
+          <Icon
+            onPress={() => irEdicaoPerfil()}
+            name="edit"
+            type="font-awesome"
+            color={colors.branco}
+            raised
+            size={30}
+            style={styles.headerIcon}
+          />
+        </View>
+      }
+      
       {loadingPage && (
         <View style={styles.loadingScreen}>
           <ActivityIndicator size={70} color={colors.media2} />

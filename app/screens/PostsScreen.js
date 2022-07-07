@@ -235,11 +235,6 @@ export default function PostsScreen({ navigation }) {
     navigation.navigate("Login");
   };
 
-  const irEdicaoPerfil = async () => {
-    navigation.pop();
-    navigation.navigate("EditProfile");
-  };
-
   const carregarMais = async () => {
     setLoadingMorePosts(true);
     fetchPosts(null, true);
@@ -267,6 +262,14 @@ export default function PostsScreen({ navigation }) {
       fetchPosts();
     }
   }, [valueTags]);
+
+  const irPerfil = async () => {
+    navigation.pop();
+    navigation.navigate("ViewProfile", {
+      visitedUsuario: usuarioObj.usuario,
+      from: "Posts"
+    });
+  };
 
   return (
     <>
@@ -306,8 +309,8 @@ export default function PostsScreen({ navigation }) {
             style={styles.headerIconRight}
           />
           <Icon
-            onPress={() => irEdicaoPerfil()}
-            name="edit"
+            onPress={() => irPerfil()}
+            name="user"
             type="font-awesome"
             reverse={dark}
             raised
