@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ImageBackground, StyleSheet, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator, BackHandler } from "react-native";
 
 import FlashMessage, { showMessage } from "react-native-flash-message";
-
+import { Icon } from "react-native-elements";
 import api from "./../../connectAPI"
 import { saveLoginState, checkLoginState, saveUserObject } from "./../../loginState"
 
@@ -132,6 +132,23 @@ export default function LoginScreen({ navigation }) {
   
   useEffect(() => {
     checkIfLogged();
+
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity 
+          onPress={() => navigation.navigate('Welcome')}
+          >
+          <Icon
+            name="arrow-left"
+            type="font-awesome"
+            reverse
+            reverseColor={colors.text}
+            color={colors.header}
+            size={20}
+          /> 
+        </TouchableOpacity>
+      )
+    });
   }, []);
 
   const [loading, setLoading] = useState(false);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator, SafeAreaView, ScrollView, KeyboardAvoidingView, BackHandler } from "react-native";
 import CheckBox from "expo-checkbox";
 import PassMeter from "react-native-passmeter";
-
+import { Icon } from "react-native-elements";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import { useTheme } from '@react-navigation/native';
 import api from "./../../connectAPI"
@@ -110,6 +110,9 @@ export default function RegisterScreen({ navigation }) {
     termos: {
       color: colors.text,
       paddingHorizontal: "3%"
+    },
+    arrowBack: {
+      marginLeft: 20
     }
   });
 
@@ -155,6 +158,23 @@ export default function RegisterScreen({ navigation }) {
 
   useEffect(() => {
     checkIfLogged();
+
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity 
+          onPress={() => navigation.navigate('Welcome')}
+          >
+          <Icon
+            name="arrow-left"
+            type="font-awesome"
+            reverse
+            reverseColor={colors.text}
+            color={colors.header}
+            size={20}
+          /> 
+        </TouchableOpacity>
+      )
+    });
   }, []);
 
   const [loading, setLoading] = useState(false);
