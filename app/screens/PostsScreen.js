@@ -223,16 +223,15 @@ export default function PostsScreen({ navigation }) {
           
         ),
         headerRight: () => (
-          <Icon
-              onPress={() => efetuarLogout()}
-              name="sign-out"
-              type="font-awesome"
-              reverse={dark}
-              reverseColor={colors.text}
-              color={colors.post}
-              size={25}
-              style={styles.headerIcon}
-            />
+          <View style={{marginRight: '18%'}}>
+            <Icon
+                onPress={() => efetuarLogout()}
+                name="sign-out"
+                type="font-awesome"
+                color={!dark ? colors.text : colors.text}
+                size={25}
+              />
+          </View>
         ),
       });
     }
@@ -344,26 +343,6 @@ export default function PostsScreen({ navigation }) {
               color={!filterEnabled ? colors.posts : colors.escura2}
               reverseColor={!filterEnabled ? colors.text: colors.buttonText}
               style={styles.headerIconRight}
-            />
-            <Icon
-              onPress={() => irPerfil()}
-              name="user"
-              type="font-awesome"
-              reverse={dark}
-              raised
-              reverseColor={colors.text}
-              size={25}
-              style={styles.headerIcon}
-            />
-            <Icon
-              onPress={() => efetuarLogout()}
-              name="sign-out"
-              type="font-awesome"
-              reverse={dark}
-              raised
-              reverseColor={colors.text}
-              size={25}
-              style={styles.headerIcon}
             />
           </View>
           {filterEnabled && (
