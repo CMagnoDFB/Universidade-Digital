@@ -119,6 +119,7 @@ export default function CreatePostScreen({ navigation }) {
       setLoadingPage(false); 
 
     }else {
+      navigation.pop();
       navigation.navigate('Login');
     }
   };
@@ -158,6 +159,7 @@ export default function CreatePostScreen({ navigation }) {
           initial_tags: []
         }).then(() => {
           setLoading(false);
+          navigation.pop();
           navigation.navigate('Posts');
         }).catch(err => {
           setLoading(false);
@@ -181,6 +183,7 @@ export default function CreatePostScreen({ navigation }) {
   };
 
   const voltar = async () => {
+    navigation.pop();
     navigation.navigate('Posts');
   };
 

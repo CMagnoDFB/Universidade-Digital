@@ -229,6 +229,7 @@ export default function ViewPostScreen({ navigation, route }) {
       setToken(data.token, false);
       setUsuarioObj(uObj);
     } else {
+      navigation.pop();
       navigation.navigate("Login");
     }
   };
@@ -298,6 +299,7 @@ export default function ViewPostScreen({ navigation, route }) {
         })
         .then(() => {
           setLoading(false);
+          navigation.pop();
           navigation.navigate("ViewPost", {
             id_publicacao: id_publicacao,
           });
@@ -327,6 +329,7 @@ export default function ViewPostScreen({ navigation, route }) {
                 id_publicacao: id_publicacao,
               })
               .then(() => {
+                navigation.pop();
                 navigation.navigate("Posts");
               })
               .catch((err) => {
@@ -342,6 +345,7 @@ export default function ViewPostScreen({ navigation, route }) {
   };
 
   const visitarPerfil = async (usuarioClicked) => {
+    navigation.pop();
     navigation.navigate("ViewProfile", {
       visitedUsuario: usuarioClicked,
       from: "Post",
@@ -350,6 +354,7 @@ export default function ViewPostScreen({ navigation, route }) {
   };
 
   const voltar = async () => {
+    navigation.pop();
     navigation.navigate("Posts");
   };
 

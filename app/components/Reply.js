@@ -4,9 +4,7 @@ import { Icon } from 'react-native-elements';
 
 import api from "./../../connectAPI";
 import { dateDifference } from "./../config/consts";
-import { ScrollView } from "react-native-gesture-handler";
 import { useTheme } from '@react-navigation/native';
-import { color } from "react-native-elements/dist/helpers";
 
 function Reply({ navigation, id, role, body, user, nomeUser, date, upvotes, userUpvoted, respostas, replyList, id_usuario, id_usuarioResp, id_publicacao, token }) {
   const {colors} = useTheme();  
@@ -223,6 +221,7 @@ function Reply({ navigation, id, role, body, user, nomeUser, date, upvotes, user
               id_resposta: id,
               id_publicacao: id_publicacao
             } ).then(() => {
+              navigation.pop();
               navigation.navigate('ViewPost', {
                 id_publicacao: id_publicacao
               });
@@ -257,6 +256,7 @@ function Reply({ navigation, id, role, body, user, nomeUser, date, upvotes, user
               id_resposta_pai: id,
               id_publicacao: id_publicacao
             } ).then(() => {
+              navigation.pop();
               navigation.navigate('ViewPost', {
                 id_publicacao: id_publicacao
               });
@@ -289,6 +289,7 @@ function Reply({ navigation, id, role, body, user, nomeUser, date, upvotes, user
         id_publicacao: id_publicacao
       } ).then(() => {
         setLoading(false);
+        navigation.pop();
         navigation.navigate('ViewPost', {
           id_publicacao: id_publicacao
         });

@@ -160,6 +160,7 @@ export default function LoginScreen({ navigation }) {
       });
 
     }else {
+      navigation.pop();
       navigation.navigate('Login');
     }
   };
@@ -205,6 +206,7 @@ export default function LoginScreen({ navigation }) {
           usuario.tags = dbTags.data.tags;
           saveUserObject(usuario);
           setLoading(false);
+          navigation.pop();
           navigation.navigate('Posts');
         }).catch(err => {
           setLoading(false);
@@ -228,6 +230,7 @@ export default function LoginScreen({ navigation }) {
   };
 
   const ignorarEdicao = async () => {
+    navigation.pop();
     navigation.navigate('Posts');
   };
 

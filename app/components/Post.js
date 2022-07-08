@@ -126,6 +126,7 @@ function Post({ navigation, id, role, tags, body, user, nomeUser, date, upvotes,
   }
 
   const visitarPerfil = async (usuarioClicked) => {
+    navigation.pop();
     navigation.navigate("ViewProfile", {
       visitedUsuario: usuarioClicked,
       from: "Posts"
@@ -133,6 +134,7 @@ function Post({ navigation, id, role, tags, body, user, nomeUser, date, upvotes,
   };
 
   const goToPost = async () => {
+    navigation.pop();
     navigation.navigate('ViewPost', {
       id_publicacao: id
     });

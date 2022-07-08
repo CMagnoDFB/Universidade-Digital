@@ -196,6 +196,7 @@ export default function PostsScreen({ navigation }) {
       setUsuarioObj(uObj);
       setItemsTags(parseTags(uObj.tags, true));
     } else {
+      navigation.pop();
       navigation.navigate("Login");
     }
   };
@@ -262,6 +263,7 @@ export default function PostsScreen({ navigation }) {
   const efetuarLogout = async () => {
     await removeLoginState();
     console.log("Usuário deslogado");
+    navigation.pop();
     navigation.navigate("Login");
   };
 
@@ -271,6 +273,7 @@ export default function PostsScreen({ navigation }) {
   };
 
   const criarPub = async () => {
+    navigation.pop();
     navigation.navigate("CreatePosts");
   };
 
@@ -294,6 +297,7 @@ export default function PostsScreen({ navigation }) {
 
   const irPerfil = async (usu) => {
     if (usu) {
+      navigation.pop();
       navigation.navigate("ViewProfile", {
         visitedUsuario: usu,
         from: "Posts"

@@ -169,6 +169,7 @@ export default function ViewProfileScreen({ navigation, route }) {
           console.log("error", err.response);
         });
     } else {
+      navigation.pop();
       navigation.navigate("Login");
     }
   };
@@ -179,10 +180,12 @@ export default function ViewProfileScreen({ navigation, route }) {
 
   const voltar = async () => {
     if (route.params.from == 'Post') {
+      navigation.pop();
       navigation.navigate("ViewPost", {
         id_publicacao: route.params.id_publicacao
       });
     }else {
+      navigation.pop();
       navigation.navigate("Posts");
     }
     
@@ -194,6 +197,7 @@ export default function ViewProfileScreen({ navigation, route }) {
   });
 
   const irEdicaoPerfil = async () => {
+    navigation.pop();
     navigation.navigate("EditProfile");
   };
 
