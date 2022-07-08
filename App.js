@@ -1,5 +1,4 @@
 import "react-native-gesture-handler";
-import { StatusBar } from "expo-status-bar";
 import WelcomeScreen from "./app/screens/WelcomeScreen";
 import LoginScreen from "./app/screens/LoginScreen";
 import PostsScreen from "./app/screens/PostsScreen";
@@ -9,14 +8,12 @@ import CreatePostScreen from "./app/screens/CreatePostScreen";
 import ViewPostScreen from "./app/screens/ViewPostScreen";
 import ViewProfileScreen from "./app/screens/ViewProfileScreen";
 import { Dark, Light } from "./app/themes/index";
-import React,{ useRef }  from "react";
-import {getUserObject} from "./loginState"
+import React  from "react";
 import {
   NavigationContainer
 } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { useColorScheme, Pressable } from "react-native";
-import { Icon } from "react-native-elements/dist/icons/Icon";
+import { useColorScheme } from "react-native";
 const Stack = createStackNavigator();
 
 import AppLoading from "expo-app-loading";
@@ -43,7 +40,6 @@ export default function App() {
   const dark = deviceTheme === "dark";
   const theme = dark ? Dark : Light;
   const colors = theme.colors;
-  const navigation = useRef(null);
   let fontsLoaded = useFonts({
     Mulish_200ExtraLight,
     Mulish_300Light,
@@ -61,20 +57,12 @@ export default function App() {
     Mulish_900Black_Italic,
   });
 
-  const irPerfil = async () => {
-    navigation.pop();
-    navigation.navigate("ViewProfile", {
-      visitedUsuario: await getUserObject().usuario,
-      from: "Posts"
-    });
-  };
-
   if (!fontsLoaded) {
     return <AppLoading backgroundColor={colors.background} color={colors.text}/>;
   } else {
     return (
       <NavigationContainer theme={theme}>
-        <Stack.Navigator headerShown={true} ref={navigation}>
+        <Stack.Navigator headerShown={true}>
           <Stack.Screen
             name="Welcome"
             component={WelcomeScreen}
@@ -108,22 +96,12 @@ export default function App() {
             name="Posts"
             component={PostsScreen}
             options={{
+              headerTitle: "Publicações",
               headerStyle: { backgroundColor: colors.header },
               headerTitleStyle: {
                 color: colors.text,
                 fontSize: 25,
-              },
-              headerLeft: (props) => (
-                <Pressable
-                  onPress={() => {irPerfil()}}>
-                  <Icon
-                    name="user"
-                    type="font-awesome"
-                    reverse={dark}
-                    reverseColor={colors.text}
-                    size={25}/>
-                </Pressable>
-              )
+              }
             }}            
           />
           <Stack.Screen

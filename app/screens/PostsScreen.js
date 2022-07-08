@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { StyleSheet, View, ActivityIndicator, BackHandler } from "react-native";
+import { StyleSheet, View, ActivityIndicator, BackHandler, TouchableOpacity } from "react-native";
 import { Icon } from "react-native-elements";
 import Post from "../components/Post";
 import FlashMessage, { showMessage } from "react-native-flash-message";
@@ -15,6 +15,8 @@ import { BADGE_COLORS, parseTags, PAGE_LIMIT } from "./../config/consts";
 import { ScrollView } from "react-native-gesture-handler";
 import { useTheme } from "@react-navigation/native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import {Gravatar} from 'react-native-gravatar';
+
 export default function PostsScreen({ navigation }) {
   const { colors, dark } = useTheme();
 
@@ -92,6 +94,14 @@ export default function PostsScreen({ navigation }) {
     filterButton: {
       margin: 0,
     },
+    roundedProfileImage: {
+      width: 50,
+      height: 50,
+      borderWidth: 3,
+      borderColor: colors.border,
+      borderRadius: 50,
+      marginLeft: 20
+    }
   });
 
   const [loadingPage, setLoadingPage] = useState(true);
@@ -101,6 +111,7 @@ export default function PostsScreen({ navigation }) {
   const [usuario, setUsuario] = useState(null);
   const [token, setToken] = useState(null);
   const [usuarioObj, setUsuarioObj] = useState(null);
+  const [email, setEmail] = useState(null);
 
   const [modoExibicao, setModoExibicao] = useState("recentes");
   const [numPagina, setNumPagina] = useState(1);
@@ -181,10 +192,10 @@ export default function PostsScreen({ navigation }) {
         });
         uObj.id_tags = tagIds;
       }
+      setEmail(uObj.email);
       setUsuarioObj(uObj);
       setItemsTags(parseTags(uObj.tags, true));
     } else {
-      navigation.pop();
       navigation.navigate("Login");
     }
   };
@@ -196,6 +207,34 @@ export default function PostsScreen({ navigation }) {
   useEffect(() => {
     if (usuarioObj && postList.length == 0) {
       fetchPosts(token, false, usuarioObj.id);
+    }
+    if(usuarioObj) {
+      navigation.setOptions({
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => irPerfil(usuarioObj.usuario)}>
+            <Gravatar options={{
+              email: email,
+              parameters: { "size": "50", "d": "mm" },
+              secure: true
+            }}
+            style={styles.roundedProfileImage} 
+            />
+          </TouchableOpacity>
+          
+        ),
+        headerRight: () => (
+          <Icon
+              onPress={() => efetuarLogout()}
+              name="sign-out"
+              type="font-awesome"
+              reverse={dark}
+              reverseColor={colors.text}
+              color={colors.post}
+              size={25}
+              style={styles.headerIcon}
+            />
+        ),
+      });
     }
   }, [usuarioObj]);
 
@@ -224,7 +263,6 @@ export default function PostsScreen({ navigation }) {
   const efetuarLogout = async () => {
     await removeLoginState();
     console.log("Usuário deslogado");
-    navigation.pop();
     navigation.navigate("Login");
   };
 
@@ -234,7 +272,6 @@ export default function PostsScreen({ navigation }) {
   };
 
   const criarPub = async () => {
-    navigation.pop();
     navigation.navigate("CreatePosts");
   };
 
@@ -256,30 +293,14 @@ export default function PostsScreen({ navigation }) {
     }
   }, [valueTags]);
 
-  const irPerfil = async () => {
-    navigation.pop();
-    navigation.navigate("ViewProfile", {
-      visitedUsuario: usuarioObj.usuario,
-      from: "Posts"
-    });
+  const irPerfil = async (usu) => {
+    if (usu) {
+      navigation.navigate("ViewProfile", {
+        visitedUsuario: usu,
+        from: "Posts"
+      });
+    }
   };
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <Icon
-            onPress={() => efetuarLogout()}
-            name="sign-out"
-            type="font-awesome"
-            reverse={dark}
-            reverseColor={colors.text}
-            color={colors.post}
-            size={25}
-            style={styles.headerIcon}
-          />
-      ),
-    });
-  }, [navigation])
 
   BackHandler.addEventListener('hardwareBackPress', () => {
     efetuarLogout();

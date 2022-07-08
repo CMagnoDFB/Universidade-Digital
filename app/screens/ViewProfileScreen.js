@@ -97,7 +97,7 @@ export default function ViewProfileScreen({ navigation, route }) {
       borderWidth: 3,
       borderColor: colors.border,
       borderRadius: 50
-  }
+    }
   });
 
   const [username, setUsername] = useState("");
@@ -169,7 +169,6 @@ export default function ViewProfileScreen({ navigation, route }) {
           console.log("error", err.response);
         });
     } else {
-      navigation.pop();
       navigation.navigate("Login");
     }
   };
@@ -179,7 +178,6 @@ export default function ViewProfileScreen({ navigation, route }) {
   }, []);
 
   const voltar = async () => {
-    navigation.pop();
     if (route.params.from == 'Post') {
       navigation.navigate("ViewPost", {
         id_publicacao: route.params.id_publicacao
@@ -196,7 +194,6 @@ export default function ViewProfileScreen({ navigation, route }) {
   });
 
   const irEdicaoPerfil = async () => {
-    navigation.pop();
     navigation.navigate("EditProfile");
   };
 

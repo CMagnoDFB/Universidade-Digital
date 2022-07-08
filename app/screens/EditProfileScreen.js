@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ImageBackground, StyleSheet, ScrollView, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator, BackHandler } from "react-native";
+import { StyleSheet, ScrollView, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator, BackHandler } from "react-native";
 
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -8,7 +8,6 @@ import api from "./../../connectAPI"
 import {CARGO_VALUES, CURSO_VALUES, CAMPUS_VALUES, BADGE_COLORS, parseTags } from "./../config/consts"
 import { checkLoginState, saveUserObject, getUserObject } from "./../../loginState"
 import { useTheme } from '@react-navigation/native';
-import { setMaxListeners } from "events";
 
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
@@ -161,7 +160,6 @@ export default function LoginScreen({ navigation }) {
       });
 
     }else {
-      navigation.pop();
       navigation.navigate('Login');
     }
   };
@@ -207,7 +205,6 @@ export default function LoginScreen({ navigation }) {
           usuario.tags = dbTags.data.tags;
           saveUserObject(usuario);
           setLoading(false);
-          navigation.pop();
           navigation.navigate('Posts');
         }).catch(err => {
           setLoading(false);
@@ -231,7 +228,6 @@ export default function LoginScreen({ navigation }) {
   };
 
   const ignorarEdicao = async () => {
-    navigation.pop();
     navigation.navigate('Posts');
   };
 
@@ -265,7 +261,6 @@ export default function LoginScreen({ navigation }) {
             setItems={setItemsCargo}
             listMode="SCROLLVIEW"
             placeholder="Selecione um Curso"
-            placeholderStyle={{color: colors.text}}
             labelStyle={{color: colors.text}}
             dropDownContainerStyle={{backgroundColor: colors.card, borderColor: colors.border}}
             placeholderStyle={{color: colors.text}}

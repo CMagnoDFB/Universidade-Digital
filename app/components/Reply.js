@@ -223,7 +223,6 @@ function Reply({ navigation, id, role, body, user, nomeUser, date, upvotes, user
               id_resposta: id,
               id_publicacao: id_publicacao
             } ).then(() => {
-              navigation.pop();
               navigation.navigate('ViewPost', {
                 id_publicacao: id_publicacao
               });
@@ -255,9 +254,9 @@ function Reply({ navigation, id, role, body, user, nomeUser, date, upvotes, user
               'Content-Type': 'application/json'
             },
               id_resposta: id_resp,
-              id_resposta_pai: id
+              id_resposta_pai: id,
+              id_publicacao: id_publicacao
             } ).then(() => {
-              navigation.pop();
               navigation.navigate('ViewPost', {
                 id_publicacao: id_publicacao
               });
@@ -286,10 +285,10 @@ function Reply({ navigation, id, role, body, user, nomeUser, date, upvotes, user
       },
         conteudo: conteudoInput,
         id_usuario: id_usuario,
-        id_resposta: id
+        id_resposta: id,
+        id_publicacao: id_publicacao
       } ).then(() => {
         setLoading(false);
-        navigation.pop();
         navigation.navigate('ViewPost', {
           id_publicacao: id_publicacao
         });
@@ -302,7 +301,6 @@ function Reply({ navigation, id, role, body, user, nomeUser, date, upvotes, user
   }
 
   const visitarPerfil = async (usuarioClicked) => {
-    navigation.pop();
     navigation.navigate("ViewProfile", {
       visitedUsuario: usuarioClicked,
       from: "Post",
