@@ -263,7 +263,7 @@ export default function LoginScreen({ navigation }) {
             setValue={setValueCargo}
             setItems={setItemsCargo}
             listMode="SCROLLVIEW"
-            placeholder="Selecione um Curso"
+            placeholder="Selecione um Cargo"
             labelStyle={{color: colors.text}}
             dropDownContainerStyle={{backgroundColor: colors.card, borderColor: colors.border}}
             placeholderStyle={{color: colors.text}}
@@ -282,7 +282,7 @@ export default function LoginScreen({ navigation }) {
             setValue={setValueCurso}
             setItems={setItemsCurso}
             listMode="SCROLLVIEW"
-            placeholder="Selecione um Campus"
+            placeholder="Selecione um Curso"
             placeholderStyle={{color: colors.text}}
             labelStyle={{color: colors.text}}
             dropDownContainerStyle={{backgroundColor: colors.card, borderColor: colors.border}}
@@ -301,7 +301,7 @@ export default function LoginScreen({ navigation }) {
             setValue={setValueCampus}
             setItems={setItemsCampus}
             listMode="SCROLLVIEW"
-            placeholder="Selecione um Curso"
+            placeholder="Selecione um Campus"
             placeholderStyle={{color: colors.text}}
             labelStyle={{color: colors.text}}
             dropDownContainerStyle={{backgroundColor: colors.card, borderColor: colors.border}}
